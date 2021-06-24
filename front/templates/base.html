@@ -1,0 +1,114 @@
+{% load i18n static manifest socialaccount %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE | default:"es" }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - RamosUC</title>
+
+    {% if GA_CODE %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_CODE }}"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ GA_CODE }}');
+    </script>
+    {% endif %}
+
+    <link rel="icon" href="{% static '/favicon.ico' %}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{% static '/favicon.ico' %}" type="image/x-icon" />
+
+    <link rel="stylesheet" href="{% static '/main.css' %}">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": "https://ramosuc.cl/",
+        "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://ramosuc.cl/buscar?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body class="container px-1">
+    <!-- NAVBAR BEGIN -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-0" style="font-size: 1.2rem;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'courses:index' %}">
+                <h1>Ramos<span class="text-primary">UC</span></h1>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto ms-2 mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" name="menu_home" href="{% url 'courses:index' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" name="menu_planner" href="{% url 'courses:planner' %}">Planifica</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" name="menu_browse" href="{% url 'courses:browse' %}">Catálogo</a>
+                    </li>
+                    <form action="{% url 'courses:search' %}" class="d-flex ms-0 ms-lg-3">
+                        <input name="q" class="form-control me-2" type="search" placeholder="Ramo, sigla o profesor" aria-label="Buscar">
+                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                    </form>
+                </ul>
+
+                <ul class="navbar-nav ms-lg-4 mt-2 mt-lg-0">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ user.username }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" href="{% url 'account_logout' %}">Salir</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" href="{% provider_login_url "google" %}">Ingresar</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+            
+        </div>
+    </nav>
+    <!-- NAVBAR END -->
+
+    <!-- CONTENT BEGIN-->
+    <div class="mt-3 px-1" role="main" style="min-height: calc(100vh - 200px);">
+        {% block main %}
+        {% endblock %}
+    </div>
+    <!-- CONTENT END-->
+
+    <!-- FOOTER BEGIN -->
+    <footer class="footer">
+        <hr>
+        <p class="text-muted mb-3 text-center">by Nico Mc. <a href="mailto:nmcintyre@uc.cl">nmcintyre@uc.cl</a></p>
+    </footer>
+    <!-- FOOTER END -->
+
+    <script type="text/javascript" src="{% manifest 'runtime.js' %}"></script>
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+</html>

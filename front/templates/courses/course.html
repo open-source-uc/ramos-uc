@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static manifest %}
+
+{% block title %} {{ course.name }} {% endblock %}
+{% block head %}
+<link rel="canonical" href="{% url 'courses:course' initials=course.initials %}?period={{period}}" />
+<meta name="description" content="{{ description }}">
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "{{ course.initials }}: {{ course.name }}",
+      "description": "{{ description }}",
+      "provider": {
+        "@type": "Organization",
+        "name": "{{ course.school }} UC"
+      }
+    }
+    </script>
+{% endblock %}
+
+{% block main %}
+
+<!-- COURSE INFO MODAL -->
+<div class="modal" tabindex="-1" id="infoModal">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="courseTitle">Cargando...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Detalles</h4>
+                <p id="courseInfo"></p>
+                <h4>Cupos</h4>
+                <p id="courseBanner">Sin información.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END INFO MODAL -->
+
+<!-- RAMO DETAIL POPUP -->
+<div id="quotaModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="quotaTitle" class="modal-title">Cargando...</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            
+            <div class="table-responsive">
+                <div id="quotaChart" class="modal-body" style="height: 500px"></div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END DETAIL POPUP -->
+
+
+<div class="alert alert-success">
+    Si ya hiciste este ramo, <a href="{% url 'califications:new' course_id=course.id %}">califícalo</a>!
+</div>
+
+<h2><span class="badge bg-primary me-2">{{ course.initials }}</span> {{ course.name }}</h2>
+<div class="col-lg-6 col-md-10">
+    <table class="table table-sm ">
+        <tr><td>Escuela</td><td>{{ course.school }}</td></tr>
+        <tr><td>Área</td><td>{{ course.area }}</td></tr>
+        <tr><td>Categorías</td><td>{{ course.category }}</tr>
+        <tr><td>Créditos</td><td>{{ course.credits }}</td></tr>
+    </table>
+</div>
+
+<h3 class="mt-4">Prerequisitos</h3>
+<p>
+    {% if course.req == 'No tiene' %}
+    <b>Sin requisitos</b>
+    {% else %}
+    <b>Requisitos:</b> {{ requirements | safe }}
+    {% endif %}
+    <br>
+    
+    {% if course.con != 'No tiene' %}
+    <b>Relación entre requisitos y restricciones:</b> {{ course.con }}<br>
+    {% endif %}
+
+    {% if course.restr == 'No tiene' %}
+    <b>Sin restricciones</b>
+    {% else %}
+    <b>Restricciones:</b> {{ course.restr }}
+    {% endif %}
+</p>
+
+<div class="card mt-2 p-3">
+    <div class="row">
+        <h3 class="col-auto">Semestre</h3>
+        <form class="col-auto" >
+            <select class="form-select col-2" name="period" onchange="this.form.submit();">
+                {% for p in periods %}
+                <option {% if p == period %} selected {% endif %}>{{ p }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    <hr>
+
+    {% if calification.like__count %}
+    <i>Basado en {{ calification.like__count }} calificaciones:</i><br>
+    <h5>Carga académica: <b>{{ calification.load__avg }}</b></h5>
+    <span class="text-muted">(1 poca carga, 5 mucha carga)</span>
+    <br>
+    <h5>Recomendación: <b>{{ calification.like__avg }}</b></h5>
+    <br>
+    {% else %}
+    <i>El ramo no sido calificado este semestre.</i><br>
+    {% endif %}
+    
+
+    <h4 class="">Secciones</h4>
+    <table class="table">
+        {% for s in sections %}
+        <tr>
+            <td style="width: 6rem;">
+                <a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo({{s.id}})">Sección {{s.section}}</a>
+            </td>
+            <td style="width: 6rem;">
+                <button class="btn" data-bs-toggle="modal" href="#quotaModal" onclick="wp.loadQuota({{s.id}})">
+                    <img class="m-0" src="{% static '/images/chart.svg' %}" height="20" />
+                </button>
+            </td>
+            <td>{{s.teachers}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="accordion accordion-flush mt-4" id="accordion">
+    <div class="accordion-item">
+        <span class="accordion-header" id="programHead">
+            <button class="accordion-button collapsed ps-0" type="button" data-bs-toggle="collapse" data-bs-target="#program" aria-expanded="false" aria-controls="program">
+                <h3>Programa</h3>
+            </button>
+        </span>
+        <div id="program" class="accordion-collapse collapse" aria-labelledby="programHead" data-bs-parent="#accordion">
+            <div class="accordion-body">
+                <p>{{ program|safe }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="{% manifest 'course.js' %}"></script>
+{% endblock %}

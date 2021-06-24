@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static manifest %}
+
+{% block title %} {{ q }} {% endblock %}
+
+{% block main %}
+
+<h2>Búsqueda avanzada</h2>
+<form action="{% url 'courses:search' %}" class="d-flex ms-0 ms-lg-3">
+    <input value="{{q}}" name="q" class="form-control me-2" type="search" placeholder="Ramo, sigla o profesor" aria-label="Buscar">
+    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+</form>
+
+<table class="table mt-3">
+{% for s in results %}
+    <tr>
+        <td style="width: min-content;">
+            <a class="badge bg-primary me-2" href="{% url 'courses:course' initials=s.course.initials %}?period={{s.period}}">{{ s.course.initials }}</a>
+        </td>
+        <td>{{ s.course.name }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% if results_count == 20 %}
+<p class="text-muted">Se muestran los primeros 20 resultados.</p>
+{% endif %}
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% manifest 'generic.js' %}"></script>
+{% endblock %}

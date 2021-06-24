@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static manifest %}
+
+{% block title %} {{ school_name }} {% endblock %}
+{% block head %}
+<link rel="canonical" href="{% url 'courses:browse' %}?escuela={{school_name}}&page={{courses_page.number}}" />
+<meta name="description" content="Ramos de la Escuela de {{school_name}} UC.">
+{% endblock %}
+
+
+{% block main %}
+
+<h2><a class="text-dark text-decoration-none" href="{% url 'courses:browse' %}">Ramos</a> > {{ school_name }}</h2>
+
+<table class="table mt-3">
+{% for c in courses_page %}
+    <tr>
+        <td style="width: min-content;">
+            <a class="badge bg-primary me-2" href="{% url 'courses:course' initials=c.initials %}">{{ c.initials }}</a>
+        </td>
+        <td>{{ c.name }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% if courses_page.has_other_pages %}
+<nav>
+    <ul class="pagination">
+        {% if courses_page.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?escuela={{ school_name }}&page={{ courses_page.previous_page_number }}">&laquo;</a>
+        </li>
+        {% endif %}
+        {% for i in courses_page.paginator.page_range %}
+            {% if courses_page.number == i %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">{{ i }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?escuela={{ school_name }}&page={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if courses_page.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?escuela={{ school_name }}&page={{ courses_page.next_page_number }}">&raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% manifest 'browse.js' %}"></script>
+{% endblock %}

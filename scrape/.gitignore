@@ -1,0 +1,5 @@
+# local config and data
+*.json
+
+# logs
+*.log

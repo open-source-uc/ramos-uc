@@ -1,0 +1,25 @@
+# Python
+__pycache__
+
+# VSCode
+.vscode
+
+# Server resources
+media/*
+!media/.empty
+logs/*
+!logs/.empty
+/static
+/cache
+
+# Other
+desktop.ini
+
+# Enviroment config
+.env
+
+# Virtualenv
+bin
+lib
+lib64
+pyvenv.cfg

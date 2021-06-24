@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% load static manifest cache %}
+
+{% block title %} Planifica {% endblock %}
+
+{% block head %}
+<meta name="keywords" content="UC, Buscacursos, Ramos, Universidad Catolica, horario, ramos uc, buscador, cursos, banner uc">
+<meta name="author" content="Nicolas Mc Intyre">
+<meta name="description" content="Buscador de ramos para la Universidad Católica, ideal para planificar tu horario y encontrar electivos. Una alternativa a Buscacursos UC.">
+{% endblock %}
+
+{% block main %}
+{% cache 21600 planner %}
+
+<!-- COURSE INFO MODAL -->
+<div class="modal" tabindex="-1" id="infoModal">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="courseTitle">Cargando...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Detalles</h4>
+                <p id="courseInfo"></p>
+                <h4>Cupos</h4>
+                <p id="courseBanner">Sin información.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END INFO MODAL -->
+
+<!-- SAVE POPUP -->
+<div id="saveModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Guardar horario</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Si usas el mismo nombre que otro horario guardado, este se reemplazará.</p>
+                <div class="form-group m-2">
+                    <input placeholder="Nombre" class="form-control" id="saveName"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="wp.save()" type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END SAVE POPUP -->
+
+<!-- VIEW SAVED POPUP -->
+<div id="savedModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Horarios guardados</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body" id="savedTable"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END VIEW SAVED POPUP -->
+
+<!-- RAMO DETAIL POPUP -->
+<div id="quotaModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="quotaTitle" class="modal-title">Cargando...</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            
+            <div class="table-responsive">
+                <div id="quotaChart" class="modal-body" style="height: 500px"></div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END DETAIL POPUP -->
+
+
+<!-- TOP -->
+<div class="row">
+    <!-- SCHEDULE LEFT -->
+    <div class="col-xl-7">
+        <div class="table-responsive">
+            <table class="table table-sm" style="text-align: center;">
+                <tr>
+                    <th>Hora</th>
+                    <th onclick="wp.toggleDay('L')">Lunes</th>
+                    <th onclick="wp.toggleDay('M')">Martes</th>
+                    <th onclick="wp.toggleDay('W')">Miercoles</th>
+                    <th onclick="wp.toggleDay('J')">Jueves</th>
+                    <th onclick="wp.toggleDay('V')">Viernes</th>
+                    <th onclick="wp.toggleDay('S')">Sábado</th>
+                </tr>
+                {% for mod in mods %}
+                    <tr>
+                        <th onclick="wp.toggleRow({{ forloop.counter }})">
+                        {{ mod }} 
+                        </th>
+                        {% for day in 'LMWJVS' %}
+                        <td class="" onclick="wp.toggle(this)" id="{{ day }}{{ forloop.parentloop.counter }}"></td>
+                        {% endfor %}
+                    </tr>
+                    {% if forloop.counter == 3 or forloop.counter == 6 %}
+                    <tr class="table-success"><td colspan="8"></td></tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        <!-- LEYENDA -->
+        <p>Al apretar los módulos podrás cambiar su estado entre <b>libre</b> y <b>no disponible</b> (oscurecido)</p>
+        <div class="mx-2 text-center">
+            <span class="badge bg-warning text-dark mb-1 me-2" style="font-size: 1em;">Cátedra</span>
+            <span class="badge bg-success mb-1 me-2" style="font-size: 1em;">Ayudantía</span>
+            <span class="badge bg-primary mb-1 me-2" style="font-size: 1em;">Laboratorio</span>
+            <span class="badge bg-secondary mb-1 me-2" style="font-size: 1em;">Taller</span>
+            <span class="badge bg-info text-dark mb-1 me-2" style="font-size: 1em;">Terreno</span>
+            <span class="badge bg-danger mb-1 me-2" style="font-size: 1em;">Otro</span>
+        </div>
+    </div>
+    
+    <!-- DETAILS RIGHT -->
+    <div id="agregados" class="col-xl-5 mt-xl-0 mt-4">
+        <button onclick="wp.viewSaved()" type="button" class="btn btn-primary ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#savedModal">Ver horarios guardados</button>
+        <button onclick="wp.share()" type="button" class="btn btn-primary ms-3 mb-3 text-white">Compartir</button>
+        <button type="button" class="btn btn-primary ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#saveModal">Guardar</button>
+        <table class="table table-sm" id="ramos"></table>
+    </div>
+</div><!-- END TOP -->
+
+<!-- SEARCH -->
+<div>
+    <hr>
+    <!-- FAST SEARCH -->
+    <form action="#" onsubmit="return wp.search();">
+        <div class="row row-cols-lg-auto g-3 align-items-center">
+            <div class="col-12">
+                <h3>Búsqueda</h3>
+            </div>
+
+            <div class="col-12">
+                <label class="visually-hidden" for="periodSelect">Periodo</label>
+                <select class="form-select" id="periodSelect">
+                    <option selected value="2021-1">2021-1</option>
+                    <option value="2020-2">2020-2</option>
+                    <option value="2020-1">2020-1</option>
+                    <option value="2019-2">2019-2</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <label class="visually-hidden" for="inputQuery">Nombre, sigla o profesor</label>
+                <input type="text" class="form-control" id="inputQuery" placeholder="Nombre, sigla o profesor" autofocus>
+            </div>
+        
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary me-3">Buscar</button>
+                <button class="btn btn-info me-1" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">Ver Filtros</button>
+                <button class="btn btn-info" type="reset" onclick="wp.clearSelects()">Borrar filtros</button>
+            </div>
+        </div>
+
+        <!-- COLLAPSEABLE FILTERS -->
+        <div id="filters" class="collapse mt-2" action="#">
+            <!-- FIRST ROW FILTERS -->
+            <div class="row">
+                <div class="col-md-3">
+                    <p class="m-0">Campus</p>
+                    <select id="campus" multiple="multiple" class="multiple-select">
+                        {% for x in campuses %}
+                        <option value="{{ x }}">{{ x }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <p class="m-0">Formato</p>
+                    <select id="formato" multiple="multiple" class="multiple-select">
+                        {% for x in formats %}
+                        {% if x %}<option value="{{ x }}">{{ x }}</option>{% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <p class="m-0">Escuela</p>
+                    <select id="escuela" multiple="multiple" class="multiple-select">
+                        {% for s in schools %}
+                        <option value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <p class="m-0">Módulos permitidos</p>
+                    <select id="tipos_modulo" multiple="multiple" class="multiple-select">
+                        <option value="CLAS">Cátedra</option>
+                        <option value="AYU">Ayudantía</option>
+                        <option value="LAB">Laboratorio</option>
+                        <option value="TAL">Taller</option>
+                        <option value="TER">Terreno</option>
+                        <option value="OTRO">Otro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SECOND ROW FILTERS -->
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <p class="m-0">Categoría</p>
+                    <select id="categoria" multiple="multiple" class="multiple-select">
+                        {% for x in categories %}
+                        {% if x %}<option value="{{ x }}">{{ x }}</option>{% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <p class="m-0">Área</p>
+                    <select id="area" multiple="multiple" class="multiple-select">
+                        {% for x in areas %}
+                        {% if x %}<option value="{{ x }}">{{ x }}</option>{% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <p class="m-0">Créditos</p>
+                    <input type="number" min="0" class="form-control" id="creditos">
+                </div>
+                <div class="col-md-3">
+                    <p class="m-0">Máximos módulos semanales</p>
+                    <input type="number" min="0" class="form-control" id="modulos">
+                </div>
+            </div>
+
+            <!-- REST OF FILTERS ROWS -->
+            <div class="form-check mt-2">
+                <input type="checkbox" class="form-check-input" id="tope_horario">
+                <label class="form-check-label" for="tope_horario">Descartar ramos que topen en mi horario (Se considera como mi horario los módulos con fondo oscurecido)</label>
+            </div>
+            <div class="form-check ms-3">
+                <input type="checkbox" class="form-check-input" id="tope_ayu">
+                <label class="form-check-label" for="tope_ayu">Permitir tope de ayudantías y terreno con cualquier módulo.</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="requisitos">
+                <label class="form-check-label" for="requisitos">Descartar ramos con requisitos</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="quota">
+                <label class="form-check-label" for="quota">Descartar ramos sin cupos libres (No es instantáneo)</label>
+            </div>
+        </div><!-- END FILTER -->
+    </form>
+
+    <!-- RESULTS TABLE -->
+    <div class="table-responsive">
+        <table class="table mt-3">
+            <thead>
+                <th></th>
+                <th>Ramo</th>
+                <th>Nombre</th>
+                <th>Profesor/es</th>
+                <th>Cupos disp.</th>
+                <th style="min-width: 100px;">Horario</th>
+            </thead>
+            <tbody id="results"><tr></tr></tbody>
+            <tfoot>
+                <td id="resultsFoot" colspan="6">Busca para encontrar ramos.</td>
+            </tfoot>
+        </table>
+    </div>
+</div><!-- END SEARCH -->
+
+{% endcache %}
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="{% manifest 'planner.js' %}"></script>
+{% endblock %}

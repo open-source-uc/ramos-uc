@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static manifest cache %}
+
+{% block title %} Todos los ramos {% endblock %}
+
+{% block main %}
+{% cache 86400 schools %}
+
+<h2>Ramos por escuela</h2>
+<table class="table mt-3">
+{% for s in schools %}
+    <tr><td><a href="{% url 'courses:browse' %}?escuela={{s}}">{{s}}</a></td></tr>
+{% endfor %}
+</table>
+
+{% endcache %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% manifest 'browse.js' %}"></script>
+{% endblock %}

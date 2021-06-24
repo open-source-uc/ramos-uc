@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load manifest %}
+
+{% block title %} Horario compartido {% endblock %}
+
+{% block main %}
+
+<!-- COURSE INFO MODAL -->
+<div class="modal" tabindex="-1" id="infoModal">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="courseTitle">Cargando...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Detalles</h4>
+                <p id="courseInfo"></p>
+                <h4>Cupos</h4>
+                <p id="courseBanner">Sin información.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END INFO MODAL -->
+
+<!-- RAMO DETAIL POPUP -->
+<div id="quotaModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="quotaTitle" class="modal-title">Cargando...</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            
+            <div class="table-responsive">
+                <div id="quotaChart" class="modal-body" style="height: 500px"></div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- END DETAIL POPUP -->
+
+<div class="table-responsive">
+    <table class="table table-sm" style="text-align: center;">
+        <tr>
+            <th>Hora</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miercoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
+        </tr>
+        {% for mod in mods %}
+            <tr>
+                <th>
+                {{ mod }} 
+                </th>
+                {% for day in 'LMWJVS' %}
+                <td id="{{ day }}{{ forloop.parentloop.counter }}"></td>
+                {% endfor %}
+            </tr>
+            {% if forloop.counter == 3 or forloop.counter == 6 %}
+            <tr class="table-success"><td colspan="8"></td></tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</div>
+
+<!-- LEYENDA -->
+<div class="mx-2 text-center">
+    <span class="badge bg-warning text-dark mb-1 me-2" style="font-size: 1em;">Cátedra</span>
+    <span class="badge bg-success mb-1 me-2" style="font-size: 1em;">Ayudantía</span>
+    <span class="badge bg-primary mb-1 me-2" style="font-size: 1em;">Laboratorio</span>
+    <span class="badge bg-secondary mb-1 me-2" style="font-size: 1em;">Taller</span>
+    <span class="badge bg-info text-dark mb-1 me-2" style="font-size: 1em;">Terreno</span>
+    <span class="badge bg-danger mb-1 me-2" style="font-size: 1em;">Otro</span>
+</div>
+
+<!-- DETAILS BOTTOM -->
+<h2 class="mt-3">Ramos <button type="button" class="btn btn-primary ms-3" onclick="wp.edit('{{ids}}')">Editar horario</button></h2>
+<table class="table table-sm" id="ramos"></table>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="{% manifest 'shared.js' %}"></script>
+<script>
+$(() => {
+    var h = "{{ ids }}";
+    h = h ? h.split(',') : [];
+    h.forEach((id) => {
+        wp.loadRamo(id, false);
+    })
+})
+</script>
+
+{% endblock %}

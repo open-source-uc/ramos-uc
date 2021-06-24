@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static manifest %}
+
+{% block title %} Calificar ramo {% endblock %}
+
+{% block main %}
+
+<h2>Calificar ramo: {{ course.name }}</h2>
+
+<div class="alert alert-info">
+Antes de calificar el ramo, te pedimos que seas serio en lo que vas a poner. <b>Si no has hecho el ramo no lo califiques.</b>
+<br>
+Lo que buscamos es poder dar más y mejor información a las personas que estén considerando tomarlo en un futuro.
+<br>
+Tu aporte será tremendamente valorado, muchas gracias!
+</div>
+
+<form method="POST" action="{% url 'califications:create' course_id=course.id %}" class="m-3 needs-validation">
+    {% if errors %}
+    <div class="alert alert-danger">Debes rellenar todos los campos.</div>
+    {% endif %}
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="yearForm" class="form-label">Año en que hiciste el ramo</label>
+        <input required name="year" id="yearForm" class="form-control" type="number" min="1900" max="2200" />
+    </div>
+
+    <div class="mb-3">
+        <label for="semForm" class="form-label">Semestre</label>
+        <select required id="semForm"  class="form-select" name="semester">
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+        <div class="invalid-feedback">Error</div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="likeForm" class="form-label">¿Cuánto recomendarías tomar este ramo?</label>
+        <select id="likeForm"  class="form-select" name="like">
+            <option></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+    
+    <div class="mb-3">
+        <label for="likeForm" class="form-label">Siendo 1 poca carga y 5 mucha carga, ¿Cuánta carga académica consideras que tuvo este ramo?</label>
+        <select id="loadForm" class="form-select" name="load">
+            <option></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Calificar</button>
+</form>
+
+<p class="text-muted">* Si ya calificaste este ramo anteriormente, tu calificación será reemplazada.</p>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% manifest 'generic.js' %}"></script>
+{% endblock %}

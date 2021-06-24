@@ -1,0 +1,7 @@
+{
+    "db_host": "localhost",
+    "db_user": "admin",
+    "db_passwd": "admin",
+    "db_name": "cursos",
+    "batch_size": 100
+}
