@@ -17,7 +17,7 @@ For dev and production.
 ## Python
 For dev and production.
 + Install python3-pip python3-dev libpq-dev
-+ pip instal virtualenv
++ pip install virtualenv
 + Add virtualenv to PATH if needed
 + Create enviroment (virtualenv /my/project/folder)
 + Activate enviroment (source bin/activate)
