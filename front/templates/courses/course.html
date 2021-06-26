@@ -9,14 +9,14 @@
     {
       "@context": "https://schema.org",
       "@type": "Course",
-      "name": "{{ course.initials }}: {{ course.name }}",
+      "name": "{{ course.name }}",
       "description": "{{ description }}",
       "provider": {
         "@type": "Organization",
         "name": "{{ course.school }} UC"
       }
     }
-    </script>
+</script>
 {% endblock %}
 
 {% block main %}
