@@ -15,11 +15,11 @@ class _RequirementsParser(HTMLParser):
         return self.values[0], self.values[1], self.values[2]
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'span' and not self.toogle:
+        if tag == "span" and not self.toogle:
             self.toogle = True
 
     def handle_endtag(self, tag):
-        if tag == 'span' and self.toogle:
+        if tag == "span" and self.toogle:
             self.toogle = False
 
     def handle_data(self, data):
@@ -29,6 +29,6 @@ class _RequirementsParser(HTMLParser):
 
 def get_requirements(initials):
     parser = _RequirementsParser()
-    query = f'http://catalogo.uc.cl/index.php?tmpl=component&view=requisitos&sigla={initials}'
+    query = f"http://catalogo.uc.cl/index.php?tmpl=component&view=requisitos&sigla={initials}"
     text = requests.get(query).text
     return parser.process(text)

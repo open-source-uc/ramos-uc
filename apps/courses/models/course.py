@@ -4,11 +4,10 @@ from django.db.models import Count, Avg
 
 class CoursesManager(models.Manager):
     def available(self, column_name, desc=False):
-        sorted_name = '-' + column_name if desc else column_name
-        values = (self.distinct(column_name)
-                    .order_by(sorted_name)
-                    .values(column_name))
+        sorted_name = "-" + column_name if desc else column_name
+        values = self.distinct(column_name).order_by(sorted_name).values(column_name)
         return [x[column_name] for x in values]
+
 
 class Course(models.Model):
     # Un ramo tiene:
@@ -29,26 +28,26 @@ class Course(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['req']),
-            models.Index(fields=['school']),
-            models.Index(fields=['area']),
-            models.Index(fields=['category']),
+            models.Index(fields=["req"]),
+            models.Index(fields=["school"]),
+            models.Index(fields=["area"]),
+            models.Index(fields=["category"]),
         ]
-    
+
     def __str__(self):
-        return self.initials + ' - ' + self.name
+        return self.initials + " - " + self.name
 
     def get_description(self):
-        start_description = self.program.find('DESCRIP')
+        start_description = self.program.find("DESCRIP")
         if start_description != -1:
-            start_description = self.program.find('\n', start_description)
-            end_description = self.program.find('II', start_description)
+            start_description = self.program.find("\n", start_description)
+            end_description = self.program.find("II", start_description)
             return self.program[start_description:end_description]
         else:
-            return 'Descripción no disponible'
-    
+            return "Descripción no disponible"
+
     def get_calification(self, period=None):
         qs = self.calification_set
         if period is not None:
             qs = qs.filter(period=period)
-        return qs.aggregate(Avg('like'), Avg('load'), Count('like'))
+        return qs.aggregate(Avg("like"), Avg("load"), Count("like"))

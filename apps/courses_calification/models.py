@@ -11,9 +11,9 @@ class Calification(models.Model):
 
     load = models.PositiveSmallIntegerField()
     like = models.PositiveSmallIntegerField()
-    
+
     class Meta:
         indexes = [
-            models.Index(fields=['course', 'period']),
-            models.Index(fields=['user', 'period']),
+            models.Index(fields=["course", "period"]),
+            models.Index(fields=["user", "period"]),
         ]

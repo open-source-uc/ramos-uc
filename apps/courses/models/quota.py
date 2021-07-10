@@ -11,5 +11,5 @@ class Quota(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['section_id', 'date']),
+            models.Index(fields=["section_id", "date"]),
         ]
