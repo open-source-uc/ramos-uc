@@ -11,27 +11,50 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('courses', '0002_auto_20210607_0243'),
+        ("courses", "0002_auto_20210607_0243"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Calification',
+            name="Calification",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('period', models.CharField(max_length=6)),
-                ('load', models.PositiveSmallIntegerField()),
-                ('like', models.PositiveSmallIntegerField()),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='courses.course')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("period", models.CharField(max_length=6)),
+                ("load", models.PositiveSmallIntegerField()),
+                ("like", models.PositiveSmallIntegerField()),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="courses.course"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddIndex(
-            model_name='calification',
-            index=models.Index(fields=['course', 'period'], name='courses_cal_course__49720c_idx'),
+            model_name="calification",
+            index=models.Index(
+                fields=["course", "period"], name="courses_cal_course__49720c_idx"
+            ),
         ),
         migrations.AddIndex(
-            model_name='calification',
-            index=models.Index(fields=['user', 'period'], name='courses_cal_user_id_7c8603_idx'),
+            model_name="calification",
+            index=models.Index(
+                fields=["user", "period"], name="courses_cal_user_id_7c8603_idx"
+            ),
         ),
     ]

@@ -19,14 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', include('apps.courses.urls')),
-    path('calificar/', include('apps.courses_calification.urls')),
-    path('comentarios/', include('apps.comments.urls')),
-    path('cuentas/', include('allauth.urls')),
+    path("", include("apps.courses.urls")),
+    path("calificar/", include("apps.courses_calification.urls")),
+    path("comentarios/", include("apps.comments.urls")),
+    path("cuentas/", include("allauth.urls")),
     # path('u/', include('apps.users.urls')),
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -16,7 +16,8 @@ class CalificationSearializer(serializers.Serializer):
 @login_required
 def new(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    return render(request, 'courses/calificate.html', {'course': course })
+    return render(request, "courses/calificate.html", {"course": course})
+
 
 @login_required
 def create(request, course_id):
@@ -24,10 +25,14 @@ def create(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     serializer = CalificationSearializer(data=request.POST)
     if not serializer.is_valid():
-        return render(request, 'courses/calificate.html', {
-            'course': course,
-            'errors': serializer.errors,
-        })
+        return render(
+            request,
+            "courses/calificate.html",
+            {
+                "course": course,
+                "errors": serializer.errors,
+            },
+        )
     params = serializer.validated_data
 
     # get previous calification if exists
@@ -37,15 +42,15 @@ def create(request, course_id):
         update = True
     except Calification.DoesNotExist:
         cal = Calification(user=request.user, course=course)
-    
+
     # save
     cal.period = f"{params['year']}-{params['semester']}"
-    cal.like = params['like']
-    cal.load = params['load']
+    cal.like = params["like"]
+    cal.load = params["load"]
     cal.save()
-    message = 'Calificación actualizada' if update else 'Gracias por tu calificación!'
+    message = "Calificación actualizada" if update else "Gracias por tu calificación!"
 
     # devalidate cache of course period
-    cache.delete(f's_{course.initials}_{cal.period}')
+    cache.delete(f"s_{course.initials}_{cal.period}")
 
-    return redirect('courses:course', initials=course.initials)
+    return redirect("courses:course", initials=course.initials)

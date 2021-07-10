@@ -3,6 +3,7 @@ from .models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'timestamp')
+    list_display = ("__str__", "timestamp")
+
 
 admin.site.register(Comment)
