@@ -17,11 +17,13 @@ For dev and production.
 ## Python
 For dev and production.
 + Install python3-pip python3-dev libpq-dev
-+ pip install virtualenv
-+ Add virtualenv to PATH if needed
-+ Create enviroment (virtualenv /my/project/folder)
-+ Activate enviroment (source bin/activate)
-+ Install dependencies on requirements.txt (pip3 install -r requirements.txt)
++ Install poetry by running:
+```shell
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+```
++ Run `poetry install` (for development) or `poetry install --no-dev` (for production) in the directory of the project.
++ Switch your python version to the created virtualenv.
++ (For development) Run `pre-commit install`.
 
 ## Nginx
 Only for production.
