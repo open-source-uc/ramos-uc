@@ -1,0 +1,28 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    # Elimina espacios o tabs innecesarios al final de las lineas
+    -   id: trailing-whitespace
+    # Elimina terminaciones conflictivas entre Windows y UNIX (CRLF y LF)
+    -   id: mixed-line-ending
+    # Arregla archivos sin una linea nueva final
+    -   id: end-of-file-fixer
+    # Revisa que los archivos de YAML sean válidos
+    -   id: check-yaml
+    # Advierte antes de commitear archivos gigantes
+    -   id: check-added-large-files
+    # Verifica que los archivos de Python tengan una sintaxis válida
+    -   id: check-ast
+    # Verifica que no hayan líneas de un merge incompleto
+    -   id: check-merge-conflict
+    #
+
+-   repo: https://github.com/psf/black
+    rev: 21.6b0
+    hooks:
+      # Revisa que el código esté en formato Black
+      -   id: black
+          name: "Format with black"
