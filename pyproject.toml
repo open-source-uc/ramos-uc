@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ramos-uc"
+version = "0.1.0"
+description = "Plataforma para la visualización y búsqueda de ramos de la Pontificia Universidad Católica."
+authors = ["Nicolás Mc Intyre <nicomcintyrew@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^3.2.5"
+django-allauth = "^0.44.0"
+django-dotenv = "^1.4.2"
+django-manifest-loader = "^1.0.0"
+djangorestframework = "^3.12.4"
+psycopg2-binary = "^2.9.1"
+
+[tool.poetry.dev-dependencies]
+black = "^21.6b0"
+flake8 = "^3.9.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
