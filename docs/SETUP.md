@@ -22,7 +22,7 @@ For dev and production.
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 ```
 + Run `poetry install` (for development) or `poetry install --no-dev` (for production) in the directory of the project.
-+ Switch your python version to the created virtualenv.
++ Use `poetry shell` to enter the virtual environment, or adjust your editor/IDE accordingly.
 + (For development) Run `pre-commit install`.
 
 ## Nginx
