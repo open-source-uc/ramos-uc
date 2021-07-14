@@ -48,7 +48,10 @@ def share(request):
 # Banner
 @never_cache
 def banner(request, id):
-    section = get_object_or_404(Section, pk=id)
+    try:
+        section = Section.objects.get(pk=id)
+    except Section.DoesNotExist:
+        return JsonResponse({"error": "Error 404"}, status=404)
     return JsonResponse(
         {
             "initials": str(section),
@@ -177,12 +180,23 @@ def single_course(request, initials):
     if cached_course is None:
         course = get_object_or_404(Course, initials=initials)
         # Link requirements
-        requirements = re.sub(
-            r"([a-zA-Z]{3}\d{3,4}[a-zA-Z]?)", r'<a href="/ramo/\1">\1</a>', course.req
+        requirements = (
+            re.sub(
+                r"([a-zA-Z]{3}\d{3,4}[a-zA-Z]?)",
+                r'<a href="/ramo/\1">\1</a>',
+                course.req,
+            )
+            if course.req
+            else "No tiene"
+        )
+        program = (
+            course.program.replace("\\", "<br>").replace("\n", "<br>")
+            if course.program
+            else "No disponible"
         )
         cached_course = {
             "course": course,
-            "program": course.program.replace("\\", "<br>").replace("\n", "<br>"),
+            "program": program,
             "description": course.get_description(),
             "requirements": requirements,
             "periods": course.section_set.available("period", desc=True),
@@ -191,7 +205,7 @@ def single_course(request, initials):
 
     # Get sections data
     if period is None:
-        period = cached_course["periods"][0]
+        period = cached_course["periods"][0] if len(cached_course["periods"]) else ""
     cached_sections = cache.get(f"s_{initials}_{period}")
     if cached_sections is None:
         course = get_object_or_404(Course, initials=initials)
@@ -209,7 +223,10 @@ def single_course(request, initials):
 # Section detail on planner
 @cache_control(must_revalidate=True)
 def single_section(request, id):
-    section = get_object_or_404(Section, pk=id)
+    try:
+        section = Section.objects.get(pk=id)
+    except Section.DoesNotExist:
+        return JsonResponse({"error": "Error 404"}, status=404)
     course = section.course
     quota = section.last_quota()
     return JsonResponse(
@@ -240,7 +257,10 @@ def single_section(request, id):
 # Data to add section to schedule
 @cache_control(private=True, max_age=3600 * 24)
 def schedule(request, id):
-    section = get_object_or_404(Section, pk=id)
+    try:
+        section = Section.objects.get(pk=id)
+    except Section.DoesNotExist:
+        return JsonResponse({"error": "Error 404"}, status=404)
     schedule = section.fullschedule.__dict__
     schedule.pop("_state")
     schedule.pop("section_id")
