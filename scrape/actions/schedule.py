@@ -7,12 +7,10 @@ for day in "lmwjvs":
         DEFAULT_SCHEDULE[day + mod] = "'FREE'"
 
 
-"""For a given schedule text in BC format, returns the SQL queries for inserting
-the full schedule and schedule info. Those queries have to format ID.
-"""
-
-
 def process_schedule(text_sc):
+    """For a given schedule text in BC format, returns the SQL queries for inserting
+    the full schedule and schedule info. Those queries have to format ID.
+    """
     ### Full Schedule
     data = text_sc.split("\nROW: ")[1:]
     # data rows -> day-day:module,module <> type <> room <><>

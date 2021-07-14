@@ -22,12 +22,10 @@ def open_db_conn(settings):
     print("DB connection set.")
 
 
-"""Searchs the delete log courses in BC. In the case it does not found
-the course, removes it from DB.
-"""
-
-
 def delete(settings):
+    """Searchs the delete log courses in BC. In the case it does not found
+    the course, removes it from DB.
+    """
     open_db_conn(settings)
 
     with open("logs/delete.log") as log:

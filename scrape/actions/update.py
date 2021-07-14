@@ -28,11 +28,9 @@ def open_db_conn(settings):
 
 procesed_initials = {}
 
-"""For a list of courses, process and gathers all related data and commits to DB.
-"""
-
 
 def _process_course(c, section_id):
+    """For a list of courses, process and gathers all related data and commits to DB."""
     try:
         # Update Course name, credits, area and category
         if c["initials"] not in procesed_initials:
@@ -77,11 +75,8 @@ def _process_course(c, section_id):
         handle(c, err)
 
 
-"""Iterates a search throw all BC and process all courses and sections founded.
-"""
-
-
 def update(period, settings):
+    """Iterates a search throw all BC and process all courses and sections founded."""
     open_db_conn(settings)
     BATCH_SIZE = settings["batch_size"]
 
