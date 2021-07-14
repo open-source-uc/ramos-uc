@@ -1,12 +1,10 @@
 from scraper.search import bc_search
 
 
-"""Search for a initial and period in BuscaCursosUC.
-Prints the results. Useful for testing only.
-"""
-
-
 def search(initials, period):
+    """Search for a initial and period in BuscaCursosUC.
+    Prints the results. Useful for testing only.
+    """
     print("Searching in BC:", initials)
     courses = bc_search(initials, period)
     for c in courses:

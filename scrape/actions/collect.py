@@ -33,11 +33,9 @@ procesed_nrcs = {}
 new_sections = 0
 new_courses = 0
 
-"""For a list of courses, process and gathers all related data and commits to DB.
-"""
-
 
 def _process_courses(courses, period):
+    """For a list of courses, process and gathers all related data and commits to DB."""
     global procesed_initials, procesed_nrcs
     global new_courses, new_sections
     for c in courses:
@@ -159,11 +157,8 @@ def _process_courses(courses, period):
             handle(c, err)
 
 
-"""Iterates a search throw all BC and process all courses and sections founded.
-"""
-
-
 def collect(period, settings):
+    """Iterates a search throw all BC and process all courses and sections founded."""
     open_db_conn(settings)
 
     LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

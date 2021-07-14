@@ -1,18 +1,26 @@
 # Application enviroment setup
 
+## Enviroment variables
+For dev and production.
++ For convenience, an `.env` file is provided and may contain needed enviroment variables.
++ Make a copy of `.env.example` and name it `.env`.
++ Setup your local enviroment configurations on the `.env` file.
+
 ## PostgreSQL
 For dev and production.
-+ Install postgresql (apt install postgresql)
-+ In psql console (sudo -u postgres psql)
-  + CREATE DATABASE db_name;
-  + CREATE USER django WITH PASSWORD 'passwd';
-  + ALTER ROLE django SET client_encoding TO 'utf-8';
-  + ALTER ROLE django SET timezone TO 'UTC';
-  + GRANT ALL PRIVILEGES ON DATABASE db_name TO django;
-+ sudo nano /etc/postgresql/13/main/pg_hba.conf
++ Install postgresql (`apt install postgresql`)
++ In psql console (`sudo -u postgres psql`)
+	```
+	CREATE DATABASE db_name;
+  	CREATE USER django WITH PASSWORD 'passwd';
+  	ALTER ROLE django SET client_encoding TO 'utf-8';
+  	ALTER ROLE django SET timezone TO 'UTC';
+  	GRANT ALL PRIVILEGES ON DATABASE db_name TO django;
+	```
++ Allow password authentication to postgres (in `/etc/postgresql/13/main/pg_hba.conf`)
   + CHANGE local all all peer ----> local all all md5
-+ sudo systemctl restart postgresql
-+ Connect to psql with psql <DATABASE> <USER>
++ Restart postgres (`systemctl restart postgresql`)
++ To test, connect to psql with `psql <DATABASE> <USER>`
 
 ## Python
 For dev and production.
@@ -27,9 +35,9 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 
 ## Nginx
 Only for production.
-+ Install NGINX (apt install nginx)
-+ Create conf at /etc/nginx/sites-available/project_name.conf
-+ Link (ln -s project_name.conf ../sites-enabled/)
++ Install NGINX (`apt install nginx`)
++ Create conf at `/etc/nginx/sites-available/project_name.conf`
++ Link (`ln -s project_name.conf ../sites-enabled/`)
 
 ### /etc/nginx/sites-available/project_name.conf
 ```
@@ -80,10 +88,10 @@ uwsgi_param  SERVER_NAME        $server_name;
 
 ## uWSGI
 Only for production.
-+ pip install uwsgi
-+ mkdir -p /etc/uwsgi/vassals/
++ Install uWSGI package (`pip install uwsgi`)
++ Create vassals directory (`mkdir -p /etc/uwsgi/vassals/`)
 + Create /etc/systemd/system/uwsgi.service
-+ systemctl enable uwsgi
++ Autostart uWSGI at boot: `systemctl enable uwsgi`
 
 ### /etc/uwsgi/vassals/NAME.ini
 ```
