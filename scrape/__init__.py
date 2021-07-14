@@ -1,2 +1,2 @@
-import scraper
-import actions
+from . import scraper
+from . import actions
