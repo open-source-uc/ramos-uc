@@ -1,5 +1,11 @@
 # Application enviroment setup
 
+## Enviroment variables
+For dev and production.
++ For convinience, a `.env` file is provided and may contain needed enviroment variables.
++ Make a copy of `.env.example` and name it `.env`.
++ Setup your local enviroment configurations on the `.env` file.
+
 ## PostgreSQL
 For dev and production.
 + Install postgresql (`apt install postgresql`)
