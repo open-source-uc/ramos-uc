@@ -59,10 +59,19 @@ class CoursesRoutesTestCase(TestCase):
             reverse("courses:browse"),
             {
                 "escuela": "Ingeniería",
-                "page": 3,
+                "page": 1,
             },
         )
         self.assertEqual(res.status_code, 200)
+
+        res = self.client.get(
+            reverse("courses:browse"),
+            {
+                "escuela": "Ingeniería",
+                "page": 1000,  # Out of range page
+            },
+        )
+        self.assertNotEqual(res.status_code, 500)
 
     def test_search_response_succesful(self):
         res = self.client.get(reverse("courses:search"))
