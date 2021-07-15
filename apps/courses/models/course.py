@@ -38,6 +38,8 @@ class Course(models.Model):
         return self.initials + " - " + self.name
 
     def get_description(self):
+        if not self.program:
+            return "Descripción no disponible"
         start_description = self.program.find("DESCRIP")
         if start_description != -1:
             start_description = self.program.find("\n", start_description)
