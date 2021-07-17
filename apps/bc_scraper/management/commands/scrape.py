@@ -3,6 +3,7 @@ from apps.bc_scraper.actions.search import search
 from apps.bc_scraper.actions.collect import collect
 from apps.bc_scraper.actions.update import update
 from apps.bc_scraper.actions.delete import delete
+from apps.bc_scraper.actions.banner import banner
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
@@ -16,11 +17,11 @@ class Command(BaseCommand):
         parser.add_argument("action", type=str)
         parser.add_argument("period", type=str)
         parser.add_argument("--initials")
+        parser.add_argument("--banner")
 
     def handle(self, *args, **options):
         action = options["action"]
-        # TODO: Implement banner action
-        ACTIONS = ["collect", "update", "delete", "search"]
+        ACTIONS = ["collect", "update", "banner", "delete", "search"]
         if action not in ACTIONS:
             raise CommandError("Invalid action.")
 
@@ -37,12 +38,22 @@ class Command(BaseCommand):
             "batch_size": getattr(settings, "SCRAPE_BATCH_SIZE"),
         }
 
+        # Excecute corresponding action
         if action == "collect":
             collect(period, settings_dict)
+
         elif action == "update":
             update(period, settings_dict)
+
+        elif action == "banner":
+            if options["banner"]:
+                banner(period, settings_dict, options["banner"])
+            else:
+                banner(period, settings_dict)
+
         elif action == "delete":
             delete(settings_dict)
+
         elif action == "search":
             if not options["initials"]:
                 raise CommandError("Must provide initials to search")
