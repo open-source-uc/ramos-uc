@@ -6,7 +6,14 @@ For dev and production.
 + Make a copy of `.env.example` and name it `.env`.
 + Setup your local enviroment configurations on the `.env` file.
 
-## PostgreSQL
+## Using devcontainer
+If you're using Visual Studio Code you can set up a full developer environment using a **development container**. Full system requirements can be found [here](https://code.visualstudio.com/docs/remote/containers), but you'll need [Docker](https://docs.docker.com/get-started/overview/), [Docker Compose](https://docs.docker.com/compose/) and the [Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+
+Once ready, just open the project in VSCode and a dialogue should prompt you to enter the container. This will automatically install Python, PostgreSQl and the dependencies, and start the initial migrations for you.
+
+
+## Manual install
+### PostgreSQL
 For dev and production.
 + Install postgresql (`apt install postgresql`)
 + In psql console (`sudo -u postgres psql`)
@@ -22,7 +29,7 @@ For dev and production.
 + Restart postgres (`systemctl restart postgresql`)
 + To test, connect to psql with `psql <DATABASE> <USER>`
 
-## Python
+### Python
 For dev and production.
 + Install python3-pip python3-dev libpq-dev
 + Install poetry by running:
@@ -33,13 +40,13 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 + Use `poetry shell` to enter the virtual environment, or adjust your editor/IDE accordingly.
 + (For development) Run `pre-commit install`.
 
-## Nginx
+### Nginx
 Only for production.
 + Install NGINX (`apt install nginx`)
 + Create conf at `/etc/nginx/sites-available/project_name.conf`
 + Link (`ln -s project_name.conf ../sites-enabled/`)
 
-### /etc/nginx/sites-available/project_name.conf
+#### /etc/nginx/sites-available/project_name.conf
 ```
 upstream django {
 	server unix:///tmp/uwsgi-web.sock;
@@ -66,7 +73,7 @@ server {
 }
 ```
 
-### /srv/NAME/uwsgi_params
+#### /srv/NAME/uwsgi_params
 ```
 uwsgi_param  QUERY_STRING       $query_string;
 uwsgi_param  REQUEST_METHOD     $request_method;
@@ -86,14 +93,14 @@ uwsgi_param  SERVER_PORT        $server_port;
 uwsgi_param  SERVER_NAME        $server_name;
 ```
 
-## uWSGI
+### uWSGI
 Only for production.
 + Install uWSGI package (`pip install uwsgi`)
 + Create vassals directory (`mkdir -p /etc/uwsgi/vassals/`)
 + Create /etc/systemd/system/uwsgi.service
 + Autostart uWSGI at boot: `systemctl enable uwsgi`
 
-### /etc/uwsgi/vassals/NAME.ini
+#### /etc/uwsgi/vassals/NAME.ini
 ```
 [uwsgi]
 chdir=/srv/NAME/current
@@ -112,7 +119,7 @@ safe-pidfile=/tmp/uwsgi-web.pid
 daemonize=/srv/NAME/log/web.log
 ```
 
-### /etc/systemd/system/uwsgi.service
+#### /etc/systemd/system/uwsgi.service
 ```
 [Unit]
 Description=uWSGI Emperor service
