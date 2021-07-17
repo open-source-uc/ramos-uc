@@ -1,10 +1,10 @@
 import json
 import sys
 import re
-from actions.search import search
-from actions.collect import collect
-from actions.update import update
-from actions.delete import delete
+from apps.bc_scraper.actions.search import search
+from apps.bc_scraper.actions.collect import collect
+from apps.bc_scraper.actions.update import update
+from apps.bc_scraper.actions.delete import delete
 
 
 # Call as "python main.py <ACTION> [PERIOD] [OPTIONS]"

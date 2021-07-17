@@ -1,4 +1,4 @@
-from scraper.search import bc_search
+from ..scraper.search import bc_search
 
 
 def search(initials, period):

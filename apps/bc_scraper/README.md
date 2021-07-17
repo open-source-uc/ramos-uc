@@ -1,5 +1,5 @@
 # BuscaCursosUC Scrapper
-Python scripts that retrieve courses data from BuscaCursosUC and Catálogo UC 
+Python scripts that retrieve courses data from BuscaCursosUC and Catálogo UC
 and save it to a Postgres database.
 
 ## How to use
@@ -36,7 +36,7 @@ and save it to a Postgres database.
 
 
 ## ```banner```
-Scrapes available cupos for all courses in a given YEAR SEMESTER. Accepts a 
-banner name parameter that adds to the database. Saves the cupos by category 
+Scrapes available cupos for all courses in a given YEAR SEMESTER. Accepts a
+banner name parameter that adds to the database. Saves the cupos by category
 and with a retrieval datetime.
 Run ```python banner.py YEAR SEMESTER```.

@@ -1,6 +1,6 @@
-from scraper.search import bc_search
-from scraper.programs import get_program
-from scraper.requirements import get_requirements
+from ..scraper.search import bc_search
+from ..scraper.programs import get_program
+from ..scraper.requirements import get_requirements
 import psycopg2
 from . import queries as sql
 from .schedule import process_schedule

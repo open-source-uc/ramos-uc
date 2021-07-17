@@ -1,5 +1,5 @@
 from datetime import datetime
-from scraper.search import bc_search
+from ..scraper.search import bc_search
 from .schedule import process_schedule
 from .errors import handle
 import psycopg2

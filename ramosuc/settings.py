@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "apps.google_analytics.apps.GAConfig",
     "apps.courses_calification.apps.CoursesCalificationConfig",
     "apps.comments.apps.CommentsConfig",
+    "apps.bc_scraper.apps.BCScraperConfig",
 ]
 
 MIDDLEWARE = [
@@ -165,6 +166,10 @@ if os.getenv("GOOGLE_AUTH_CLIENT") is not None:
 
 # Google analytics
 GA_CODE = os.getenv("GA_CODE", None)
+
+# BC-Scraper
+SCRAPE_LOG = BASE_DIR / "logs" / "scrape.log"
+SCRAPE_BATCH_SIZE = 100
 
 
 # Cache
