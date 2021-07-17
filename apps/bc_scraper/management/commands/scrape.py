@@ -1,65 +1,49 @@
-import json
-import sys
 import re
 from apps.bc_scraper.actions.search import search
 from apps.bc_scraper.actions.collect import collect
 from apps.bc_scraper.actions.update import update
 from apps.bc_scraper.actions.delete import delete
+from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
 
 
-# Call as "python main.py <ACTION> [PERIOD] [OPTIONS]"
-ACTIONS = [
-    "collect",  # collect from all BC and Catalogo (update or create). Does not detect deletions.
-    "update",  # update existing NRCs with BC data. Log unfounded for deletion.
-    "delete",  # review deletions propositions and execute deletion
-    "search",  # search initials for debugging and testing
-    "help",
-]
+class Command(BaseCommand):
+    help = (
+        "Scrapes Buscacursos and Catálogo to update database. See docs for more info."
+    )
 
-# Validate call
-ACTION = "help"
-if len(sys.argv) >= 2 and sys.argv[1] in ACTIONS:
-    ACTION = sys.argv[1]
+    def add_arguments(self, parser):
+        parser.add_argument("action", type=str)
+        parser.add_argument("period", type=str)
+        parser.add_argument("--initials")
 
-PERIOD = "0000-0"
-PERIOD_PROVIDED = False
-if len(sys.argv) >= 3 and re.match("\d{4}-[012]", sys.argv[2]):
-    PERIOD = sys.argv[2]
-    PERIOD_PROVIDED = True
+    def handle(self, *args, **options):
+        action = options["action"]
+        # TODO: Implement banner action
+        ACTIONS = ["collect", "update", "delete", "search"]
+        if action not in ACTIONS:
+            raise CommandError("Invalid action.")
 
-# Load settings
-SETTINGS = None
-with open("settings.json") as file:
-    SETTINGS = json.load(file)
+        period = options["period"]
+        if not re.match("\d{4}-[012]", period):
+            raise CommandError("Period must follow format YYYY-S")
 
-if ACTION == "help":
-    print('Call as "python main.py <ACTION> [PERIOD] [OPTIONS]"')
-    print("ex: python main.py collect 2021-2")
-    print()
-    print("Available actions are:")
-    print(" ", "\n  ".join(ACTIONS))
-    print()
-    print("PERIOD must be in the form of YYYY-S")
-    exit()
+        db_settings = getattr(settings, "DATABASES")["default"]
+        settings_dict = {
+            "db_host": db_settings["HOST"],
+            "db_user": db_settings["USER"],
+            "db_passwd": db_settings["PASSWORD"],
+            "db_name": db_settings["NAME"],
+            "batch_size": getattr(settings, "SCRAPE_BATCH_SIZE"),
+        }
 
-elif ACTION == "delete":
-    delete(SETTINGS)
-
-elif not PERIOD_PROVIDED:
-    print("Provide PERIOD in the form of YYYY-S")
-    exit()
-
-elif ACTION == "collect":
-    collect(PERIOD, SETTINGS)
-
-elif ACTION == "update":
-    update(PERIOD, SETTINGS)
-
-elif ACTION == "quota":
-    print("Not implemented yet, and maybe never. Just run banner.py.")
-
-elif ACTION == "search":
-    if len(sys.argv) != 4:
-        print("Call: search PERIOD <initials>")
-        exit()
-    search(sys.argv[3], PERIOD)
+        if action == "collect":
+            collect(period, settings_dict)
+        elif action == "update":
+            update(period, settings_dict)
+        elif action == "delete":
+            delete(settings_dict)
+        elif action == "search":
+            if not options["initials"]:
+                raise CommandError("Must provide initials to search")
+            search(options["initials"], period)
