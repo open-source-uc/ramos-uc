@@ -148,7 +148,6 @@ python3 -m virtualenv $name
 
 cd $PROJECT_PATH/$name
 ln -s $PROJECT_PATH/.env $PROJECT_PATH/$name/.env
-ln -s $PROJECT_PATH/settings.json $PROJECT_PATH/$name/scrape/settings.json
 rm -rf $PROJECT_PATH/$name/media
 ln -s $PROJECT_PATH/media $PROJECT_PATH/$name/media
 
