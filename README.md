@@ -5,7 +5,7 @@ Built on Django framework.
 Currently running on [ramosuc.cl](https://ramosuc.cl/).
 
 ## Installation
-Setup instructions [here](docs/SETUP.md), more documentation at [docs](docs/) folder.
+Setup instructions [here](docs/SETUP.md), more documentation at [docs](docs/) folder. For convenience, a [devcontainer](https://code.visualstudio.com/docs/remote/containers) environment is included for VSCode users.
 
 ## Usage
 After setup, run a local server with
