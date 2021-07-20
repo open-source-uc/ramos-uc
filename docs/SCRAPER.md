@@ -3,7 +3,10 @@ Management commads to retrieve courses data from BuscaCursosUC and Catálogo UC
 and save it to the database.
 
 ## How to use
+Directly from terminal use the management command:
 ```python manage.py scrape <action> [YYYY-S]```
+
+Also, scrapping can be scheduled from `/scraper` url. Only allowed for staff users. See [scheduler docs](SCHEDULER.md) for more details on how scheduling works.
 
 ### Available actions
 + `collect` -> Runs a full search in BC and Catalogo. Inserts or updates all BC content. Does NOT delete removed courses.
