@@ -6,7 +6,7 @@ Currently, only some tasks from the scraper module can be scheduled. More detail
 ## How to use
 Read library documentation for learning on how to allow an specific task/function to be scheduled.
 
-For scheduled tasks to excecute, you need to run this management command:
+For scheduled tasks to execute, you need to run this management command:
 ```
 python manage.py process_tasks
 ```
