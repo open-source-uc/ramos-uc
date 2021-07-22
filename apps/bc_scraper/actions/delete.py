@@ -52,3 +52,6 @@ def delete(settings):
                 db_conn.commit()
             else:
                 print("Course founded. Not deleted.")
+
+    db_cursor.close()
+    db_conn.close()
