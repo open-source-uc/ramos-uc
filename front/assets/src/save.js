@@ -1,5 +1,5 @@
 import {getCookie, setCookie} from './cookies';
-
+import {link} from './course_link';
 
 // Create share link and copy to clipboard
 const share = () => {
@@ -19,6 +19,18 @@ const share = () => {
     } catch (error) {
         console.log('No analytics.');
     }
+};
+
+// Create share link to buscacursos and copy to clipboard
+const buscacursos = () => {
+      
+    var lin = link();
+    navigator.clipboard.writeText(lin)
+        .then(() => {
+            alert('Link copiado, ahora puedes compartirlo con quien quieras!');
+        });
+
+    
 };
 
 // From share view, load ramos to cookie and redirect to root
@@ -100,4 +112,4 @@ const unsave = (key) => {
     }
 };
 
-export {save, unsave, viewSaved, edit, share};
+export {save, unsave, viewSaved, edit, share, buscacursos};
