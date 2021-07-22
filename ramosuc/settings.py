@@ -35,11 +35,13 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "background_task",
     "apps.users.apps.UsersConfig",
     "apps.courses.apps.CoursesConfig",
     "apps.google_analytics.apps.GAConfig",
     "apps.courses_calification.apps.CoursesCalificationConfig",
     "apps.comments.apps.CommentsConfig",
+    "apps.bc_scraper.apps.BCScraperConfig",
 ]
 
 MIDDLEWARE = [
@@ -109,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = "es-cl"
-TIME_ZONE = "UTC"
+TIME_ZONE = os.getenv("TIME_ZONE", "UTC")
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -165,6 +167,10 @@ if os.getenv("GOOGLE_AUTH_CLIENT") is not None:
 
 # Google analytics
 GA_CODE = os.getenv("GA_CODE", None)
+
+# BC-Scraper
+SCRAPE_LOG = BASE_DIR / "logs" / "scrape.log"
+SCRAPE_BATCH_SIZE = 100
 
 
 # Cache

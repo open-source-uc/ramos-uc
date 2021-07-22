@@ -1,4 +1,4 @@
-from scraper.search import bc_search
+from ..scraper.search import bc_search
 
 
 def search(initials, period):
@@ -8,6 +8,6 @@ def search(initials, period):
     print("Searching in BC:", initials)
     courses = bc_search(initials, period)
     for c in courses:
-        print(c["initials"], c["section"], c["name"], "-", c["teacher"])
+        print(c["initials"], c["section"], c["name"], "-", c["teachers"])
     if len(courses) >= 50:
         print("> Some results may have been truncated.")

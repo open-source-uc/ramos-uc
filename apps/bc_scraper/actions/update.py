@@ -1,5 +1,5 @@
 from datetime import datetime
-from scraper.search import bc_search
+from ..scraper.search import bc_search
 from .schedule import process_schedule
 from .errors import handle
 import psycopg2
@@ -12,17 +12,13 @@ db_conn, db_cursor = None, None
 
 def open_db_conn(settings):
     global db_conn, db_cursor
-    try:
-        db_conn = psycopg2.connect(
-            host=settings["db_host"],
-            user=settings["db_user"],
-            password=settings["db_passwd"],
-            dbname=settings["db_name"],
-        )
-        db_cursor = db_conn.cursor()
-    except Exception as err:
-        print("DB Error:", err)
-        exit()
+    db_conn = psycopg2.connect(
+        host=settings["db_host"],
+        user=settings["db_user"],
+        password=settings["db_passwd"],
+        dbname=settings["db_name"],
+    )
+    db_cursor = db_conn.cursor()
     print("DB connection set.")
 
 
@@ -76,7 +72,7 @@ def _process_course(c, section_id):
 
 
 def update(period, settings):
-    """Iterates a search throw all BC and process all courses and sections founded."""
+    """Iterates a search throw all BC and process all courses and sections found."""
     open_db_conn(settings)
     BATCH_SIZE = settings["batch_size"]
 

@@ -24,6 +24,7 @@ urlpatterns = [
     path("comentarios/", include("apps.comments.urls")),
     path("cuentas/", include("allauth.urls")),
     # path('u/', include('apps.users.urls')),
+    path("scraper/", include("apps.bc_scraper.urls")),
     path("admin/", admin.site.urls),
 ]
 
