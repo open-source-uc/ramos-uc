@@ -51,7 +51,7 @@ def delete(settings):
                 db_cursor.execute(sql.DEL_SECTION, (section_id,))
                 db_conn.commit()
             else:
-                print("Course founded. Not deleted.")
+                print("Course found. Not deleted.")
 
     db_cursor.close()
     db_conn.close()

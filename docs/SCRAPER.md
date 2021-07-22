@@ -12,7 +12,7 @@ Also, scraping can be scheduled from `/scraper` url (only allowed for staff user
 
 ### Available actions
 + `collect` -> Runs a full search in BC and Catalogo. Inserts or updates all BC content. Does NOT delete removed courses.
-+ `update` -> Updates data of courses present in simple BC search. Creates a delete log with courses not founded.
++ `update` -> Updates data of courses present in simple BC search. Creates a delete log with courses not found.
 + `delete` -> For every course in the delete log, retries the search in BC and deletes if the course does not exist. **The delete log must be cleared manually**.
 + `search` -> A course initial must be provided as extra argumemt (`--initials <initials>`). Retrives results for that initials in BC.
 + `banner` -> Scrapes available cupos for all sections in a given period. Accepts a banner name parameter (`--banner <banner_name>`) that adds to the database.

@@ -154,7 +154,7 @@ def _process_courses(courses, period):
 
 
 def collect(period, settings):
-    """Iterates a search throw all BC and process all courses and sections founded."""
+    """Iterates a search throw all BC and process all courses and sections found."""
     open_db_conn(settings)
 
     LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -72,7 +72,7 @@ def _process_course(c, section_id):
 
 
 def update(period, settings):
-    """Iterates a search throw all BC and process all courses and sections founded."""
+    """Iterates a search throw all BC and process all courses and sections found."""
     open_db_conn(settings)
     BATCH_SIZE = settings["batch_size"]
 
