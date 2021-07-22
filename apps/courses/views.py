@@ -162,6 +162,7 @@ def planner_search(request):
                 "initials": str(s),
                 "name": s.course.name,
                 "teachers": s.teachers,
+                "format": s.format,
                 "available_quota": s.available_quota,
                 "schedule": s.schedule,
             }
