@@ -47,7 +47,7 @@ export const search = (page=1) => {
         free_quota: free_quota,
         page: page
     }
-    
+
     $.get('/p_search', query_body)
     .done(response => {
         if (response.error) {
@@ -70,6 +70,7 @@ export const search = (page=1) => {
             row += '<td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(' + result.id + ')">' + result.initials + '</a></td>';
             row += '<td>' + result.name + '</td>';
             row += '<td>' + result.teachers.replace(/,/g, '<br>') + '</td>';
+            row += '<td>' + result.format + '</td>';
             row += '<td>' + result.available_quota + '</td>';
 
             // Schedule
