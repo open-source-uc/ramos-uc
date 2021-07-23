@@ -15,7 +15,6 @@ module.exports = {
     browse: './src/browse.js',
     index: './src/index.js',
     generic: './src/generic.js',
-    course_link: './src/course_link.js',
   },
   plugins: [
     new CleanWebpackPlugin(),

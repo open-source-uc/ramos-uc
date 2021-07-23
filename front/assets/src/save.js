@@ -1,5 +1,4 @@
 import {getCookie, setCookie} from './cookies';
-import {link} from './course_link';
 
 // Create share link and copy to clipboard
 const share = () => {
@@ -23,13 +22,33 @@ const share = () => {
 
 // Create share link to buscacursos and copy to clipboard
 const buscacursos = () => {
-      
-    var lin = link();
-    navigator.clipboard.writeText(lin)
-        .then(() => {
-            alert('Link copiado, ahora puedes compartirlo con quien quieras!');
-        });
 
+    var saved = getCookie('ramos');
+    saved = saved ? saved.split(',') : [];
+
+    // make link to buscacursos with actual schedule
+    var buscacursos_link = 'https://buscacursos.uc.cl/?cursos=';
+    var fst = 1;
+
+    for (let i in saved) {
+
+        // get course initial in html
+        let tb = $(`[name=ramo_${saved[i]}]`);
+        let course_initial = tb.find('td').eq(3).text();
+        
+        // add coma only after the first course code
+        if(fst == 0){
+            buscacursos_link += ',';
+        } else
+            fst = 0;
+
+        buscacursos_link += course_initial;
+    }
+    
+    navigator.clipboard.writeText(buscacursos_link)
+        .then(() => {
+            alert('Link copiado, ahora puedes ver tu horario en buscacursos!');
+        });
     
 };
 
