@@ -11,6 +11,8 @@ class Calification(models.Model):
 
     load = models.PositiveSmallIntegerField()
     like = models.PositiveSmallIntegerField()
+    online_adaptation = models.PositiveSmallIntegerField(blank=True, null=True)
+    communication = models.PositiveSmallIntegerField(blank=True, null=True)
 
     class Meta:
         indexes = [
