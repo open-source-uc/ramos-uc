@@ -52,4 +52,10 @@ class Course(models.Model):
         qs = self.calification_set
         if period is not None:
             qs = qs.filter(period=period)
-        return qs.aggregate(Avg("like"), Avg("load"), Count("like"))
+        return qs.aggregate(
+            Avg("like"),
+            Avg("load"),
+            Avg("online_adaptation"),
+            Avg("communication"),
+            Count("like"),
+        )

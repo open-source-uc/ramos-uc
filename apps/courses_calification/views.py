@@ -11,6 +11,10 @@ class CalificationSearializer(serializers.Serializer):
     semester = serializers.IntegerField(min_value=1, max_value=2, required=True)
     like = serializers.IntegerField(min_value=1, max_value=5, required=True)
     load = serializers.IntegerField(min_value=1, max_value=5, required=True)
+    online_adaptation = serializers.IntegerField(
+        min_value=1, max_value=5, required=True
+    )
+    communication = serializers.IntegerField(min_value=1, max_value=5, required=True)
 
 
 @login_required
@@ -36,10 +40,8 @@ def create(request, course_id):
     params = serializer.validated_data
 
     # get previous calification if exists
-    update = False
     try:
         cal = Calification.objects.get(user=request.user, course=course)
-        update = True
     except Calification.DoesNotExist:
         cal = Calification(user=request.user, course=course)
 
@@ -47,8 +49,9 @@ def create(request, course_id):
     cal.period = f"{params['year']}-{params['semester']}"
     cal.like = params["like"]
     cal.load = params["load"]
+    cal.online_adaptation = params["online_adaptation"]
+    cal.communication = params["communication"]
     cal.save()
-    message = "Calificación actualizada" if update else "Gracias por tu calificación!"
 
     # devalidate cache of course period
     cache.delete(f"s_{course.initials}_{cal.period}")
