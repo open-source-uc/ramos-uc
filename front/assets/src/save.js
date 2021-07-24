@@ -35,7 +35,7 @@ const buscacursos = () => {
         // get course initial in html
         let tb = $(`[name=ramo_${saved[i]}]`);
         let course_initial = tb.find('td').eq(3).text();
-        
+
         // add coma only after the first course code
         if(fst == 0){
             buscacursos_link += ',';
@@ -44,12 +44,12 @@ const buscacursos = () => {
 
         buscacursos_link += course_initial;
     }
-    
+
     navigator.clipboard.writeText(buscacursos_link)
         .then(() => {
             alert('Link copiado, ahora puedes ver tu horario en buscacursos!');
         });
-    
+
 };
 
 // From share view, load ramos to cookie and redirect to root
@@ -65,7 +65,7 @@ const edit = (ids) => {
 
     if (confirm('Al editar este horario se perderá la información de cualquier otro horario que no hayas guardado.')) {
         setCookie('ramos', ids, 120);
-        location.href = location.protocol + '//' + location.host;
+        location.href = '/planifica';
     }
 };
 
