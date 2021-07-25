@@ -172,6 +172,9 @@ GA_CODE = os.getenv("GA_CODE", None)
 SCRAPE_LOG = BASE_DIR / "logs" / "scrape.log"
 SCRAPE_BATCH_SIZE = 100
 
+# Scheduler
+MAX_ATTEMPTS = 1
+MAX_RUN_TIME = 3600 * 12
 
 # Cache
 if DEBUG:
