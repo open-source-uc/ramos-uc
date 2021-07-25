@@ -90,7 +90,7 @@ def _process_courses(courses, period):
                     )
 
                 db_conn.commit()
-                procesed_initials[c["initials"]] = True
+                procesed_initials[c["initials"]] = course_id
 
             # Process Section
             insert_full_sc_query, insert_info_sc_query = process_schedule(c["schedule"])
@@ -101,6 +101,7 @@ def _process_courses(courses, period):
 
             # Save Section
             if section_id is None:
+                course_id = procesed_initials[c["initials"]]
                 db_cursor.execute(
                     sql.CREATE_SECTION,
                     (
