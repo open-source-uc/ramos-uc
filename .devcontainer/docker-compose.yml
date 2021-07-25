@@ -8,6 +8,10 @@ services:
       args:
         # [Choice] Python version: 3, 3.8, 3.7, 3.6
         VARIANT: 3.9
+        # [Choice] Node.js version
+        INSTALL_NODE: "true"
+        NODE_VERSION: "lts/*"
+
         # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
         USER_UID: 1000
         USER_GID: 1000
@@ -27,9 +31,9 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: django
+      POSTGRES_DB: django
+      POSTGRES_PASSWORD: django
 
 volumes:
   postgres-data:

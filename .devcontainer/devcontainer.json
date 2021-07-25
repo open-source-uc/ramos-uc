@@ -14,9 +14,9 @@
 			"previewLimit": 50,
 			"server": "localhost",
 			"port": 5432,
-			"database": "postgres",
-			"username": "postgres",
-			"password": "postgres"
+			"database": "django",
+			"username": "django",
+			"password": "django"
 		}],
 		"python.pythonPath": "/workspace/.venv/python",
 		"python.venvPath": "/workspace/.venv/",
@@ -48,7 +48,7 @@
 	"forwardPorts": [5000, 5432],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "$HOME/.local/bin/poetry install && cp -n /workspace/.env.example /workspace/.env && /workspace/.venv/bin/pre-commit install && /workspace/.venv/bin/python /workspace/manage.py migrate",
+	"postCreateCommand": "$HOME/.local/bin/poetry install && cp -n /workspace/.env.example /workspace/.env && /workspace/.venv/bin/pre-commit install && cd front/assets/ && npm install && cd /workspace && /workspace/.venv/bin/python /workspace/manage.py migrate ",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
@@ -57,8 +57,8 @@
 		"PATH": "${containerEnv:PATH}:${containerEnv:HOME}/.local/bin/",
 		"DEBUG": "True",
 		"LANGUAGE": "es-cl",
-		"PSQL_DB": "postgres",
-		"PSQL_USER": "postgres",
-		"PSQL_PASSWD": "postgres"
+		"PSQL_DB": "django",
+		"PSQL_USER": "django",
+		"PSQL_PASSWD": "django"
 	},
 }
