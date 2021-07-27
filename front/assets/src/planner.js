@@ -6,12 +6,12 @@ import 'bootstrap';
 import 'multiple-select';
 
 // Public functions
-import {toggle, toggleRow, toggleDay, clearSelects} from './filters';
-import {save, unsave, viewSaved, edit, share} from './save';
-import {add, remove, loadRamo, loadFromCookie} from './schedule';
-import {loadInfo} from './info';
-import {search} from './search';
-import {loadQuota} from './quota';
+import {toggle, toggleRow, toggleDay, clearSelects} from './utils/filters';
+import {save, unsave, viewSaved, edit, share} from './utils/save';
+import {add, remove, loadRamo, loadFromCookie} from './utils/schedule';
+import {loadInfo} from './utils/info';
+import {search} from './utils/search';
+import {loadQuota} from './utils/quota';
 
 export {
     toggle, toggleRow, toggleDay, clearSelects,

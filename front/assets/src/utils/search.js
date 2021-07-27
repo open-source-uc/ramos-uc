@@ -47,7 +47,7 @@ export const search = (page=1) => {
         free_quota: free_quota,
         page: page
     }
-    
+
     $.get('/p_search', query_body)
     .done(response => {
         if (response.error) {

@@ -43,7 +43,7 @@ export const loadInfo = (id) => {
 
         if (have_alert) modal.html(alerts);
         else modal.html('');
-        
+
         // Rest of info
         modal.append(`
             <b>Campus:</b> ${course.campus}<br>
