@@ -7,7 +7,7 @@ import 'multiple-select';
 
 // Public functions
 import {toggle, toggleRow, toggleDay, clearSelects} from './utils/filters';
-import {save, unsave, viewSaved, edit, share} from './utils/save';
+import {save, unsave, viewSaved, edit, share, buscacursos} from './utils/save';
 import {add, remove, loadRamo, loadFromCookie} from './utils/schedule';
 import {loadInfo} from './utils/info';
 import {search} from './utils/search';
@@ -15,7 +15,7 @@ import {loadQuota} from './utils/quota';
 
 export {
     toggle, toggleRow, toggleDay, clearSelects,
-    save, unsave, viewSaved, edit, share,
+    save, unsave, viewSaved, edit, share, buscacursos,
     add, remove, loadRamo, loadFromCookie,
     loadInfo,
     search,

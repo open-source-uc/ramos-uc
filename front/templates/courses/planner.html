@@ -79,11 +79,11 @@
                 <h3 id="quotaTitle" class="modal-title">Cargando...</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            
+
             <div class="table-responsive">
                 <div id="quotaChart" class="modal-body" style="height: 500px"></div>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
@@ -110,7 +110,7 @@
                 {% for mod in mods %}
                     <tr>
                         <th onclick="wp.toggleRow({{ forloop.counter }})">
-                        {{ mod }} 
+                        {{ mod }}
                         </th>
                         {% for day in 'LMWJVS' %}
                         <td class="" onclick="wp.toggle(this)" id="{{ day }}{{ forloop.parentloop.counter }}"></td>
@@ -133,11 +133,12 @@
             <span class="badge bg-danger mb-1 me-2" style="font-size: 1em;">Otro</span>
         </div>
     </div>
-    
+
     <!-- DETAILS RIGHT -->
     <div id="agregados" class="col-xl-5 mt-xl-0 mt-4">
         <button onclick="wp.viewSaved()" type="button" class="btn btn-primary ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#savedModal">Ver horarios guardados</button>
         <button onclick="wp.share()" type="button" class="btn btn-primary ms-3 mb-3 text-white">Compartir</button>
+        <button onclick="wp.buscacursos()" type="button" class="btn btn-primary ms-3 mb-3">Ver en Buscacursos</button>
         <button type="button" class="btn btn-primary ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#saveModal">Guardar</button>
         <table class="table table-sm" id="ramos"></table>
     </div>
@@ -156,7 +157,8 @@
             <div class="col-12">
                 <label class="visually-hidden" for="periodSelect">Periodo</label>
                 <select class="form-select" id="periodSelect">
-                    <option selected value="2021-1">2021-1</option>
+                    <option selected value="2021-2">2021-2</option>
+                    <option value="2021-1">2021-1</option>
                     <option value="2020-2">2020-2</option>
                     <option value="2020-1">2020-1</option>
                     <option value="2019-2">2019-2</option>
@@ -167,7 +169,7 @@
                 <label class="visually-hidden" for="inputQuery">Nombre, sigla o profesor</label>
                 <input type="text" class="form-control" id="inputQuery" placeholder="Nombre, sigla o profesor" autofocus>
             </div>
-        
+
             <div class="col-12">
                 <button type="submit" class="btn btn-primary me-3">Buscar</button>
                 <button class="btn btn-info me-1" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">Ver Filtros</button>
@@ -272,6 +274,7 @@
                 <th>Ramo</th>
                 <th>Nombre</th>
                 <th>Profesor/es</th>
+                <th>Formato</th>
                 <th>Cupos disp.</th>
                 <th style="min-width: 100px;">Horario</th>
             </thead>

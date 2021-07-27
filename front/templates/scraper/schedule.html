@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static manifest %}
+
+{% block title %} Scraper {% endblock %}
+
+{% block main %}
+
+<div class="alert alert-info">
+    Sitio restringido a personas staff.
+</div>
+
+<h2>Scraper</h2>
+<p>
+    Mediante este formulario puede programar el <i>scraping</i> de BuscaCursos para que se ejecute automáticamente en el horario deseado.
+</p>
+
+<form class="m-3" method="POST">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="timeInput" class="form-label">Horario</label>
+        <input required name="time" id="timeInput" class="form-control" type="datetime-local" />
+    </div>
+
+    <div class="mb-3">
+        <label for="nameInput" class="form-label">Acción</label>
+        <select required id="nameInput" class="form-select" name="action">
+            <option></option>
+            <option value="collect">Collect (Incorporar nuevos)</option>
+            <option value="update">Update (Actualizar existentes)</option>
+            <option value="delete">Delete (Eliminar según registro)</option>
+            <option value="banner">Banner (Recolectar cupos)</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="periodInput" class="form-label">Periodo (YYYY-S)</label>
+        <input required name="period" id="periodInput" class="form-control" type="text" />
+    </div>
+
+    <div class="mb-3">
+        <label for="bannerInput" class="form-label">Banner (opcional)</label>
+        <input name="banner" id="bannerInput" class="form-control" type="text" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Programar</button>
+</form>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% manifest 'generic.js' %}"></script>
+{% endblock %}

@@ -1,18 +1,24 @@
-# BuscaCursosUC Scrapper
-Python scripts that retrieve courses data from BuscaCursosUC and Catálogo UC 
-and save it to a Postgres database.
+# Scraper: BuscaCursos and Catálogo UC
+Management commads to retrieve courses data from BuscaCursosUC and Catálogo UC
+and save it to the database.
 
 ## How to use
-```python main.py <command> [YYYY-S] [...]```
+Directly from terminal use the management command:
+```
+python manage.py scrape <action> [YYYY-S]
+```
 
-### Available commands
+Also, scraping can be scheduled from `/scraper` url (only allowed for staff users). See [scheduler docs](SCHEDULER.md) for more details on how scheduling works.
+
+### Available actions
 + `collect` -> Runs a full search in BC and Catalogo. Inserts or updates all BC content. Does NOT delete removed courses.
-+ `update` -> Updates data of courses present in simple BC search. Creates a delete log with courses not founded.
-+ `delete` -> For every course in the delete log, retries the search in BC and deletes if the course does not exist. The delete log must be cleared manually.
-+ `search` -> A course initial must be provided as extra argumemt. Retrives results for that initial in BC.
-+ `help` -> Shows available commands and usage format.
++ `update` -> Updates data of courses present in simple BC search. Creates a delete log with courses not found.
++ `delete` -> For every course in the delete log, retries the search in BC and deletes if the course does not exist. **The delete log must be cleared manually**.
++ `search` -> A course initial must be provided as extra argumemt (`--initials <initials>`). Retrives results for that initials in BC.
++ `banner` -> Scrapes available cupos for all sections in a given period. Accepts a banner name parameter (`--banner <banner_name>`) that adds to the database.
 
 ## Database Schema
+Uses the same schema defined on courses models.
 + courses_course (id, initials, name, credits, req, con, restr, program, school, area, category)
 + courses_section (id, course_id, period, section, nrc, teachers, schedule, format, campus, is_english, is_removable, is_special, available_quota, total_quota)
 + courses_quota (section_id, date, category, quota, banner)
@@ -33,10 +39,3 @@ and save it to a Postgres database.
 
 + Requirements and restrictions
   http://catalogo.uc.cl/index.php?tmpl=component&view=requisitos&sigla=PSI5005
-
-
-## ```banner```
-Scrapes available cupos for all courses in a given YEAR SEMESTER. Accepts a 
-banner name parameter that adds to the database. Saves the cupos by category 
-and with a retrieval datetime.
-Run ```python banner.py YEAR SEMESTER```.

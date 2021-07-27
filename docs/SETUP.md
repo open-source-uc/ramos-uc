@@ -21,7 +21,7 @@ For dev and production.
 	CREATE DATABASE db_name;
   	CREATE USER django WITH PASSWORD 'passwd';
   	ALTER ROLE django SET client_encoding TO 'utf-8';
-  	ALTER ROLE django SET timezone TO 'UTC';
+  	ALTER ROLE django SET timezone TO '<timezone>';  # example timezone: America/Santiago
   	GRANT ALL PRIVILEGES ON DATABASE db_name TO django;
 	```
 + Allow password authentication to postgres (in `/etc/postgresql/13/main/pg_hba.conf`)
@@ -155,7 +155,6 @@ python3 -m virtualenv $name
 
 cd $PROJECT_PATH/$name
 ln -s $PROJECT_PATH/.env $PROJECT_PATH/$name/.env
-ln -s $PROJECT_PATH/settings.json $PROJECT_PATH/$name/scrape/settings.json
 rm -rf $PROJECT_PATH/$name/media
 ln -s $PROJECT_PATH/media $PROJECT_PATH/$name/media
 

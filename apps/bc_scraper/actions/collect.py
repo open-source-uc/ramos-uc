@@ -1,6 +1,6 @@
-from scraper.search import bc_search
-from scraper.programs import get_program
-from scraper.requirements import get_requirements
+from ..scraper.search import bc_search
+from ..scraper.programs import get_program
+from ..scraper.requirements import get_requirements
 import psycopg2
 from . import queries as sql
 from .schedule import process_schedule
@@ -13,17 +13,13 @@ db_conn, db_cursor = None, None
 
 def open_db_conn(settings):
     global db_conn, db_cursor
-    try:
-        db_conn = psycopg2.connect(
-            host=settings["db_host"],
-            user=settings["db_user"],
-            password=settings["db_passwd"],
-            dbname=settings["db_name"],
-        )
-        db_cursor = db_conn.cursor()
-    except Exception as err:
-        print("DB Error:", err)
-        exit()
+    db_conn = psycopg2.connect(
+        host=settings["db_host"],
+        user=settings["db_user"],
+        password=settings["db_passwd"],
+        dbname=settings["db_name"],
+    )
+    db_cursor = db_conn.cursor()
     print("DB connection set.")
 
 
@@ -94,7 +90,7 @@ def _process_courses(courses, period):
                     )
 
                 db_conn.commit()
-                procesed_initials[c["initials"]] = True
+                procesed_initials[c["initials"]] = course_id
 
             # Process Section
             insert_full_sc_query, insert_info_sc_query = process_schedule(c["schedule"])
@@ -105,6 +101,7 @@ def _process_courses(courses, period):
 
             # Save Section
             if section_id is None:
+                course_id = procesed_initials[c["initials"]]
                 db_cursor.execute(
                     sql.CREATE_SECTION,
                     (
@@ -158,7 +155,7 @@ def _process_courses(courses, period):
 
 
 def collect(period, settings):
-    """Iterates a search throw all BC and process all courses and sections founded."""
+    """Iterates a search throw all BC and process all courses and sections found."""
     open_db_conn(settings)
 
     LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
