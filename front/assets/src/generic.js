@@ -1,5 +1,5 @@
 // CSS
-import './css/entry';
+import "./css/entry"
 
 // Dependencies
-import 'bootstrap';
+import "bootstrap"

@@ -1,11 +1,11 @@
 // CSS
-import './css/entry';
+import "./css/entry"
 
 // Dependencies
-import 'bootstrap';
+import "bootstrap"
 
 // Automatic execution
 $(() => {
     // Menu highlight
-    $('a[name="menu_browse"]').addClass('active');
-});
+    $("a[name=\"menu_browse\"]").addClass("active")
+})

@@ -1,8 +1,9 @@
 // Dependecies
-import 'bootstrap';
+import "bootstrap"
 
 // Public functions
-import {loadInfo} from './utils/info';
-import {loadQuota} from './utils/quota';
+import { loadInfo } from "./utils/info"
+import { loadQuota } from "./utils/quota"
 
-export {loadInfo, loadQuota};
+
+export { loadInfo, loadQuota }
