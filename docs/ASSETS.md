@@ -1,7 +1,4 @@
-# Assets
-
-Directorio de assets empaquetados por [webpack][webpack].
-
+# Compilación de Assets
 
 ## Preparación
 
