@@ -1,11 +1,11 @@
 // Public functions
 import 'bootstrap';
 
-import {loadInfo} from './info';
-import {loadQuota} from './quota';
-import {search} from './search';
-import {edit} from './save';
-import {loadRamo} from './schedule';
+import {loadInfo} from './utils/info';
+import {loadQuota} from './utils/quota';
+import {search} from './utils/search';
+import {edit} from './utils/save';
+import {loadRamo} from './utils/schedule';
 
 export {loadInfo, search, edit, loadRamo, loadQuota};
 window.$ = $;

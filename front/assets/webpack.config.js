@@ -9,12 +9,12 @@ var webpack = require('webpack');
 module.exports = {
   mode: 'production',
   entry: {
+    browse: './src/browse.js',
+    course: './src/course.js',
+    generic: './src/generic.js',
+    index: './src/index.js',
     planner: './src/planner.js',
     shared: './src/shared.js',
-    course: './src/course.js',
-    browse: './src/browse.js',
-    index: './src/index.js',
-    generic: './src/generic.js',
   },
   plugins: [
     new CleanWebpackPlugin(),

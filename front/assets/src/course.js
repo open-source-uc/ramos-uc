@@ -2,7 +2,7 @@
 import 'bootstrap';
 
 // Public functions
-import {loadInfo} from './info';
-import {loadQuota} from './quota';
+import {loadInfo} from './utils/info';
+import {loadQuota} from './utils/quota';
 
 export {loadInfo, loadQuota};
