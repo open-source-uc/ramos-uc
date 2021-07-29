@@ -1,11 +1,11 @@
 // Public functions
-import 'bootstrap';
+import "bootstrap"
 
-import {loadInfo} from './utils/info';
-import {loadQuota} from './utils/quota';
-import {search} from './utils/search';
-import {edit} from './utils/save';
-import {loadRamo} from './utils/schedule';
+import { loadInfo } from "./utils/info"
+import { loadQuota } from "./utils/quota"
+import { search } from "./utils/search"
+import { edit } from "./utils/save"
+import { loadRamo } from "./utils/schedule"
 
-export {loadInfo, search, edit, loadRamo, loadQuota};
-window.$ = $;
+export { loadInfo, search, edit, loadRamo, loadQuota }
+window.$ = $
