@@ -60,43 +60,46 @@ const remove = (id) => {
 const loadRamo = (id, showDelete = true) => {
     var ramos = $("#ramos")
     ramos.append("<div class=\"spinner-border ramos_load\" role=\"status\"></div>")
-
     $.get(`/detalle/${id}/horario`)
-        .then(response => {
-            var ramo = response
-            // Print in horario
-            for (let [key, value] of Object.entries(ramo.schedule)) {
-                if (value == "CLAS") value = "warning text-dark"
-                else if (value == "AYU") value = "success"
-                else if (value == "LAB") value = "primary"
-                else if (value == "TAL") value = "secondary"
-                else if (value == "TER") value = "info text-dark"
-                else value = "danger"
-                var slot = $(`#${key.toUpperCase()}`)
-                slot.append(`<span name="ramo_${id}" class="badge bg-${value}" style="font-size: 0.85em;">${ramo.initials}</span><br>`)
-                slot.addClass("table-secondary")
-            }
-            // Print on detalles
-            let row = `<tr name="ramo_${id}">`
-            if (showDelete) {
-                row += `
-                <td><button onclick="wp.remove('${id}')" type="button" class="btn" aria-label="Eliminar"><img src="/dist/images/close.svg" height="15"/></button></td>
-            `
-            }
-            row += `
-            <td>${ramo.period}</td>
-            <td><a data-bs-toggle="modal" href="#quotaModal" onclick="wp.loadQuota(${id})"><img src="/dist/images/chart.svg" height="20"/></a></td>
-            <td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(${id})">${ramo.initials}</a></td>
-            <td>${ramo.name}</td>
-            </tr>
-        `
-            ramos.append(row)
-            $(".ramos_load").remove()
-        })
+        .then((r) => loadRamoHandleResponse(r, id, showDelete, ramos))
         .catch(error => {
             console.log(error)
             $(".ramos_load").remove()
         })
+}
+
+
+const toCourseClassName = (type_of_course) => {
+    switch (type_of_course) {
+    case "CLAS": return "warning text-dark"
+    case "AYU":  return "success"
+    case "LAB":  return "primary"
+    case "TAL":  return "secondary"
+    case "TER":  return "secondary"
+    default:     return "danger"
+    }
+}
+
+const loadRamoHandleResponse = (response, id, showDelete, ramos) => {
+    var ramo = response
+    // Print in horario
+    for (let [key, value] of Object.entries(ramo.schedule)) {
+        var slot = $(`#${key.toUpperCase()}`)
+        slot.append(`<span name="ramo_${id}" class="badge bg-${toCourseClassName(value)}" style="font-size:0.85em">${ramo.initials}</span><br>`)
+        slot.addClass("table-secondary")
+    }
+    // Print on detalles
+    let row = `<tr name="ramo_${id}">`
+    if (showDelete)
+        row += `<td><button onclick="wp.remove('${id}')" type="button" class="btn" aria-label="Eliminar"><img src="/dist/images/close.svg" height="15"/></button></td>`
+    row += `<td>${ramo.period}</td>
+    <td><a data-bs-toggle="modal" href="#quotaModal" onclick="wp.loadQuota(${id})"><img src="/dist/images/chart.svg" height="20"/></a></td>
+    <td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(${id})">${ramo.initials}</a></td>
+    <td>${ramo.name}</td>
+    </tr>`
+
+    ramos.append(row)
+    $(".ramos_load").remove()
 }
 
 // Autoload ramos saved in cookie

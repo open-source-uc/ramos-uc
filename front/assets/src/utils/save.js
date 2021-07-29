@@ -37,18 +37,13 @@ const buscacursos = () => {
         let course_initial = tb.find("td").eq(3).text()
 
         // add coma only after the first course code
-        if(fst == 0){
-            buscacursos_link += ","
-        } else
-            fst = 0
+        fst == 0 ? (buscacursos_link += ",") : (fst = 0)
 
         buscacursos_link += course_initial
     }
 
     navigator.clipboard.writeText(buscacursos_link)
-        .then(() => {
-            alert("Link copiado, ahora puedes ver tu horario en buscacursos!")
-        })
+        .then(() => alert("Link copiado, ahora puedes ver tu horario en buscacursos!"))
 
 }
 
@@ -56,9 +51,7 @@ const buscacursos = () => {
 const edit = (ids) => {
     // google analytics
     try {
-        gtag("event", "edit", {
-            value: ids.split(",").length,
-        })
+        gtag("event", "edit", { value: ids.split(",").length })
     } catch (error) {
         console.log("No analytics.")
     }
@@ -77,10 +70,7 @@ const save = () => {
 
     // google analytics
     try {
-        gtag("event", "save", {
-            event_category: "persistence",
-            value: saved.split(",").length,
-        })
+        gtag("event", "save", { event_category: "persistence", value: saved.split(",").length })
     } catch (error) {
         console.log("No analytics.")
     }
@@ -123,9 +113,7 @@ const unsave = (key) => {
 
     // google analytics
     try {
-        gtag("event", "unsave", {
-            event_category: "persistence",
-        })
+        gtag("event", "unsave", { event_category: "persistence" })
     } catch (error) {
         console.log("No analytics.")
     }
