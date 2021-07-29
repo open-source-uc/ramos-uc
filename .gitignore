@@ -173,3 +173,7 @@ bin
 lib
 lib64
 pyvenv.cfg
+
+# SQL Dumps
+*.sql
+*.dump

@@ -7,5 +7,5 @@ SCP from local:
 Load backup to DB:
 ```
 scp YY-MM-DD.dump user@host:/srv/ramosuc/database/
-pg_restore -U django -d ramosuc -c -v YY-MM-DD.dump
+pg_restore -U django -d ramosuc -c -v --if-exists YY-MM-DD.dump
 ```
