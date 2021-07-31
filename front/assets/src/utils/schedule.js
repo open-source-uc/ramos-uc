@@ -75,7 +75,7 @@ const toCourseClassName = (type_of_course) => {
     case "AYU":  return "success"
     case "LAB":  return "primary"
     case "TAL":  return "secondary"
-    case "TER":  return "secondary"
+    case "TER":  return "info text-dark"
     default:     return "danger"
     }
 }
