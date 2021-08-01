@@ -49,7 +49,7 @@ Only for production.
 ### Node
 For dev and production.
 + **nodejs** and **npm** are required.
-+ Read [assets docs](docs/ASSETS.md) for more info.
++ Read [assets docs](ASSETS.md) for more info.
 
 #### /etc/nginx/sites-available/project_name.conf
 ```
