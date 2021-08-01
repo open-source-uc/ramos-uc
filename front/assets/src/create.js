@@ -31,29 +31,10 @@ $(() => {
     $("a[name=\"menu_create\"]").addClass("active")
 
     // Load filters dropdowns
-    $("#campus").multipleSelect({
-        selectAll: false,
-        showClear: true,
-    })
-    $("#formato").multipleSelect({
-        selectAll: false,
-        showClear: true,
-    })
-    $("#escuela").multipleSelect({
-        selectAll: false,
-        filter: true,
-        showClear: true,
-    })
-    $("#tipos_modulo").multipleSelect({
-        selectAll: false,
-        showClear: true,
-    })
-    $("#categoria").multipleSelect({
-        selectAll: false,
-        showClear: true,
-    })
-    $("#area").multipleSelect({
-        selectAll: false,
-        showClear: true,
-    })
+    $("#campus").multipleSelect({ selectAll: false, showClear: true })
+    $("#formato").multipleSelect({ selectAll: false, showClear: true })
+    $("#escuela").multipleSelect({ selectAll: false, showClear: true, filter: true })
+    $("#tipos_modulo").multipleSelect({ selectAll: false, showClear: true })
+    $("#categoria").multipleSelect({ selectAll: false, showClear: true })
+    $("#area").multipleSelect({ selectAll: false, showClear: true })
 })

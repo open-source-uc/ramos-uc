@@ -1,4 +1,5 @@
 import { Course } from "./classes/Course"
+import ga_event from "./ga_event"
 
 // Make ajax search request and load results to table
 export const createSearch = (page = 1) => {
@@ -112,13 +113,6 @@ export const createSearch = (page = 1) => {
         })
 
     // google analytics
-    try {
-        gtag("event", "createSearch", {
-            event_category: period,
-            event_label: query,
-        })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("create-search", { event_category: period, event_label: query })
     return false
 }
