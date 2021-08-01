@@ -156,7 +156,7 @@ const updateUI = () => {
 
     // Show combination
     if (combinations.length > 0) {
-        $("#combination-title").html(`Combinacion ${String(combinationIndex + 1)}`)
+        $("#combination-title").html(`Combinación ${String(combinationIndex + 1)}`)
         $("#combination").html("")
 
         let combination = combinations[combinationIndex]
@@ -206,7 +206,7 @@ const updateUI = () => {
 
         })
     } else {
-        $("#combination-title").html("Combinacion")
+        $("#combination-title").html("Combinación")
         $("#combination").html("<tr><td colspan=\"5\">No hay ninguna combinación</td></tr>")
     }
 
