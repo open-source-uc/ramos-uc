@@ -46,6 +46,11 @@ Only for production.
 + Create conf at `/etc/nginx/sites-available/project_name.conf`
 + Link (`ln -s project_name.conf ../sites-enabled/`)
 
+### Node
+For dev and production.
++ **nodejs** and **npm** are required.
++ Read [assets docs](ASSETS.md) for more info.
+
 #### /etc/nginx/sites-available/project_name.conf
 ```
 upstream django {
@@ -158,6 +163,11 @@ ln -s $PROJECT_PATH/.env $PROJECT_PATH/$name/.env
 rm -rf $PROJECT_PATH/$name/media
 ln -s $PROJECT_PATH/media $PROJECT_PATH/$name/media
 
+cd $PROJECT_PATH/$name/front/assets
+npm install
+npm run build
+
+cd $PROJECT_PATH/$name
 source bin/activate
 pip3 install -r requirements.txt
 python3 manage.py migrate
