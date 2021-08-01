@@ -3,12 +3,7 @@ import "multiple-select"
 
 // Toogle availability state in schedule, for one module
 const toggle = (module) => {
-    if (module.className == ""){
-        module.className = "table-secondary"
-    }
-    else {
-        module.className = ""
-    }
+    module.className = (module.className === "" ? "table-secondary" : "")
 }
 
 // Toogle availability state in schedule, for all row
@@ -25,7 +20,6 @@ const toggleRow = (module) => {
 // Toogle availability state in schedule, for all day
 const toggleDay = (day) => {
     let toogle = ""
-    // FIXME(benjavicente): should be `day + 1`? or `day + '1'`
     if (document.getElementById(`${day}1`).className == "") {
         toogle = "table-secondary"
     }
