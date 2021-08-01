@@ -156,7 +156,7 @@ const updateUI = () => {
 
     // Show combination
     if (combinations.length > 0) {
-        $("#combination-title").html(`Combinación ${String(combinationIndex + 1)}`)
+        $("#combination-title").html(`Combinación ${String(combinationIndex + 1)} de ${String(combinations.length)}`)
         $("#combination").html("")
 
         let combination = combinations[combinationIndex]
@@ -175,7 +175,6 @@ const updateUI = () => {
                     module.mods.forEach(mod => {
                         let slot = $(`#${day + String(mod)}`)
                         slot.append(`<span name="ramo_${initials}" class="badge bg-${color}" style="font-size: 0.85em;">${initials}</span><br>`)
-                        slot.addClass("table-secondary")
                     })
                 })
             })
@@ -217,9 +216,11 @@ const updateUI = () => {
     if (combinations.length == 0) {
         prev = false
         next = false
-    } else if (combinationIndex == 0) {
+    }
+    if (combinationIndex == 0) {
         prev = false
-    } else if (combinationIndex == combinations.length - 1) {
+    }
+    if (combinationIndex == combinations.length - 1) {
         next = false
     }
 
