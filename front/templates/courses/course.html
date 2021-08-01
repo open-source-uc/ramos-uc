@@ -114,28 +114,28 @@
     <p class="mt-3">Basado en {{ calification.like__count }} calificaciones:</p>
     <div class="card-group text-center mb-3">
         <div class="card">
-            <p class="card-title m-3 display-5">{{ calification.load__avg }}</p>
+            <p class="card-title m-3 display-5">{{ calification.load__avg|floatformat }}</p>
             <p class="card-text">
                 Carga académica<br>
                 <small class="text-muted">1 al 5, mayor es más carga</small>
             </p>
         </div>
         <div class="card">
-            <h5 class="card-title m-3 display-5">{{ calification.like__avg }}</h5>
+            <h5 class="card-title m-3 display-5">{{ calification.like__avg|floatformat }}</h5>
             <p class="card-text">
                 Recomendación<br>
                 <small class="text-muted">1 al 5, mayor es mejor</small>
             </p>
         </div>
         <div class="card">
-            <h5 class="card-title m-3 display-5">{{ calification.online_adaptation__avg }}</h5>
+            <h5 class="card-title m-3 display-5">{{ calification.online_adaptation__avg|floatformat }}</h5>
             <p class="card-text">
                 Adaptación al contexto online<br>
                 <small class="text-muted">1 al 5, mayor es mejor</small>
             </p>
         </div>
         <div class="card">
-            <h5 class="card-title m-3 display-5">{{ calification.communication__avg }}</h5>
+            <h5 class="card-title m-3 display-5">{{ calification.communication__avg|floatformat }}</h5>
             <p class="card-text">
                 Comunicación con profesores<br>
                 <small class="text-muted">1 al 5, mayor es mejor</small>
