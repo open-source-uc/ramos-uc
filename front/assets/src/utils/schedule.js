@@ -1,4 +1,6 @@
 import { getCookie, setCookie } from "./cookies"
+import ga_event from "./ga_event.js"
+
 
 // Add ramo to cookie and load it to schedule
 const add = (id) => {
@@ -6,23 +8,12 @@ const add = (id) => {
     // Save in cookie
     var saved = getCookie("ramos")
     saved = saved ? saved.split(",") : []
-    if (saved.includes(id)) {
-        return
-    }
+    if (saved.includes(id)) return
+
     saved.push(id)
     setCookie("ramos", saved.join(","), 30)
-
     loadRamo(id)
-
-    // google analytics
-    try {
-        gtag("event", "add_to_schedule", {
-            event_category: "schedule",
-            event_label: id,
-        })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("add_to_schedule", { event_category: "schedule", event_label: id })
 }
 
 // Remove ramo from horario and cookie
@@ -44,16 +35,7 @@ const remove = (id) => {
             $(`#${td.id}`).removeClass("table-secondary")
         }
     })
-
-    // google analytics
-    try {
-        gtag("event", "remove_from_schedule", {
-            event_category: "schedule",
-            event_label: id,
-        })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("remove_from_schedule", { event_category: "schedule", event_label: id })
 }
 
 // Retrieve ramo info and show it on schedule

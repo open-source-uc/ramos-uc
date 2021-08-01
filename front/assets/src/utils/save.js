@@ -1,4 +1,6 @@
 import { getCookie, setCookie } from "./cookies"
+import ga_event from "./ga_event"
+
 
 // Create share link and copy to clipboard
 const share = () => {
@@ -8,16 +10,7 @@ const share = () => {
         .then(() => {
             alert("Link copiado, ahora puedes compartirlo con quien quieras!")
         })
-
-    // google analytics
-    try {
-        gtag("event", "share", {
-            event_category: "difusion",
-            value: saved.split(",").length,
-        })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("share", { event_category: "difusion", value: saved.split(",").length })
 }
 
 // Create share link to buscacursos and copy to clipboard
@@ -49,12 +42,7 @@ const buscacursos = () => {
 
 // From share view, load ramos to cookie and redirect to root
 const edit = (ids) => {
-    // google analytics
-    try {
-        gtag("event", "edit", { value: ids.split(",").length })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("edit", { value: ids.split(",").length })
 
     if (confirm("Al editar este horario se perderá la información de cualquier otro horario que no hayas guardado.")) {
         setCookie("ramos", ids, 120)
@@ -67,13 +55,7 @@ const save = () => {
     var name = `horario_${$("#saveName").val()}`
     var saved = getCookie("ramos")
     localStorage.setItem(name, saved)
-
-    // google analytics
-    try {
-        gtag("event", "save", { event_category: "persistence", value: saved.split(",").length })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("save", { event_category: "persistence", value: saved.split(",").length })
 }
 
 // Load horarios names from local storage to modal
@@ -95,28 +77,14 @@ const viewSaved = () => {
             `)
         }
     })
-
-    // google analytics
-    try {
-        gtag("event", "view_saved", {
-            event_category: "persistence",
-        })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("view_saved", { event_category: "persistence" })
 }
 
 // Delete schedule from local storage and reload modal
 const unsave = (key) => {
     localStorage.removeItem(key)
     viewSaved()
-
-    // google analytics
-    try {
-        gtag("event", "unsave", { event_category: "persistence" })
-    } catch (error) {
-        console.log("No analytics.")
-    }
+    ga_event("unsave", { event_category: "persistence" })
 }
 
 export { save, unsave, viewSaved, edit, share, buscacursos }

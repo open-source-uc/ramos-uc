@@ -1,3 +1,5 @@
+import ga_event from "./ga_event"
+
 // Retrieve ramo info to modal, triggered on modal show
 export const loadInfo = (id) => {
     var modal = $("#courseInfo")
@@ -56,9 +58,5 @@ const loadInfoHandleResponse = (response, modal) => {
         <a class="btn btn-primary mt-2" href="${course.url}">Más información</a>
     `)
 
-    // google analytics
-    gtag("event", "info", {
-        event_category: course.escuela,
-        event_label: course.nombre,
-    })
+    ga_event("info", { event_category: course.escuela, event_label: course.nombre })
 }

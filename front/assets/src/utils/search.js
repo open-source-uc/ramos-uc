@@ -1,3 +1,5 @@
+import ga_event from "./ga_event"
+
 // Make ajax search request and load results to table
 export const search = (page = 1) => {
     var table = $("#results")
@@ -33,20 +35,13 @@ export const search = (page = 1) => {
         school: $("#escuela").val(),
         without_req: $("#requisitos").prop("checked"),
     }
-
+    ga_event("search", { event_category: request_content.period, event_label: request_content.q })
     $.get("/p_search", request_content)
         .done((response) => searchHandleResults(response, table, page))
         .fail(error => {
             console.log(error)
             $("#resultsFoot").html("<tr><td>Error en la búsqueda</td></tr>")
         })
-
-    // google analytics
-    try {
-        gtag("event", "search", { event_category: request_content.period, event_label: request_content.q })
-    } catch (error) {
-        console.log("No analytics.")
-    }
     return false
 }
 

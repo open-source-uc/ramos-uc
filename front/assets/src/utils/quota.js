@@ -1,3 +1,6 @@
+import ga_event from "./ga_event.js"
+
+
 // Retrieve ramo info to modal, triggered on modal show
 export const loadQuota = (id) => {
     var modal = $("#quotaChart")
@@ -14,7 +17,6 @@ export const loadQuota = (id) => {
 
 const loadQuotaHandleResponse = (response, modal) => {
     $("#quotaTitle").text(response.initials)
-
     // Format data
     var categories = {}
     var dates = {}
@@ -90,9 +92,5 @@ const loadQuotaHandleResponse = (response, modal) => {
     google.charts.load("current", { packages: ["line"] })
     google.charts.setOnLoadCallback(drawChart)
 
-    // google analytics
-    gtag("event", "detail", {
-        event_category: "follow",
-        event_label: response.initials,
-    })
+    ga_event("detail", { event_category: "follow", event_label: response.initials })
 }
