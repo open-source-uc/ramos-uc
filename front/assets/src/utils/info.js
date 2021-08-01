@@ -3,7 +3,7 @@ export const loadInfo = (id) => {
     var modal = $("#courseInfo")
     modal.html("<div class=\"spinner-border\" role=\"status\"></div>")
     $.get(`/detalle/${id.toString()}`)
-        .done((request) => loadInfoHandleResponse(request, modal))
+        .done((response) => loadInfoHandleResponse(response, modal))
         .catch(error => {
             console.log(error)
             modal.html("Error al cargar información.")

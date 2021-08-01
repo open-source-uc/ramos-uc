@@ -4,7 +4,7 @@ export const loadQuota = (id) => {
     modal.html("<div class=\"spinner-border\" role=\"status\"></div>")
 
     $.get(`/banner/${id.toString()}`)
-        .done((request) => loadQuotaHandleResponse(request, modal))
+        .done((response) => loadQuotaHandleResponse(response, modal))
         .catch(error => {
             console.log(error)
             modal.html("Error al cargar información.")
