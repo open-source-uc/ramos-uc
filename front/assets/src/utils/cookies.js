@@ -8,7 +8,7 @@ const setCookie = (cname, cvalue, exdays) => {
 
 // Get the value of a cookie by name, or empty string if not exists
 const getCookie = cname => {
-    const cookie_regrex = `${cname}=(?<value>[^;]*?);`
+    const cookie_regrex = `${cname}=(?<value>[^;]*?)(;|$)`
     const match = document.cookie.match(cookie_regrex)
     return match ? match.groups.value : ""
 }
