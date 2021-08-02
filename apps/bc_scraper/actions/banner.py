@@ -1,5 +1,5 @@
 import psycopg2
-import requests
+from ..scraper.request import get_text
 from datetime import datetime
 from time import sleep
 from .errors import handle
@@ -50,7 +50,7 @@ def banner(period, settings, banner="0"):
             id = int(curso[0])
             nrc = curso[1]
             query = f"http://buscacursos.uc.cl/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
-            text = requests.get(query).text
+            text = get_text(query)
             # sleep(0.1)
             date = str(datetime.now())
             cupos_dict = parser.process(text)
@@ -59,7 +59,7 @@ def banner(period, settings, banner="0"):
                 query = (
                     f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
                 )
-                text = requests.get(query).text
+                text = get_text(query)
                 cupos_dict = {"Total": parser_bc.process(text)}
 
             try:
