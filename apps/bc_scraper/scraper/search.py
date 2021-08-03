@@ -110,7 +110,7 @@ def bc_search(query, period, nrc=False):
     resp = get_text(url)
 
     # Check valid response
-    if len(resp.text) < 1000:
+    if len(resp) < 1000:
         print("Too many request prevention")
         sleep(5)
         resp = get_text(url)
