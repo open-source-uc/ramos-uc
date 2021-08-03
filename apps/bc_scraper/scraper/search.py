@@ -115,5 +115,5 @@ def bc_search(query, period, nrc=False):
         sleep(5)
         resp = get_text(url)
 
-    parser.feed(resp.text)
+    parser.feed(resp)
     return parser.courses
