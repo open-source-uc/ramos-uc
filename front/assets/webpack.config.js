@@ -15,6 +15,7 @@ module.exports = {
         index: "./src/index.js",
         planner: "./src/planner.js",
         shared: "./src/shared.js",
+        create: "./src/create.js",
     },
     plugins: [
         new CleanWebpackPlugin(),

@@ -48,7 +48,7 @@
 	"forwardPorts": [5000, 5432],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "$HOME/.local/bin/poetry install && cp -n /workspace/.env.example /workspace/.env && /workspace/.venv/bin/pre-commit install && cd front/assets/ && npm install && cd /workspace && /workspace/.venv/bin/python /workspace/manage.py migrate ",
+	"postCreateCommand": "$HOME/.local/bin/poetry install && cp -n /workspace/.env.example /workspace/.env && /workspace/.venv/bin/pre-commit install && cd front/assets/ && npm install && npm run build && cd /workspace && /workspace/.venv/bin/python /workspace/manage.py migrate ",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
