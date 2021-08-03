@@ -165,6 +165,8 @@ def planner_search(request):
                 "format": s.format,
                 "available_quota": s.available_quota,
                 "schedule": s.schedule,
+                "course_initials": str(s).split("-")[0],
+                "section": int(str(s).split("-")[1]),
             }
         )
     return JsonResponse({"results": results})
@@ -320,3 +322,21 @@ def search(request):
             "results_count": len(results),
         },
     )
+
+
+# Crea
+@cache_control(must_revalidate=True)
+def create(request):
+    data = cache.get_or_set(
+        "create_data",
+        {
+            "mods": ["8:30", "10:00", "11:30", "2:00", "3:30", "5:00", "6:30", "8:00"],
+            "schools": Course.objects.available("school"),
+            "campuses": Section.objects.available("campus"),
+            "formats": Section.objects.available("format"),
+            "categories": Course.objects.available("category"),
+            "areas": Course.objects.available("area"),
+        },
+        3600 * 12,
+    )
+    return render(request, "courses/create.html", data)
