@@ -21,4 +21,6 @@ urlpatterns = [
     path("ramos", views.browse, name="browse"),
     # Search
     path("buscar", views.search, name="search"),
+    # Crea (HorarioUC)
+    path("crea", views.create, name="create"),
 ]
