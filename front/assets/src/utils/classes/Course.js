@@ -18,7 +18,7 @@ export class Course {
         let sections = this.sections
 
         if (onlySelected && this.selections.length > 0) {
-            sections = sections.filter(({section}) => this.selections.includes(section))
+            sections = sections.filter(({ section }) => this.selections.includes(section))
         }
 
         sections = sections.map(s => {

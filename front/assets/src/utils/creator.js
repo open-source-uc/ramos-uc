@@ -147,7 +147,7 @@ const updateUI = () => {
             row += `<td><button onclick="wp.remove('${initials}')" type="button" class="btn" aria-label="Eliminar"><img src="/dist/images/close.svg" height="15"/></button></button>`
             row += `<td><span class="badge bg-secondary">${initials}</span></td>`
             row += `<td>${name}</td>`
-            row += `<td><a href="#sectionSelectorModal" data-bs-toggle="modal" onclick="wp.openSectionSelect('${initials}')">${selections.length > 0 ? selections.length + "/" + sections.length : sections.length}</a></td>`
+            row += `<td><a href="#sectionSelectorModal" data-bs-toggle="modal" onclick="wp.openSectionSelect('${initials}')">${selections.length > 0 ? `${selections.length}/${sections.length}` : sections.length}</a></td>`
             row += `<td>${groups.length}</td></tr>`
 
             table.append(row)
@@ -274,7 +274,7 @@ const saveSectionSelections = (initials) => {
 
     let selections = []
 
-    course.sections.forEach(({section}) => {
+    course.sections.forEach(({ section }) => {
         if ($(`#section-${section}-checkbox`).is(":checked")) {
             selections.push(section)
         }
