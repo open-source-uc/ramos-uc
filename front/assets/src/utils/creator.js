@@ -86,6 +86,8 @@ const generateCombinations = () => {
     combinationIndex = 0
     combinations = []
 
+    addedCourses.forEach(course => course.group(true))
+
     if (addedCourses.length > 0) {
         let courses = [...addedCourses]
         let course = courses.shift()
@@ -99,7 +101,7 @@ const generateCombinations = () => {
             combinations.forEach(combination => {
                 course.groups.forEach(g => {
                     let compatible = combination.every(g2 =>
-                        Module.compatibleSchedules(g.schedule, g2.schedule))
+                        Module.compatibleSchedules(g.schedule_obj, g2.schedule_obj))
 
                     if (compatible) {
                         let newCombination = [...combination]
@@ -132,7 +134,7 @@ const resetHorario = () => {
 }
 
 const updateUI = () => {
-    // Update tabla
+    // Update tabla agregados
     let table = $("#ramos")
 
     if (addedCourses.length == 0)
@@ -140,12 +142,12 @@ const updateUI = () => {
     else {
         table.html("")
 
-        addedCourses.forEach(({ initials, name, sections, groups }) => {
+        addedCourses.forEach(({ initials, name, sections, groups, selections }) => {
             let row = "<tr>"
             row += `<td><button onclick="wp.remove('${initials}')" type="button" class="btn" aria-label="Eliminar"><img src="/dist/images/close.svg" height="15"/></button></button>`
             row += `<td><span class="badge bg-secondary">${initials}</span></td>`
             row += `<td>${name}</td>`
-            row += `<td>${sections.length}</td>`
+            row += `<td><a href="#sectionSelectorModal" data-bs-toggle="modal" onclick="wp.openSectionSelect('${initials}')">${selections.length > 0 ? selections.length + "/" + sections.length : sections.length}</a></td>`
             row += `<td>${groups.length}</td></tr>`
 
             table.append(row)
@@ -161,9 +163,9 @@ const updateUI = () => {
 
         let combination = combinations[combinationIndex]
 
-        combination.forEach(({ initials, schedule, sections, name }) => {
+        combination.forEach(({ initials, schedule_obj, sections, name }) => {
             // Horario
-            schedule.forEach(module => {
+            schedule_obj.forEach(module => {
                 let color = "danger"
                 if (module.type == "CLAS") color = "warning text-dark"
                 else if (module.type == "AYU") color = "success"
@@ -186,7 +188,7 @@ const updateUI = () => {
             let row = "<tr>"
             row += `<td rowspan=${sections.length} class="align-middle">${name}</td>`
             row += `<td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(${firstSection.id})">${firstSection.initials}</a></td>`
-            row += `<td>${firstSection.teachers.replace(",", ", ")}</td>`
+            row += `<td>${firstSection.teachers.replaceAll(",", ", ")}</td>`
             row += `<td>${firstSection.available_quota}</td>`
             row += `<td><button class="btn p-0 m-1" data-bs-toggle="modal" href="#quotaModal" onclick="wp.loadQuota(${firstSection.id})"><img src="/dist/images/chart.svg" height="25"/></button></td>`
             row += "</tr>"
@@ -195,7 +197,7 @@ const updateUI = () => {
             otherSections.forEach(section => {
                 row += "<tr>"
                 row += `<td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(${section.id})">${section.initials}</a></td>`
-                row += `<td>${section.teachers.replace(",", ", ")}</td>`
+                row += `<td>${section.teachers.replaceAll(",", ", ")}</td>`
                 row += `<td>${section.available_quota}</td>`
                 row += `<td><button class="btn p-0 m-1" data-bs-toggle="modal" href="#quotaModal" onclick="wp.loadQuota(${section.id})"><img src="/dist/images/chart.svg" height="25"/></button></td>`
                 row += "</tr>"
@@ -230,4 +232,58 @@ const updateUI = () => {
 
 }
 
-export { add, remove, next, prev, loadFromCookie }
+const openSectionSelect = (initials) => {
+    let course = addedCourses.find(c => c.initials == initials)
+
+    if (!course) {
+        console.error("No se ha podido abrir el modal para seleccionar las secciones correctamente", initials)
+        return
+    }
+
+    $("#sectionSelectorTitle").html(`${course.initials} - ${course.name}`)
+
+    let table = $("#sectionSelectorTable")
+    table.html("")
+    console.log(course)
+    course.sections.forEach(section => {
+        let section_number = section.section
+        let selected = course.selections.includes(section_number)
+
+        let row = "<tr>"
+        row += `<td><input class="form-check-input" type="checkbox" value="" id="section-${section_number}-checkbox" ${selected ? "checked" : ""}></td>`
+        row += `<td>${section_number}</td>`
+        row += `<td>${section.teachers.replaceAll(",", ", ")}</td>`
+        row += `<td>${section.format}</td>`
+        row += `<td>${section.available_quota}</td>`
+        row += `<td>${section.schedule.replace("\nROW:", "").replaceAll("\nROW:", "<br>").replaceAll("<>", " ")}</td>`
+        row += "</tr>"
+
+        table.append(row)
+    })
+
+    $("#closeSectionSelectorButton").attr("onclick", `wp.saveSectionSelections('${initials}')`)
+}
+
+const saveSectionSelections = (initials) => {
+    let course = addedCourses.find(c => c.initials == initials)
+
+    if (!course) {
+        console.error("No se ha guardar las selecciones", initials)
+        return
+    }
+
+    let selections = []
+
+    course.sections.forEach(({section}) => {
+        if ($(`#section-${section}-checkbox`).is(":checked")) {
+            selections.push(section)
+        }
+    })
+
+    course.selections = selections
+
+    generateCombinations()
+    updateUI()
+}
+
+export { add, remove, next, prev, loadFromCookie, openSectionSelect, saveSectionSelections }

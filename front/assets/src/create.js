@@ -7,14 +7,14 @@ import "multiple-select"
 
 // Public functions
 import { toggle, toggleRow, toggleDay, clearSelects } from "./utils/filters"
-import { add, remove, next, prev, loadFromCookie } from "./utils/creator"
+import { add, remove, next, prev, loadFromCookie, openSectionSelect, saveSectionSelections } from "./utils/creator"
 import { createSearch } from "./utils/createSearch"
 import { loadInfo } from "./utils/info"
 import { loadQuota } from "./utils/quota"
 
 export {
     toggle, toggleRow, toggleDay, clearSelects,
-    add, remove, next, prev, loadFromCookie,
+    add, remove, next, prev, loadFromCookie, openSectionSelect, saveSectionSelections,
     createSearch,
     loadInfo,
     loadQuota,
