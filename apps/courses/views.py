@@ -14,7 +14,7 @@ def home(request):
     return render(request, "index.html")
 
 
-def generate_possible_values():
+def get_fields_values():
     return {
         "mods": ["8:30", "10:00", "11:30", "2:00", "3:30", "5:00", "6:30", "8:00"],
         "schools": Course.objects.available("school"),
@@ -28,7 +28,7 @@ def generate_possible_values():
 # Planner index
 @cache_control(private=True, max_age=3600 * 12)
 def planner(request):
-    data = cache.get_or_set("possible_values", generate_possible_values, 3600 * 12)
+    data = cache.get_or_set("possible_values", get_fields_values, 3600 * 12)
     return render(request, "courses/planner.html", data)
 
 
@@ -301,7 +301,7 @@ def browse(request):
             },
         )
 
-    data = cache.get_or_set("possible_values", generate_possible_values, 3600 * 12)
+    data = cache.get_or_set("possible_values", get_fields_values, 3600 * 12)
     return render(request, "courses/browse.html", data)
 
 
@@ -324,5 +324,5 @@ def search(request):
 # Crea
 @cache_control(must_revalidate=True)
 def create(request):
-    data = cache.get_or_set("possible_values", generate_possible_values, 3600 * 12)
+    data = cache.get_or_set("possible_values", get_fields_values, 3600 * 12)
     return render(request, "courses/create.html", data)
