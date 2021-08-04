@@ -50,19 +50,20 @@ def banner(period, settings, banner="0"):
             id = int(curso[0])
             nrc = curso[1]
             query = f"http://buscacursos.uc.cl/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
-            text = get_text(query)
-            # sleep(0.1)
-            date = str(datetime.now())
-            cupos_dict = parser.process(text)
-            if not len(cupos_dict):
-                # Solo vacantes libres, buscar en página principal
-                query = (
-                    f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
-                )
-                text = get_text(query)
-                cupos_dict = {"Total": parser_bc.process(text)}
 
             try:
+                text = get_text(query)
+                # sleep(0.1)
+                date = str(datetime.now())
+                cupos_dict = parser.process(text)
+                if not len(cupos_dict):
+                    # Solo vacantes libres, buscar en página principal
+                    query = (
+                        f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
+                    )
+                    text = get_text(query)
+                    cupos_dict = {"Total": parser_bc.process(text)}
+
                 values = []
                 free_quota = 0
                 for categoria, cupos in cupos_dict.items():
