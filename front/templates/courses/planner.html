@@ -142,71 +142,7 @@
         <!-- COLLAPSEABLE FILTERS -->
         <div id="filters" class="collapse mt-2" action="#">
             <!-- FIRST ROW FILTERS -->
-            <div class="row">
-                <div class="col-md-3">
-                    <p class="m-0">Campus</p>
-                    <select id="campus" multiple="multiple" class="multiple-select">
-                        {% for x in campuses %}
-                        <option value="{{ x }}">{{ x }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <p class="m-0">Formato</p>
-                    <select id="formato" multiple="multiple" class="multiple-select">
-                        {% for x in formats %}
-                        {% if x %}<option value="{{ x }}">{{ x }}</option>{% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <p class="m-0">Escuela</p>
-                    <select id="escuela" multiple="multiple" class="multiple-select">
-                        {% for s in schools %}
-                        <option value="{{ s }}">{{ s }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <p class="m-0">Módulos permitidos</p>
-                    <select id="tipos_modulo" multiple="multiple" class="multiple-select">
-                        <option value="CLAS">Cátedra</option>
-                        <option value="AYU">Ayudantía</option>
-                        <option value="LAB">Laboratorio</option>
-                        <option value="TAL">Taller</option>
-                        <option value="TER">Terreno</option>
-                        <option value="OTRO">Otro</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- SECOND ROW FILTERS -->
-            <div class="row mt-4">
-                <div class="col-md-3">
-                    <p class="m-0">Categoría</p>
-                    <select id="categoria" multiple="multiple" class="multiple-select">
-                        {% for x in categories %}
-                        {% if x %}<option value="{{ x }}">{{ x }}</option>{% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <p class="m-0">Área</p>
-                    <select id="area" multiple="multiple" class="multiple-select">
-                        {% for x in areas %}
-                        {% if x %}<option value="{{ x }}">{{ x }}</option>{% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <p class="m-0">Créditos</p>
-                    <input type="number" min="0" class="form-control" id="creditos">
-                </div>
-                <div class="col-md-3">
-                    <p class="m-0">Máximos módulos semanales</p>
-                    <input type="number" min="0" class="form-control" id="modulos">
-                </div>
-            </div>
+            {% include "courses/_base_filters.html" %}
 
             <!-- REST OF FILTERS ROWS -->
             <div class="form-check mt-2">
