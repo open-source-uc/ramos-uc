@@ -7,25 +7,7 @@
 
 {% include "courses/_info_modal.html" %}
 
-<!-- RAMO DETAIL POPUP -->
-<div id="quotaModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="quotaTitle" class="modal-title">Cargando...</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-
-            <div class="table-responsive">
-                <div id="quotaChart" class="modal-body" style="height: 500px"></div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div><!-- END DETAIL POPUP -->
+{% include "courses/_quota_modal.html" %}
 
 <div class="table-responsive">
     <table class="table table-sm" style="text-align: center;">
