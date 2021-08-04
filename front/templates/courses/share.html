@@ -9,32 +9,7 @@
 
 {% include "courses/_quota_modal.html" %}
 
-<div class="table-responsive">
-    <table class="table table-sm" style="text-align: center;">
-        <tr>
-            <th>Hora</th>
-            <th>Lunes</th>
-            <th>Martes</th>
-            <th>Miercoles</th>
-            <th>Jueves</th>
-            <th>Viernes</th>
-            <th>Sábado</th>
-        </tr>
-        {% for mod in mods %}
-            <tr>
-                <th>
-                {{ mod }}
-                </th>
-                {% for day in 'LMWJVS' %}
-                <td id="{{ day }}{{ forloop.parentloop.counter }}"></td>
-                {% endfor %}
-            </tr>
-            {% if forloop.counter == 3 or forloop.counter == 6 %}
-            <tr class="table-success"><td colspan="8"></td></tr>
-            {% endif %}
-        {% endfor %}
-    </table>
-</div>
+{% include "courses/_schedule_table.html" with is_interactive=False %}
 
 <!-- LEYENDA -->
 <div class="mx-2 text-center">
