@@ -1,4 +1,4 @@
-{% load i18n static manifest socialaccount %}
+{% load i18n static manifest %}
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE | default:"es" }}">
@@ -42,58 +42,7 @@
 </head>
 
 <body class="container px-1">
-    <!-- NAVBAR BEGIN -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-0" style="font-size: 1.2rem;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'courses:index' %}">
-                <h1>Ramos<span class="text-primary">UC</span></h1>
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto ms-2 mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" name="menu_home" href="{% url 'courses:index' %}">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" name="menu_planner" href="{% url 'courses:planner' %}">Planifica</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" name="menu_create" href="{% url 'courses:create' %}">Crea</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" name="menu_browse" href="{% url 'courses:browse' %}">Catálogo</a>
-                    </li>
-                    <form action="{% url 'courses:search' %}" class="d-flex ms-0 ms-lg-3">
-                        <input name="q" class="form-control me-2" type="search" placeholder="Ramo, sigla o profesor" aria-label="Buscar">
-                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
-                    </form>
-                </ul>
-
-                <ul class="navbar-nav ms-lg-4 mt-2 mt-lg-0">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">{{ user.username }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-secondary" href="{% url 'account_logout' %}">Salir</a>
-                    </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a class="btn btn-secondary" href="{% provider_login_url "google" %}">Ingresar</a>
-                    </li>
-                    {% endif %}
-                </ul>
-
-            </div>
-
-        </div>
-    </nav>
-    <!-- NAVBAR END -->
+    {% include "_navbar.html" %}
 
     <!-- CONTENT BEGIN-->
     <div class="mt-3 px-1" role="main" style="min-height: calc(100vh - 200px);">
@@ -103,10 +52,10 @@
     <!-- CONTENT END-->
 
     <!-- FOOTER BEGIN -->
+    <hr>
     <footer class="footer">
-				<hr>
         <p class="text-muted mb-1 text-center">by Nico Mc. Mantenido con la ayuda de contribuidores de <a href="https://github.com/open-source-uc">Open Source UC.</a></p>
-				<p class="text-muted mb-3 text-center">Ver en <a href="https://github.com/open-source-uc/ramos-uc">GitHub</a></p>
+        <p class="text-muted mb-3 text-center">Ver en <a href="https://github.com/open-source-uc/ramos-uc">GitHub</a></p>
     </footer>
     <!-- FOOTER END -->
 
