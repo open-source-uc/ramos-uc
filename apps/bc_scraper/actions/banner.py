@@ -80,8 +80,6 @@ def banner(period, settings, banner="0"):
                 handle(
                     {
                         "id": id,
-                        "banner": banner,
-                        "cupos_dict": cupos_dict,
                     },
                     err,
                 )
