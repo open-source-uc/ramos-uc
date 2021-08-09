@@ -5,73 +5,11 @@
 
 {% block main %}
 
-<!-- COURSE INFO MODAL -->
-<div class="modal" tabindex="-1" id="infoModal">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="courseTitle">Cargando...</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body">
-                <h4>Detalles</h4>
-                <p id="courseInfo"></p>
-                <h4>Cupos</h4>
-                <p id="courseBanner">Sin información.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div><!-- END INFO MODAL -->
+{% include "courses/_info_modal.html" %}
 
-<!-- RAMO DETAIL POPUP -->
-<div id="quotaModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="quotaTitle" class="modal-title">Cargando...</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            
-            <div class="table-responsive">
-                <div id="quotaChart" class="modal-body" style="height: 500px"></div>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div><!-- END DETAIL POPUP -->
+{% include "courses/_quota_modal.html" %}
 
-<div class="table-responsive">
-    <table class="table table-sm" style="text-align: center;">
-        <tr>
-            <th>Hora</th>
-            <th>Lunes</th>
-            <th>Martes</th>
-            <th>Miercoles</th>
-            <th>Jueves</th>
-            <th>Viernes</th>
-            <th>Sábado</th>
-        </tr>
-        {% for mod in mods %}
-            <tr>
-                <th>
-                {{ mod }} 
-                </th>
-                {% for day in 'LMWJVS' %}
-                <td id="{{ day }}{{ forloop.parentloop.counter }}"></td>
-                {% endfor %}
-            </tr>
-            {% if forloop.counter == 3 or forloop.counter == 6 %}
-            <tr class="table-success"><td colspan="8"></td></tr>
-            {% endif %}
-        {% endfor %}
-    </table>
-</div>
+{% include "courses/_schedule_table.html" with is_interactive=False %}
 
 <!-- LEYENDA -->
 <div class="mx-2 text-center">

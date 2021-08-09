@@ -1,0 +1,49 @@
+{% load socialaccount %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-0" style="font-size: 1.2rem;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'courses:index' %}">
+            <h1>Ramos<span class="text-primary">UC</span></h1>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto ms-2 mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" name="menu_home" href="{% url 'courses:index' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" name="menu_planner" href="{% url 'courses:planner' %}">Planifica</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" name="menu_create" href="{% url 'courses:create' %}">Crea</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" name="menu_browse" href="{% url 'courses:browse' %}">Catálogo</a>
+                </li>
+                <form action="{% url 'courses:search' %}" class="d-flex ms-0 ms-lg-3">
+                    <input name="q" class="form-control me-2" type="search" placeholder="Ramo, sigla o profesor" aria-label="Buscar">
+                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                </form>
+            </ul>
+
+            <ul class="navbar-nav ms-lg-4 mt-2 mt-lg-0">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">{{ user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-secondary" href="{% url 'account_logout' %}">Salir</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="btn btn-secondary" href="{% provider_login_url "google" %}">Ingresar</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
