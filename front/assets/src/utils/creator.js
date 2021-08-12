@@ -1,6 +1,9 @@
+import { Tooltip } from "bootstrap"
+
 import { Course } from "./classes/Course"
 import { Module } from "./classes/Module"
 import { getCookie, setCookie } from "./cookies"
+
 
 // Local variables
 let combinations = []
@@ -138,19 +141,26 @@ const updateUI = () => {
     let table = $("#ramos")
 
     if (addedCourses.length == 0)
-        table.html("<tr><td colspan=\"5\">No has agregado ningún ramo.</td></tr>")
+        table.html("<tr><td colspan=\"6\">No has agregado ningún ramo.</td></tr>")
     else {
         table.html("")
 
         addedCourses.forEach(({ initials, name, sections, groups, selections }) => {
-            let row = "<tr>"
+            let row = "<tr class=\"align-middle\">"
             row += `<td><button onclick="wp.remove('${initials}')" type="button" class="btn" aria-label="Eliminar"><img src="/dist/images/close.svg" height="15"/></button></button>`
             row += `<td><span class="badge bg-secondary">${initials}</span></td>`
             row += `<td>${name}</td>`
-            row += `<td><a href="#sectionSelectorModal" data-bs-toggle="modal" onclick="wp.openSectionSelect('${initials}')">${selections.length > 0 ? `${selections.length}/${sections.length}` : sections.length}</a></td>`
-            row += `<td>${groups.length}</td></tr>`
-
+            row += `<td><span data-bs-toggle="tooltip" data-bs-placement="top" title="${selections.length ? `${selections.length} secciones elegidas` : ""}">${selections.length > 0 ? `${selections.length} de ${sections.length}` : sections.length}</span></td>`
+            row += `<td>${groups.length}</td>`
+            row += `<td><button class="btn p-0 m-1" href="#sectionSelectorModal" data-bs-toggle="modal" onclick="wp.openSectionSelect('${initials}')"><img src="/dist/images/filter.svg" height="25"/></button></td>`
+            row += "</tr>"
             table.append(row)
+        })
+
+        // Enable tooltips
+        let tooltipTriggerList = [].slice.call(document.querySelectorAll("[data-bs-toggle=\"tooltip\"]"))
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            return new Tooltip(tooltipTriggerEl)
         })
     }
 
@@ -185,7 +195,7 @@ const updateUI = () => {
             let firstSection = sections[0]
             let otherSections = sections.slice(1)
 
-            let row = "<tr>"
+            let row = "<tr class=\"align-middle\">"
             row += `<td rowspan=${sections.length} class="align-middle">${name}</td>`
             row += `<td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(${firstSection.id})">${firstSection.initials}</a></td>`
             row += `<td>${firstSection.teachers.replaceAll(",", ", ")}</td>`
@@ -195,7 +205,7 @@ const updateUI = () => {
 
 
             otherSections.forEach(section => {
-                row += "<tr>"
+                row += "<tr class=\"align-middle\">"
                 row += `<td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(${section.id})">${section.initials}</a></td>`
                 row += `<td>${section.teachers.replaceAll(",", ", ")}</td>`
                 row += `<td>${section.available_quota}</td>`
