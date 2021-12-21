@@ -90,7 +90,7 @@ const searchHandleResults = (response, table, page) => {
     if (page > 1) {
         footer.append(`<button onclick="wp.search(${(page - 1).toString()});" class="btn btn-outline-primary me-3"><< Anterior</button>`)
     }
-    if (response.length == 25) {
+    if (results.length == 25) {
         footer.append(`<button onclick="wp.search(${(page + 1).toString()});" class="btn btn-outline-primary">Siguiente >></button>`)
     }
 }
