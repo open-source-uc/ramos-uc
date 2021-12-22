@@ -12,8 +12,9 @@
 {% block main %}
 {% cache 21600 create %}
 
+<!-- MODALS -->
+{% include "courses/_section_select_modal.html" %}
 {% include "courses/_info_modal.html" %}
-
 {% include "courses/_quota_modal.html" %}
 
 <!-- TOP -->
@@ -65,6 +66,7 @@
                 <th>Nombre</th>
                 <th>Secciones</th>
                 <th>Horarios</th>
+                <th>Elegir sección</th>
             </tr>
             </thead>
             <tbody id="ramos"><tr><td colspan="5">No has agregado ningún ramo.</td></tr></tbody>

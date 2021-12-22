@@ -6,6 +6,7 @@ export class Course {
         this.sections = sections
         this.name = name
         this.groups = []
+        this.selections = []
     }
 
     addSection(section){
@@ -13,9 +14,15 @@ export class Course {
     }
 
     // Group sections that have the same schedule
-    group(){
-        let sections = this.sections.map(s => {
-            s.schedule = Module.scheduleFromString(s.schedule)
+    group(onlySelected = false){
+        let sections = this.sections
+
+        if (onlySelected && this.selections.length > 0) {
+            sections = sections.filter(({ section }) => this.selections.includes(section))
+        }
+
+        sections = sections.map(s => {
+            s.schedule_obj = Module.scheduleFromString(s.schedule)
             return s
         })
 
@@ -23,10 +30,10 @@ export class Course {
 
         while (sections.length > 0) {
             let section = sections.shift()
-            let { schedule } = section
+            let { schedule_obj, schedule } = section
 
             let group_sections = []
-            group_sections = sections.filter(s2 => Module.equalSchedules(schedule, s2.schedule))
+            group_sections = sections.filter(s2 => Module.equalSchedules(schedule_obj, s2.schedule_obj))
 
             group_sections.forEach(s => sections.splice(sections.indexOf(s), 1))
 
@@ -38,6 +45,7 @@ export class Course {
                 initials: `${this.initials}-${section_numbers}`,
                 name: this.name,
                 schedule,
+                schedule_obj,
                 sections: group_sections,
             })
         }
