@@ -1,0 +1,27 @@
+{% comment %} is_interactive requires that toggleDay is imported in the webpack entrypoint of this view! {% endcomment %}
+<div class="table-responsive">
+    <table class="table table-sm" style="text-align: center;">
+        <tr>
+            <th>Hora</th>
+            <th {% if is_interactive %}onclick="wp.toggleDay('L')"{% endif %}>Lunes</th>
+            <th {% if is_interactive %}onclick="wp.toggleDay('M')"{% endif %}>Martes</th>
+            <th {% if is_interactive %}onclick="wp.toggleDay('W')"{% endif %}>Miercoles</th>
+            <th {% if is_interactive %}onclick="wp.toggleDay('J')"{% endif %}>Jueves</th>
+            <th {% if is_interactive %}onclick="wp.toggleDay('V')"{% endif %}>Viernes</th>
+            <th {% if is_interactive %}onclick="wp.toggleDay('S')"{% endif %}>Sábado</th>
+        </tr>
+        {% for mod in mods %}
+            <tr>
+                <th {% if is_interactive %}onclick="wp.toggleRow({{ forloop.counter }})"{% endif %}>
+                {{ mod }}
+                </th>
+                {% for day in 'LMWJVS' %}
+                <td {% if is_interactive %}onclick="wp.toggle(this)"{% endif %} id="{{ day }}{{ forloop.parentloop.counter }}"></td>
+                {% endfor %}
+            </tr>
+            {% if forloop.counter == 3 or forloop.counter == 6 %}
+            <tr class="table-success"><td colspan="8"></td></tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</div>
