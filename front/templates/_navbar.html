@@ -1,5 +1,5 @@
 {% load socialaccount %}
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-0" style="font-size: 1.2rem;">
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-0 pb-2 pb-lg-0" style="font-size: 1.2rem;">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'courses:index' %}">
             <h1>Ramos<span class="text-primary">UC</span></h1>
@@ -31,18 +31,14 @@
             </ul>
 
             <ul class="navbar-nav ms-lg-4 mt-2 mt-lg-0">
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="#">{{ user.username }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-secondary" href="{% url 'account_logout' %}">Salir</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="btn btn-secondary" href="{% provider_login_url "google" %}">Ingresar</a>
-                </li>
-                {% endif %}
+                <div class="d-flex justify-content-end">
+                    {% if user.is_authenticated %}
+                    <a class="nav-link me-lg-1 me-3" href="#">{{ user.username }}</a>
+                    <a class="btn btn-secondary" style="font-size: 1.2rem;" href="{% url 'account_logout' %}">Salir</a>
+                    {% else %}
+                    <a class="btn btn-secondary" style="font-size: 1.2rem;" href="{% provider_login_url "google" %}">Ingresar</a>
+                    {% endif %}
+                </div>
             </ul>
         </div>
     </div>
