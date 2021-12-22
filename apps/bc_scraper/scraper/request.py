@@ -1,6 +1,7 @@
 import requests
 from time import sleep
 
+
 def get_text(query):
     tries = 10
     while tries > 0:
