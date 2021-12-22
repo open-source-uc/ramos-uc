@@ -1,4 +1,4 @@
-import requests
+from .request import get_text
 from html.parser import HTMLParser
 
 
@@ -30,5 +30,5 @@ class _RequirementsParser(HTMLParser):
 def get_requirements(initials):
     parser = _RequirementsParser()
     query = f"http://catalogo.uc.cl/index.php?tmpl=component&view=requisitos&sigla={initials}"
-    text = requests.get(query).text
+    text = get_text(query)
     return parser.process(text)

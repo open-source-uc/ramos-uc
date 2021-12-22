@@ -1,6 +1,6 @@
 from html.parser import HTMLParser
 from time import sleep
-import requests
+from .request import get_text
 
 
 class _BCParser(HTMLParser):
@@ -107,13 +107,13 @@ def bc_search(query, period, nrc=False):
         url = f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={query}"
     else:
         url = f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_sigla={query}"
-    resp = requests.get(url)
+    resp = get_text(url)
 
     # Check valid response
-    if len(resp.text) < 1000:
+    if len(resp) < 1000:
         print("Too many request prevention")
         sleep(5)
-        resp = requests.get(url)
+        resp = get_text(url)
 
-    parser.feed(resp.text)
+    parser.feed(resp)
     return parser.courses

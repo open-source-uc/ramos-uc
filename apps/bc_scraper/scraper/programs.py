@@ -1,5 +1,5 @@
 from html.parser import HTMLParser
-import requests
+from .request import get_text
 
 
 class _ProgramParser(HTMLParser):
@@ -37,5 +37,5 @@ def get_program(initials):
     query = (
         f"http://catalogo.uc.cl/index.php?tmpl=component&view=programa&sigla={initials}"
     )
-    text = requests.get(query).text
+    text = get_text(query)
     return parser.process(text)

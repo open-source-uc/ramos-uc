@@ -42,14 +42,17 @@ def delete(settings):
             not_result = "La búsqueda no produjo resultados" in resp.text
             if not_result:
                 print("No result found. Deleting...\n")
-                db_cursor.execute(sql.GET_SECTION_ID_FROM_NRC, (nrc, period))
-                section_id = db_cursor.fetchone()[0]
+                try:
+                    db_cursor.execute(sql.GET_SECTION_ID_FROM_NRC, (nrc, period))
+                    section_id = db_cursor.fetchone()[0]
 
-                db_cursor.execute(sql.DELETE_FULL_SC, (section_id,))
-                db_cursor.execute(sql.DELETE_INFO_SC, (section_id,))
-                db_cursor.execute(sql.DEL_SECTION_QUOTA, (section_id,))
-                db_cursor.execute(sql.DEL_SECTION, (section_id,))
-                db_conn.commit()
+                    db_cursor.execute(sql.DELETE_FULL_SC, (section_id,))
+                    db_cursor.execute(sql.DELETE_INFO_SC, (section_id,))
+                    db_cursor.execute(sql.DEL_SECTION_QUOTA, (section_id,))
+                    db_cursor.execute(sql.DEL_SECTION, (section_id,))
+                    db_conn.commit()
+                except:
+                    print("Already deleted.")
             else:
                 print("Course found. Not deleted.")
 
