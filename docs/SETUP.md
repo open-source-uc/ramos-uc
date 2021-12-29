@@ -168,6 +168,7 @@ npm install
 npm run build
 
 cd $PROJECT_PATH/$name
+poetry export -f requirements.txt --output requirements.txt
 source bin/activate
 pip3 install -r requirements.txt
 python3 manage.py migrate
