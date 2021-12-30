@@ -12,7 +12,7 @@ Antes de calificar el ramo, te pedimos que seas serio en lo que vas a poner. <b>
 <br>
 Lo que buscamos es poder dar más y mejor información a las personas que estén considerando tomarlo en un futuro.
 <br>
-Tu aporte será tremendamente valorado, muchas gracias!
+Tu aporte será tremendamente valorado, ¡muchas gracias!
 </div>
 
 <form method="POST" action="{% url 'califications:create' course_id=course.id %}" class="m-3 needs-validation">
@@ -22,64 +22,62 @@ Tu aporte será tremendamente valorado, muchas gracias!
     {% csrf_token %}
     <div class="mb-3">
         <label for="yearForm" class="form-label">Año en que hiciste el ramo</label>
-        <input required name="year" id="yearForm" class="form-control" type="number" min="1900" max="2200" />
+        <input required name="year" id="yearForm" class="form-control w-auto py-3" type="number" min="1900" max="2200" />
     </div>
 
     <div class="mb-3">
         <label for="semForm" class="form-label">Semestre</label>
-        <select required id="semForm"  class="form-select" name="semester">
+        <select required id="semForm"  class="form-select w-auto" name="semester">
             <option value="1">1</option>
             <option value="2">2</option>
         </select>
         <div class="invalid-feedback">Error</div>
     </div>
 
-    <div class="mb-3">
-        <label for="likeForm" class="form-label">¿Cuánto recomendarías tomar este ramo? (1 al 5, mayor es mejor)</label>
-        <select id="likeForm"  class="form-select" name="like">
-            <option></option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+    <div class="mb-1">
+        <label for="likeForm" class="form-label mb-0">¿Cuánto recomendarías tomar este ramo? (1 al 5, mayor es mejor)</label>
+        <div class="rating">
+            <!--elements are in reversed order, to allow "previous sibling selectors" in CSS-->
+            <input type="radio" name="like" value="5" id="like5"><label for="like5">&star;</label>
+            <input type="radio" name="like" value="4" id="like4"><label for="like4">&star;</label>
+            <input type="radio" name="like" value="3" id="like3"><label for="like3">&star;</label>
+            <input type="radio" name="like" value="2" id="like2"><label for="like2">&star;</label>
+            <input type="radio" name="like" value="1" id="like1"><label for="like1">&star;</label>
+        </div>
+    </div>
+
+    <div class="mb-1">
+        <label for="loadForm" class="form-label mb-0">¿Cuánta carga académica consideras que tuvo este ramo? (1 al 5, mayor es más carga)</label>
+        <div class="rating">
+            <!--elements are in reversed order, to allow "previous sibling selectors" in CSS-->
+            <input type="radio" name="load" value="5" id="load5"><label for="load5">&star;</label>
+            <input type="radio" name="load" value="4" id="load4"><label for="load4">&star;</label>
+            <input type="radio" name="load" value="3" id="load3"><label for="load3">&star;</label>
+            <input type="radio" name="load" value="2" id="load2"><label for="load2">&star;</label>
+            <input type="radio" name="load" value="1" id="load1"><label for="load1">&star;</label>
+        </div>
+    </div>
+
+    <div class="mb-1">
+        <label for="communicationForm" class="form-label mb-0">Comunicación entre profesores y estudiantes (1 al 5, mayor es mejor)</label>
+        <div class="rating">
+            <!--elements are in reversed order, to allow "previous sibling selectors" in CSS-->
+            <input type="radio" name="communication" value="5" id="communication5"><label for="communication5">&star;</label>
+            <input type="radio" name="communication" value="4" id="communication4"><label for="communication4">&star;</label>
+            <input type="radio" name="communication" value="3" id="communication3"><label for="communication3">&star;</label>
+            <input type="radio" name="communication" value="2" id="communication2"><label for="communication2">&star;</label>
+            <input type="radio" name="communication" value="1" id="communication1"><label for="communication1">&star;</label>
+        </div>
     </div>
 
     <div class="mb-3">
-        <label for="loadForm" class="form-label">¿Cuánta carga académica consideras que tuvo este ramo? (1 al 5, mayor es más carga)</label>
-        <select id="loadForm" class="form-select" name="load">
-            <option></option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+        <label for="credits" class="form-label">¿Cuantos créditos sientes que debería tener?</label>
+        <input required name="credits" id="credits" class="form-control w-auto py-3" type="number" min="0" max="50" />
     </div>
 
     <div class="mb-3">
-        <label for="onlineForm" class="form-label">Adaptación al contexto online (1 al 5, mayor es más mejor)</label>
-        <select id="onlineForm" class="form-select" name="online_adaptation">
-            <option></option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label for="communicationForm" class="form-label">Comunicación entre profesores y estudiantes (1 al 5, mayor es mejor)</label>
-        <select id="communicationForm" class="form-select" name="communication">
-            <option></option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+        <label for="comment" class="form-label">Puedes dejar un comentario opcionalmente:</label>
+        <textarea name="credits" id="credits" class="form-control"></textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">Calificar</button>

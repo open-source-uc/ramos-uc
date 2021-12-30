@@ -5,3 +5,43 @@
 input[type=number] {
     height: 1.7em;
 }
+
+/* RATING */
+/*shows the stars side by side, centered, and in reverse order than the HMTL*/
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+/*hides the radio buttons*/
+.rating > input{ display: none; }
+
+/*style the empty stars, sets position:relative as base for pseudo-elements*/
+.rating > label {
+    position: relative;
+    width: 1.1em;
+    font-size: 3em;
+    color: darkslategray;
+    cursor: pointer;
+}
+
+/* sets filled star pseudo-elements */
+.rating > label::before{
+    content: "\2605";
+    position: absolute;
+    opacity: 0;
+}
+/*overlays a filled start character to the hovered element and all previous siblings*/
+.rating > label:hover:before,
+.rating > label:hover ~ label:before {
+    opacity: 1 !important;
+}
+
+/*overlays a filled start character on the selected element and all previous siblings*/
+.rating > input:checked ~ label:before{
+    opacity: 1;
+}
+
+/*when an element is selected and pointer re-enters the rating container, selected rate and siblings get semi transparent, as reminder of current selection*/
+.rating:hover > input:checked ~ label:before{ opacity: 0.4; }
