@@ -64,28 +64,28 @@
 <p>Basado en {{ calification.like__count }} calificaciones:</p>
 <div class="card-group text-center mb-3">
     <div class="card">
-        <p class="card-title m-3 display-5">{{ calification.load__avg|floatformat }}</p>
-        <p class="card-text">
-            Carga académica<br>
-            <small class="text-muted">1 al 5, mayor es más carga</small>
-        </p>
-    </div>
-    <div class="card">
-        <h5 class="card-title m-3 display-5">{{ calification.like__avg|floatformat }}</h5>
+        <h5 class="card-title m-3 display-5">{{ calification.like__avg|floatformat|default:"-" }}</h5>
         <p class="card-text">
             Recomendación<br>
             <small class="text-muted">1 al 5, mayor es mejor</small>
         </p>
     </div>
     <div class="card">
-        <h5 class="card-title m-3 display-5">{{ calification.online_adaptation__avg|floatformat }}</h5>
+        <p class="card-title m-3 display-5">{{ calification.load__avg|floatformat|default:"-" }}</p>
         <p class="card-text">
-            Adaptación al contexto online<br>
-            <small class="text-muted">1 al 5, mayor es mejor</small>
+            Carga académica<br>
+            <small class="text-muted">1 al 5, mayor es más carga</small>
         </p>
     </div>
     <div class="card">
-        <h5 class="card-title m-3 display-5">{{ calification.communication__avg|floatformat }}</h5>
+        <h5 class="card-title m-3 display-5">{{ calification.credits__avg|floatformat|default:"-" }}</h5>
+        <p class="card-text">
+            Créditos estimados<br>
+            <small class="text-muted">Estimación según alumnos.</small>
+        </p>
+    </div>
+    <div class="card">
+        <h5 class="card-title m-3 display-5">{{ calification.communication__avg|floatformat|default:"-" }}</h5>
         <p class="card-text">
             Comunicación con profesores<br>
             <small class="text-muted">1 al 5, mayor es mejor</small>
@@ -104,8 +104,14 @@
             </button>
         </span>
         <div id="comments" class="accordion-collapse collapse" aria-labelledby="programHead" data-bs-parent="#accordion">
-            <div class="accordion-body">
-                <p>Comentarios...</p>
+            <div class="accordion-body px-1">
+                {% for c in comments %}
+                <p class="m-1">
+                    ({{c.period}}) <b>{{c.user__username}}</b>: {{ c.comment }}
+                </p>
+                {% empty %}
+                No hay comentarios.
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -116,7 +122,7 @@
             </button>
         </span>
         <div id="program" class="accordion-collapse collapse" aria-labelledby="programHead" data-bs-parent="#accordion">
-            <div class="accordion-body">
+            <div class="accordion-body px-1">
                 <p>{{ program|safe }}</p>
             </div>
         </div>

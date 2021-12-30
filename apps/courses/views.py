@@ -204,6 +204,7 @@ def single_course(request, initials):
             "requirements": requirements,
             "periods": course.section_set.available("period", desc=True),
             "calification": course.get_calification(),
+            "comments": course.get_comments(),
         }
         cache.set("c_" + initials, cached_course, 3600 * 24)
 
