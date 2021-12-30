@@ -15,7 +15,7 @@ class Calification(models.Model):
     communication = models.PositiveSmallIntegerField(blank=True, null=True)
 
     credits = models.PositiveSmallIntegerField(blank=True, null=True)
-    comment = models.TextField(blank=True, null=True, max_length=400)
+    comment = models.CharField(blank=True, null=True, max_length=400)
 
     class Meta:
         indexes = [
