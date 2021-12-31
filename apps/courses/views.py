@@ -203,6 +203,8 @@ def single_course(request, initials):
             "description": course.get_description(),
             "requirements": requirements,
             "periods": course.section_set.available("period", desc=True),
+            "calification": course.get_calification(),
+            "comments": course.get_comments(),
         }
         cache.set("c_" + initials, cached_course, 3600 * 24)
 
@@ -215,7 +217,6 @@ def single_course(request, initials):
         cached_sections = {
             "sections": course.section_set.filter(period=period).order_by("section"),
             "period": period,
-            "calification": course.get_calification(period),
         }
         cache.set(f"s_{initials}_{period}", cached_sections, 3600 * 12)
 

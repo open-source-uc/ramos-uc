@@ -11,10 +11,9 @@ class CalificationSearializer(serializers.Serializer):
     semester = serializers.IntegerField(min_value=1, max_value=2, required=True)
     like = serializers.IntegerField(min_value=1, max_value=5, required=True)
     load = serializers.IntegerField(min_value=1, max_value=5, required=True)
-    online_adaptation = serializers.IntegerField(
-        min_value=1, max_value=5, required=True
-    )
     communication = serializers.IntegerField(min_value=1, max_value=5, required=True)
+    credits = serializers.IntegerField(min_value=1, max_value=50, required=True)
+    comment = serializers.CharField(max_length=500, required=False)
 
 
 @login_required
@@ -49,8 +48,9 @@ def create(request, course_id):
     cal.period = f"{params['year']}-{params['semester']}"
     cal.like = params["like"]
     cal.load = params["load"]
-    cal.online_adaptation = params["online_adaptation"]
     cal.communication = params["communication"]
+    cal.credits = params["credits"]
+    cal.comment = params["comment"]
     cal.save()
 
     # devalidate cache of course period

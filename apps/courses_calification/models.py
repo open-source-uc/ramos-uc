@@ -14,6 +14,9 @@ class Calification(models.Model):
     online_adaptation = models.PositiveSmallIntegerField(blank=True, null=True)
     communication = models.PositiveSmallIntegerField(blank=True, null=True)
 
+    credits = models.PositiveSmallIntegerField(blank=True, null=True)
+    comment = models.CharField(blank=True, null=True, max_length=400)
+
     class Meta:
         indexes = [
             models.Index(fields=["course", "period"]),

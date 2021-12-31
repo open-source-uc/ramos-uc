@@ -55,7 +55,14 @@ class Course(models.Model):
         return qs.aggregate(
             Avg("like"),
             Avg("load"),
-            Avg("online_adaptation"),
             Avg("communication"),
+            Avg("credits"),
             Count("like"),
+        )
+
+    def get_comments(self):
+        return (
+            self.calification_set.exclude(comment=None)
+            .values("comment", "period", "user__username")
+            .order_by("period")[:15]
         )

@@ -25,10 +25,6 @@
 
 {% include "courses/_quota_modal.html" %}
 
-<div class="alert alert-success">
-    Si ya hiciste este ramo, <a href="{% url 'califications:new' course_id=course.id %}">califícalo</a>!
-</div>
-
 <h2><span class="badge bg-primary me-2">{{ course.initials }}</span> {{ course.name }}</h2>
 <div class="col-lg-6 col-md-10">
     <table class="table table-sm ">
@@ -59,75 +55,66 @@
     {% endif %}
 </p>
 
-<div class="card mt-2 p-3">
-    <div class="row">
-        <h3 class="col-auto">Semestre</h3>
-        <form class="col-auto" >
-            <select class="form-select col-2" name="period" onchange="this.form.submit();">
-                {% for p in periods %}
-                <option {% if p == period %} selected {% endif %}>{{ p }}</option>
-                {% endfor %}
-            </select>
-        </form>
-    </div>
 
-
-    {% if calification.like__count %}
-    <p class="mt-3">Basado en {{ calification.like__count }} calificaciones:</p>
-    <div class="card-group text-center mb-3">
-        <div class="card">
-            <p class="card-title m-3 display-5">{{ calification.load__avg|floatformat }}</p>
-            <p class="card-text">
-                Carga académica<br>
-                <small class="text-muted">1 al 5, mayor es más carga</small>
-            </p>
-        </div>
-        <div class="card">
-            <h5 class="card-title m-3 display-5">{{ calification.like__avg|floatformat }}</h5>
-            <p class="card-text">
-                Recomendación<br>
-                <small class="text-muted">1 al 5, mayor es mejor</small>
-            </p>
-        </div>
-        <div class="card">
-            <h5 class="card-title m-3 display-5">{{ calification.online_adaptation__avg|floatformat }}</h5>
-            <p class="card-text">
-                Adaptación al contexto online<br>
-                <small class="text-muted">1 al 5, mayor es mejor</small>
-            </p>
-        </div>
-        <div class="card">
-            <h5 class="card-title m-3 display-5">{{ calification.communication__avg|floatformat }}</h5>
-            <p class="card-text">
-                Comunicación con profesores<br>
-                <small class="text-muted">1 al 5, mayor es mejor</small>
-            </p>
-        </div>
-    </div>
-    {% else %}
-    <i>El ramo no sido calificado este semestre.</i><br>
-    {% endif %}
-
-
-    <h4 class="">Secciones</h4>
-    <table class="table">
-        {% for s in sections %}
-        <tr>
-            <td style="width: 6rem;">
-                <a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo({{s.id}})">Sección {{s.section}}</a>
-            </td>
-            <td style="width: 6rem;">
-                <button class="btn" data-bs-toggle="modal" href="#quotaModal" onclick="wp.loadQuota({{s.id}})">
-                    <img class="m-0" src="{% static '/images/chart.svg' %}" height="20" />
-                </button>
-            </td>
-            <td>{{s.teachers}}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<h3 class="">Calificaciones</h3>
+<div class="alert alert-success">
+    Si ya hiciste este ramo, <a href="{% url 'califications:new' course_id=course.id %}">califícalo</a>! También puedes dejar un comentario.
 </div>
+{% if calification.like__count %}
+<p>Basado en {{ calification.like__count }} calificaciones:</p>
+<div class="card-group text-center mb-3">
+    <div class="card">
+        <h5 class="card-title m-3 display-5">{{ calification.like__avg|floatformat|default:"-" }}</h5>
+        <p class="card-text">
+            Recomendación<br>
+            <small class="text-muted">1 al 5, mayor es mejor</small>
+        </p>
+    </div>
+    <div class="card">
+        <p class="card-title m-3 display-5">{{ calification.load__avg|floatformat|default:"-" }}</p>
+        <p class="card-text">
+            Carga académica<br>
+            <small class="text-muted">1 al 5, mayor es más carga</small>
+        </p>
+    </div>
+    <div class="card">
+        <h5 class="card-title m-3 display-5">{{ calification.credits__avg|floatformat|default:"-" }}</h5>
+        <p class="card-text">
+            Créditos estimados<br>
+            <small class="text-muted">Estimación según alumnos.</small>
+        </p>
+    </div>
+    <div class="card">
+        <h5 class="card-title m-3 display-5">{{ calification.communication__avg|floatformat|default:"-" }}</h5>
+        <p class="card-text">
+            Comunicación con profesores<br>
+            <small class="text-muted">1 al 5, mayor es mejor</small>
+        </p>
+    </div>
+</div>
+{% else %}
+<p>Este ramo no ha sido calificado.</p>
+{% endif %}
 
-<div class="accordion accordion-flush mt-4" id="accordion">
+<div class="accordion accordion-flush" id="accordion">
+    <div class="accordion-item">
+        <span class="accordion-header" id="commentsHead">
+            <button class="accordion-button collapsed ps-0" type="button" data-bs-toggle="collapse" data-bs-target="#comments" aria-expanded="false" aria-controls="comments">
+                <h3>Comentarios</h3>
+            </button>
+        </span>
+        <div id="comments" class="accordion-collapse collapse" aria-labelledby="programHead" data-bs-parent="#accordion">
+            <div class="accordion-body px-1">
+                {% for c in comments %}
+                <p class="m-1">
+                    ({{c.period}}) <b>{{c.user__username}}</b>: {{ c.comment }}
+                </p>
+                {% empty %}
+                No hay comentarios.
+                {% endfor %}
+            </div>
+        </div>
+    </div>
     <div class="accordion-item">
         <span class="accordion-header" id="programHead">
             <button class="accordion-button collapsed ps-0" type="button" data-bs-toggle="collapse" data-bs-target="#program" aria-expanded="false" aria-controls="program">
@@ -135,12 +122,39 @@
             </button>
         </span>
         <div id="program" class="accordion-collapse collapse" aria-labelledby="programHead" data-bs-parent="#accordion">
-            <div class="accordion-body">
+            <div class="accordion-body px-1">
                 <p>{{ program|safe }}</p>
             </div>
         </div>
     </div>
 </div>
+
+<hr>
+<div class="row">
+    <h3 class="col-auto">Secciones</h3>
+    <form class="col-auto" >
+        <select class="form-select col-2" name="period" onchange="this.form.submit();">
+            {% for p in periods %}
+            <option {% if p == period %} selected {% endif %}>{{ p }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+<table class="table">
+    {% for s in sections %}
+    <tr>
+        <td style="width: 6rem;">
+            <a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo({{s.id}})">Sección {{s.section}}</a>
+        </td>
+        <td style="width: 6rem;">
+            <button class="btn" data-bs-toggle="modal" href="#quotaModal" onclick="wp.loadQuota({{s.id}})">
+                <img class="m-0" src="{% static '/images/chart.svg' %}" height="20" />
+            </button>
+        </td>
+        <td>{{s.teachers}}</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}
 
