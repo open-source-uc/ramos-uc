@@ -13,7 +13,7 @@ class CalificationSearializer(serializers.Serializer):
     load = serializers.IntegerField(min_value=1, max_value=5, required=True)
     communication = serializers.IntegerField(min_value=1, max_value=5, required=True)
     credits = serializers.IntegerField(min_value=1, max_value=50, required=True)
-    comment = serializers.CharField(max_length=500, required=False)
+    comment = serializers.CharField(max_length=500, required=False, default=None)
 
 
 @login_required
