@@ -54,6 +54,6 @@ def create(request, course_id):
     cal.save()
 
     # devalidate cache of course period
-    cache.delete(f"s_{course.initials}_{cal.period}")
+    cache.delete(f"c_{course.initials}")
 
     return redirect("courses:course", initials=course.initials)
