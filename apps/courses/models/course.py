@@ -54,7 +54,7 @@ class Course(models.Model):
             qs = qs.filter(period=period)
         return qs.aggregate(
             Avg("like"),
-            Avg("load"),
+            Avg("difficulty"),
             Avg("communication"),
             Avg("credits"),
             Count("like"),

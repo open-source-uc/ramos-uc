@@ -10,7 +10,7 @@ class CalificationSearializer(serializers.Serializer):
     year = serializers.IntegerField(min_value=1900, max_value=2200, required=True)
     semester = serializers.IntegerField(min_value=1, max_value=2, required=True)
     like = serializers.IntegerField(min_value=1, max_value=5, required=True)
-    load = serializers.IntegerField(min_value=1, max_value=5, required=True)
+    difficulty = serializers.IntegerField(min_value=1, max_value=5, required=True)
     communication = serializers.IntegerField(min_value=1, max_value=5, required=True)
     credits = serializers.IntegerField(min_value=1, max_value=50, required=True)
     comment = serializers.CharField(max_length=500, required=False, default=None)
@@ -47,7 +47,7 @@ def create(request, course_id):
     # save
     cal.period = f"{params['year']}-{params['semester']}"
     cal.like = params["like"]
-    cal.load = params["load"]
+    cal.difficulty = params["difficulty"]
     cal.communication = params["communication"]
     cal.credits = params["credits"]
     cal.comment = params["comment"]

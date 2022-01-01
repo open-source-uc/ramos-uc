@@ -9,13 +9,14 @@ class Calification(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     period = models.CharField(max_length=6)
 
-    load = models.PositiveSmallIntegerField()
     like = models.PositiveSmallIntegerField()
-    online_adaptation = models.PositiveSmallIntegerField(blank=True, null=True)
-    communication = models.PositiveSmallIntegerField(blank=True, null=True)
-
+    difficulty = models.PositiveSmallIntegerField(blank=True, null=True)
     credits = models.PositiveSmallIntegerField(blank=True, null=True)
+    communication = models.PositiveSmallIntegerField(blank=True, null=True)
     comment = models.CharField(blank=True, null=True, max_length=400)
+
+    load = models.PositiveSmallIntegerField()
+    online_adaptation = models.PositiveSmallIntegerField(blank=True, null=True)
 
     class Meta:
         indexes = [
