@@ -34,6 +34,7 @@ def create(request, course_id):
             {
                 "course": course,
                 "errors": serializer.errors,
+                "form": request.POST,
             },
         )
     params = serializer.validated_data
