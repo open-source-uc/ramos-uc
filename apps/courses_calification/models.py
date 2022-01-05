@@ -13,7 +13,7 @@ class Calification(models.Model):
     difficulty = models.PositiveSmallIntegerField(blank=True, null=True)
     credits = models.PositiveSmallIntegerField(blank=True, null=True)
     communication = models.PositiveSmallIntegerField(blank=True, null=True)
-    comment = models.CharField(blank=True, null=True, max_length=400)
+    comment = models.CharField(blank=True, null=True, max_length=500)
 
     load = models.PositiveSmallIntegerField(blank=True, null=True)
     online_adaptation = models.PositiveSmallIntegerField(blank=True, null=True)
