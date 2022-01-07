@@ -42,18 +42,17 @@ def banner(period, settings, banner="0"):
     while offset < total:
         # Process by batches
         print("Collecting from", offset, "to", offset + BATCH_SIZE, "of", total)
-        db_cursor.execute(
-            f"SELECT id, nrc FROM courses_section WHERE period = '{period}' ORDER BY id LIMIT {BATCH_SIZE} OFFSET {offset};"
-        )
-        cursos = db_cursor.fetchall()
-        for curso in cursos:
-            id = int(curso[0])
-            nrc = curso[1]
-            query = f"http://buscacursos.uc.cl/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
-
-            try:
+        try:
+            db_cursor.execute(
+                f"SELECT id, nrc FROM courses_section WHERE period = '{period}' ORDER BY id LIMIT {BATCH_SIZE} OFFSET {offset};"
+            )
+            cursos = db_cursor.fetchall()
+            for curso in cursos:
+                id = int(curso[0])
+                nrc = curso[1]
+                query = f"http://buscacursos.uc.cl/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
                 text = get_text(query)
-                # sleep(0.1)
+
                 date = str(datetime.now())
                 cupos_dict = parser.process(text)
                 if not len(cupos_dict):
@@ -74,13 +73,14 @@ def banner(period, settings, banner="0"):
                 db_conn.commit()
                 print(db_cursor.rowcount, "id scrapped:", id)
 
-            except Exception as err:
-                handle(
-                    {
-                        "id": id,
-                    },
-                    err,
-                )
+        except BrokenPipeError:
+            db_conn.close()
+            open_db_conn(settings)
+            sleep(5)
+            continue
+
+        except Exception as err:
+            handle({"id": id}, err)
 
         offset += BATCH_SIZE
         sleep(1.5)
