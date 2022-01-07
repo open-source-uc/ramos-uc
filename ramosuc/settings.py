@@ -201,7 +201,7 @@ LOGGING = {
     "handlers": {
         "web-file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "../logs/django.log",
+            "filename": os.getenv("WEB_LOG"),
             "when": "midnight",
             "backupCount": 7,
             "formatter": "simple",
@@ -209,7 +209,7 @@ LOGGING = {
         },
         "scraper-errors": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "../logs/scraper_err.log",
+            "filename": os.getenv("SCRAPER_ERR"),
             "when": "midnight",
             "backupCount": 7,
             "formatter": "simple",
@@ -217,7 +217,7 @@ LOGGING = {
         },
         "scraper-general": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "../logs/scraper.log",
+            "filename": os.getenv("SCRAPER_LOG"),
             "when": "midnight",
             "backupCount": 3,
             "formatter": "simple",
