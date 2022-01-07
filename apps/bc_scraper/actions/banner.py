@@ -4,7 +4,9 @@ from datetime import datetime
 from time import sleep
 from .errors import handle
 from ..scraper.banner import BannerParser, BannerBCParser
+import logging
 
+log = logging.getLogger("scraper")
 
 # DB
 db_conn, db_cursor = None, None
@@ -19,7 +21,7 @@ def open_db_conn(settings):
         dbname=settings["db_name"],
     )
     db_cursor = db_conn.cursor()
-    print("DB connection set.")
+    log.info("DB connection set.")
 
 
 def banner(period, settings, banner="0"):
@@ -34,14 +36,14 @@ def banner(period, settings, banner="0"):
         f"SELECT COUNT(*) FROM courses_section WHERE period = '{period}';"
     )
     total = int(db_cursor.fetchone()[0])
-    print(total, "courses found.")
+    log.info("%s courses found.", total)
 
     offset = 0
     parser = BannerParser()
     parser_bc = BannerBCParser()
     while offset < total:
         # Process by batches
-        print("Collecting from", offset, "to", offset + BATCH_SIZE, "of", total)
+        log.info("Collecting from %s to %s of %s", offset, offset + BATCH_SIZE, total)
         try:
             db_cursor.execute(
                 f"SELECT id, nrc FROM courses_section WHERE period = '{period}' ORDER BY id LIMIT {BATCH_SIZE} OFFSET {offset};"
@@ -71,7 +73,7 @@ def banner(period, settings, banner="0"):
                 db_cursor.executemany(INSERT, values)
                 db_cursor.execute(UPDATE, (str(free_quota), id))
                 db_conn.commit()
-                print(db_cursor.rowcount, "id scrapped:", id)
+                log.info("%s id scrapped: %s", db_cursor.rowcount, id)
 
         except BrokenPipeError:
             db_conn.close()

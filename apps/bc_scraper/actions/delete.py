@@ -1,7 +1,9 @@
 import requests
 import psycopg2
 from . import queries as sql
+import logging
 
+log = logging.getLogger("scraper")
 
 db_conn, db_cursor = None, None
 
@@ -15,7 +17,7 @@ def open_db_conn(settings):
         dbname=settings["db_name"],
     )
     db_cursor = db_conn.cursor()
-    print("DB connection set.")
+    log.info("DB connection set.")
 
 
 def delete(settings):
@@ -24,8 +26,8 @@ def delete(settings):
     """
     open_db_conn(settings)
 
-    with open("logs/delete.log") as log:
-        for line in log:
+    with open("logs/delete.log") as del_log:
+        for line in del_log:
             # line format -> DATE NRC 12345 YYYY-S
             copy = line.strip().split(" NRC ")
             # date = copy[0].strip()
@@ -34,14 +36,14 @@ def delete(settings):
             nrc = course[0].strip()
             period = course[1].strip()
 
-            print("Searching", nrc, period)
+            log.info("Searching %s %s", nrc, period)
             resp = requests.get(
                 f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
             )
 
             not_result = "La búsqueda no produjo resultados" in resp.text
             if not_result:
-                print("No result found. Deleting...\n")
+                log.info("No result found. Deleting...")
                 try:
                     db_cursor.execute(sql.GET_SECTION_ID_FROM_NRC, (nrc, period))
                     section_id = db_cursor.fetchone()[0]
@@ -52,9 +54,9 @@ def delete(settings):
                     db_cursor.execute(sql.DEL_SECTION, (section_id,))
                     db_conn.commit()
                 except:
-                    print("Already deleted.")
+                    log.warn("Already deleted.")
             else:
-                print("Course found. Not deleted.")
+                log.warn("Course found. Not deleted.")
 
     db_cursor.close()
     db_conn.close()

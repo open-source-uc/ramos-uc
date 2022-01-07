@@ -5,7 +5,9 @@ import psycopg2
 from . import queries as sql
 from .schedule import process_schedule
 from .errors import handle
+import logging
 
+log = logging.getLogger("scraper")
 
 # DB
 db_conn, db_cursor = None, None
@@ -20,7 +22,7 @@ def open_db_conn(settings):
         dbname=settings["db_name"],
     )
     db_cursor = db_conn.cursor()
-    print("DB connection set.")
+    log.info("DB connection set.")
 
 
 # Global procesed courses and sections
@@ -148,7 +150,9 @@ def _process_courses(courses, period):
 
             # Commit to DB
             db_conn.commit()
-            print("Procesed:", c["initials"] + "-" + str(c["section"]), c["name"])
+            log.info(
+                "Procesed: %s %s", c["initials"] + "-" + str(c["section"]), c["name"]
+            )
 
         except Exception as err:
             handle(c, err)
@@ -161,7 +165,7 @@ def collect(period, settings):
     LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     for l1 in LETTERS:
         comb = l1
-        print("Searching", comb)
+        log.info("Searching %s", comb)
         courses = bc_search(comb, period)
         _process_courses(courses, period)
         if len(courses) < 50:
@@ -169,7 +173,7 @@ def collect(period, settings):
 
         for l2 in LETTERS:
             comb = l1 + l2
-            print("Searching", comb)
+            log.info("Searching %s", comb)
             courses = bc_search(comb, period)
             _process_courses(courses, period)
             if len(courses) < 50:
@@ -177,7 +181,7 @@ def collect(period, settings):
 
             for l3 in LETTERS:
                 comb = l1 + l2 + l3
-                print("Searching", comb)
+                log.info("Searching %s", comb)
                 courses = bc_search(comb, period)
                 _process_courses(courses, period)
                 if len(courses) < 50:
@@ -185,7 +189,7 @@ def collect(period, settings):
 
                 for n1 in "0123456789":
                     comb = l1 + l2 + l3 + n1
-                    print("Searching", comb)
+                    log.info("Searching %s", comb)
                     courses = bc_search(comb, period)
                     _process_courses(courses, period)
                     if len(courses) < 50:
@@ -193,7 +197,7 @@ def collect(period, settings):
 
                     for n2 in "0123456789":
                         comb = l1 + l2 + l3 + n1 + n2
-                        print("Searching", comb)
+                        log.info("Searching %s", comb)
                         courses = bc_search(comb, period)
                         _process_courses(courses, period)
 
@@ -202,8 +206,8 @@ def collect(period, settings):
 
     global procesed_nrcs, procesed_initials
     global new_sections, new_courses
-    print()
-    print("New courses:", new_courses)
-    print("New sections:", new_sections)
-    print("Total courses:", len(procesed_initials))
-    print("Total sections:", len(procesed_nrcs))
+
+    log.info("New courses: %s", new_courses)
+    log.info("New sections: %s", new_sections)
+    log.info("Total courses: %s", len(procesed_initials))
+    log.info("Total sections: %s", len(procesed_nrcs))

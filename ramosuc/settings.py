@@ -169,7 +169,6 @@ if os.getenv("GOOGLE_AUTH_CLIENT") is not None:
 GA_CODE = os.getenv("GA_CODE", None)
 
 # BC-Scraper
-SCRAPE_LOG = BASE_DIR / "logs" / "scrape.log"
 SCRAPE_BATCH_SIZE = 100
 
 # Scheduler
@@ -196,16 +195,43 @@ else:
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "%(asctime)s (%(filename)s) %(levelname)s: %(message)s"},
+    },
     "handlers": {
-        "file": {
-            "class": "logging.FileHandler",
-            "filename": "logs/django.log",
+        "web-file": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "../logs/django.log",
+            "when": "midnight",
+            "backupCount": 7,
+            "formatter": "simple",
+            "level": "INFO",
+        },
+        "scraper-errors": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "../logs/scraper_err.log",
+            "when": "midnight",
+            "backupCount": 7,
+            "formatter": "simple",
+            "level": "WARNING",
+        },
+        "scraper-general": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "../logs/scraper.log",
+            "when": "midnight",
+            "backupCount": 3,
+            "formatter": "simple",
+            "level": "INFO",
         },
     },
     "loggers": {
         "django": {
-            "handlers": ["file"],
+            "handlers": ["web-file"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "WARNING"),
+        },
+        "scraper": {
+            "handlers": ["scraper-general", "scraper-errors"],
+            "level": "INFO",
         },
     },
 }
