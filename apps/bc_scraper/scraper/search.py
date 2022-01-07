@@ -1,6 +1,9 @@
 from html.parser import HTMLParser
 from time import sleep
 from .request import get_text
+import logging
+
+log = logging.getLogger("scraper")
 
 
 class _BCParser(HTMLParser):
@@ -111,7 +114,7 @@ def bc_search(query, period, nrc=False):
 
     # Check valid response
     if len(resp) < 1000:
-        print("Too many request prevention")
+        log.warn("Too many request prevention")
         sleep(5)
         resp = get_text(url)
 

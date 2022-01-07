@@ -4,7 +4,9 @@ from .schedule import process_schedule
 from .errors import handle
 import psycopg2
 from . import queries as sql
+import logging
 
+log = logging.getLogger("scraper")
 
 # DB
 db_conn, db_cursor = None, None
@@ -19,7 +21,7 @@ def open_db_conn(settings):
         dbname=settings["db_name"],
     )
     db_cursor = db_conn.cursor()
-    print("DB connection set.")
+    log.info("DB connection set.")
 
 
 procesed_initials = {}
@@ -65,7 +67,7 @@ def _process_course(c, section_id):
 
         # Commit to DB
         db_conn.commit()
-        print("Procesed: NRC", c["nrc"], c["name"])
+        log.info("Procesed: NRC %s %s", c["nrc"], c["name"])
 
     except Exception as err:
         handle(c, err)
@@ -83,7 +85,7 @@ def update(period, settings):
     offset = 0
     while offset < total:
         # Process by batches
-        print("Updating from", offset, "to", offset + BATCH_SIZE, "of", total)
+        log.info("Updating from %s to % of %s", offset, offset + BATCH_SIZE, total)
         db_cursor.execute(sql.GET_NRC_BATCH, (period, BATCH_SIZE, offset))
         rows = db_cursor.fetchall()
         for row in rows:
@@ -94,9 +96,11 @@ def update(period, settings):
             # Check section existance in BC
             if not len(courses):
                 deleted += 1
-                print(nrc, "give no results. Added to delete list.")
-                with open("logs/delete.log", "a+") as log:
-                    log.write(str(datetime.now()) + " NRC " + nrc + " " + period + "\n")
+                log.info("%s give no results. Added to delete list.", nrc)
+                with open("logs/delete.log", "a+") as del_log:
+                    del_log.write(
+                        str(datetime.now()) + " NRC " + nrc + " " + period + "\n"
+                    )
 
             else:
                 _process_course(courses[0], section_id)
@@ -106,4 +110,4 @@ def update(period, settings):
     db_cursor.close()
     db_conn.close()
 
-    print("Courses deleted:", str(deleted))
+    log.info("Courses deleted: %s", str(deleted))
