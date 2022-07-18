@@ -38,7 +38,7 @@ def delete(settings):
 
             log.info("Searching %s %s", nrc, period)
             resp = requests.get(
-                f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
+                f"https://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
             )
 
             not_result = "La búsqueda no produjo resultados" in resp.text
