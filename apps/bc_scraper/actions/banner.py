@@ -52,7 +52,7 @@ def banner(period, settings, banner="0"):
             for curso in cursos:
                 id = int(curso[0])
                 nrc = curso[1]
-                query = f"http://buscacursos.uc.cl/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
+                query = f"https://buscacursos.uc.cl/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
                 text = get_text(query)
 
                 date = str(datetime.now())
