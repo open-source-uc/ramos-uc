@@ -107,9 +107,9 @@ def bc_search(query, period, nrc=False):
     parser = _BCParser()
     url = None
     if nrc:
-        url = f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={query}"
+        url = f"https://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={query}"
     else:
-        url = f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_sigla={query}"
+        url = f"https://buscacursos.uc.cl/?cxml_semestre={period}&cxml_sigla={query}"
     resp = get_text(url)
 
     # Check valid response
