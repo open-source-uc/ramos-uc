@@ -163,6 +163,7 @@ def planner_search(request):
                 "name": s.course.name,
                 "teachers": s.teachers,
                 "format": s.format,
+                "campus": s.campus,
                 "available_quota": s.available_quota,
                 "schedule": s.schedule,
                 "course_initials": str(s).split("-")[0],

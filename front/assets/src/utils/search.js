@@ -58,7 +58,7 @@ const searchHandleResults = (response, table, page) => {
     }
     table.html("")
 
-    results.forEach(({ id, initials, name, teachers, format, available_quota, schedule }) => {
+    results.forEach(({ id, initials, name, teachers, campus, available_quota, schedule }) => {
     // Characteristics
         let row = "<tr class=\"border-top\">"
         row += `<td><button class="btn p-0 m-1" onclick="wp.add(${id})"><img src="/dist/images/add.svg" height="25"/></button>`
@@ -66,7 +66,7 @@ const searchHandleResults = (response, table, page) => {
         row += `<td><a class="badge bg-secondary" data-bs-toggle="modal" href="#infoModal" onclick="wp.loadInfo(${id})">${initials}</a></td>`
         row += `<td>${name}</td>`
         row += `<td>${teachers.replace(/,/g, "<br>")}</td>`
-        row += `<td>${format}</td>`
+        row += `<td>${campus}</td>`
         row += `<td>${available_quota}</td>`
 
         // Schedule
