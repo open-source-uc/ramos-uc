@@ -5,7 +5,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %} - RamosUC</title>
+
+    <title>{% if page_title %}{{ page_title }} - {% endif %}RamosUC</title>
+    <meta property="og:title" content="{% if page_title %}{{ page_title }} - {% endif %}RamosUC" />
+    <meta property="og:description" content="{% firstof page_description fallback_description %}"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.path }}" />
+    <meta property="og:image" content="{% firstof page_img_path fallback_img_path %}" />
+    <meta name="author" content="Nicolas Mc Intyre">
+    <meta name="keywords" content="UC, Buscacursos, Ramos, Universidad Catolica, horario, ramos uc, buscador, cursos, banner uc">
+    <meta name="description" content="{% firstof page_description fallback_description %}">
 
     {% if GA_CODE %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_CODE }}"></script>
