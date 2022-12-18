@@ -34,7 +34,7 @@ For dev and production.
 + Install python3-pip python3-dev libpq-dev
 + Install poetry by running:
 ```shell
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 + Run `poetry install` (for development) or `poetry install --no-dev` (for production) in the directory of the project.
 + Use `poetry shell` to enter the virtual environment, or adjust your editor/IDE accordingly.
