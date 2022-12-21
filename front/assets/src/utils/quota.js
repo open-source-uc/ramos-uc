@@ -18,79 +18,222 @@ export const loadQuota = (id) => {
 const loadQuotaHandleResponse = (response, modal) => {
     $("#quotaTitle").text(response.initials)
     // Format data
-    var categories = {}
-    var dates = {}
-    response.quota.forEach(({ category, date }) => {
-        categories[category] = null
-        dates[date] = null
-    })
-    categories = Object.keys(categories)
+    let categories_keys = new Set();
+    let categories = {};
 
-    // Prefill with nulls
-    Object.keys(dates).forEach(date => {
-        dates[date] = new Array(categories.length).fill(null)
-    })
+    response.quota.forEach(({ category }) => {
+        categories_keys.add(category);
+    });
 
-    // Fill with data
-    response.quota.forEach(({ category, date, quota }) => {
-        dates[date][categories.indexOf(category)] = quota
-    })
+    categories_keys.forEach(category => {
+        categories[category] = [];
+    });
 
-    // Create Google Charts
-    const drawChart = () => {
-        var data = new google.visualization.DataTable()
-        // Columns -> Tiempo, ...categories
-        data.addColumn("string", "Tiempo")
-        categories.forEach(col => {
-            data.addColumn("number", col)
-            // data.addColumn({type: 'string', role: 'tooltip'});
-        })
+    response.quota.forEach(({ category, date, quota, banner }) => {
+        categories[category].push({
+            date: new Date(date),
+            quota: quota,
+            banner: banner,
+            category: category
+        });
+    });
 
-        // Rows -> Date, ...quotas ordered by categories
-        Object.keys(dates).forEach(date => {
-            try {
-                let str_date = (new Date(date)).toLocaleString("es-CL", { timeZone: "America/Santiago" })
-                /* Tooltips
-                let interpolated = [];
-                dates[date].forEach(quota => {
-                    interpolated.push(quota.quota, quota.banner.toString());
-                });
-                data.addRow([str_date, ...interpolated]);
-                */
-                data.addRow([str_date, ...dates[date]])
-            } catch (error) {
-                console.log(error)
+    categories_keys = Array.from(categories_keys);
+
+    const data = [];
+    categories_keys.forEach(category => {
+        data.push(categories[category])
+    });
+
+    console.log(categories_keys);
+    console.log(data);
+
+    // Create the visualization using D3.js
+    //npm install d3
+    const d3 = require('d3');
+
+    const WIDTH = 1000,
+        HEIGHT = 500;
+
+    const margins = {
+        top: 63.5,
+        left: 45.5,
+        bottom: 52.5,
+        right: 357.5
+    };
+
+    const width = WIDTH - margins.left - margins.right,
+        height = HEIGHT - margins.top - margins.bottom;
+
+    const divQuotaChart = d3.select("#quotaChart");
+
+    const lineChart = divQuotaChart
+        .append("svg")
+        .attr("width", WIDTH)
+        .attr("height", HEIGHT);
+
+    const quotaTitle = lineChart
+        .append("text")
+        .attr("font-size", 16)
+        .attr("fill", "#757575")
+        .attr("x", margins.left/3)
+        .attr("y", margins.top*3/4)
+        .text("Disponibilidad de cupos");
+
+    const dateTitle = lineChart
+        .append("text")
+        .attr("font-size", 16)
+        .attr("fill", "#757575")
+        .attr("x", margins.left + width/2)
+        .attr("y", HEIGHT - margins.bottom/5)
+        .text("Fechas y horarios")
+        .attr("text-anchor", "middle");
+
+    const maxQuota = categories_keys.map(category => categories[category].map(d => d.quota).reduce((a, b) => Math.max(a, b), 0)).reduce((a, b) => Math.max(a, b), 0);
+    console.log(maxQuota);
+
+    const sortedDates = categories[categories_keys[0]].map(d => d.date).sort((a, b) => a - b);
+    const firstDate = sortedDates[0],
+        lastDate = sortedDates[sortedDates.length - 1];
+
+    console.log(firstDate, lastDate);
+
+    const quotaScale = d3
+        .scaleLinear()
+        .domain([0, maxQuota])
+        .range([height, 0])
+        .nice();
+
+    const timeScale = d3
+        .scaleTime()
+        .domain([firstDate, lastDate])
+        .range([0, width])
+        .nice();
+        //.ticks(d3.timeMinute.every(90))
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const axisQuota = d3.axisLeft(quotaScale);
+    const containerAxisQuota = lineChart
+        .append("g")
+        .attr("transform", `translate(${margins.left}, ${margins.top})`)
+        .call(axisQuota);
+
+    containerAxisQuota
+        .selectAll(".tick")
+        .select("line")
+        .attr("x1", width)
+        .attr("stroke-dasharray", "8")
+        .attr("opacity", 0.5)
+        .attr("stroke", "#757575");
+
+    containerAxisQuota
+        .selectAll(".tick")
+        .select("text")
+        .attr("font-size", 12)
+        .attr("fill", "#757575");
+
+    const axisDates = d3.axisBottom(timeScale);
+    lineChart
+        .append("g")
+        .attr("transform", `translate(${margins.left}, ${height + margins.top})`)
+        .call(axisDates);
+
+    const drawLines = d3
+        .line(d3.curveStepAfter)
+        .x((d) => timeScale(d.date))
+        .y((d) => quotaScale(d.quota));
+
+    const lines = lineChart
+        .append("g")
+        .attr("id", "lines")
+        .attr("transform", `translate(${margins.left}, ${margins.top})`)
+        .selectAll("path")
+        .data(data)
+        .join(
+            (enter) => {
+                enter.append("path")
+                    .attr("stroke", d => colorScale(d[0].category))
+                    .attr("fill", "transparent")
+                    .attr("stroke-width", 2.4)
+                    .attr("d", d => drawLines(d))
+                    .on("mouseenter", (event, dato) => {
+                        enter
+                            .selectAll("path")
+                            .attr("stroke-opacity", (d) => {
+                            if (d == dato) {
+                                return 1
+                            } else {
+                                return 0.3
+                            }
+                        });
+
+                        d3.select("#captionsquares")
+                            .selectAll("rect")
+                            .attr("fill-opacity", (d) => {
+                            if (d == dato) {
+                                return 1
+                            } else {
+                                return 0.3
+                            }
+                        });
+
+                        d3.select("#textsquares")
+                            .selectAll("text")
+                            .attr("fill-opacity", (d) => {
+                        if (d == dato) {
+                            return 1
+                        } else {
+                            return 0.3
+                        }
+                        });
+                    })
+                    .on("mouseleave", (event, dato) => {
+                        enter.selectAll("path")
+                            .attr("stroke-opacity", 1);
+
+                        d3.select("#captionsquares")
+                            .selectAll("rect")
+                            .attr("fill-opacity", 1);
+
+                        d3.select("#textsquares")
+                            .selectAll("text")
+                            .attr("fill-opacity", 1);
+                    })
             }
-        })
+        )
 
-        // Chart options
-        var options = {
-            chart: {
-                title: "Disponibilidad de cupos",
-            },
-            legend: {
-                position: "top",
-                alignment: "center",
-            },
-            width: 1000,
-            height: 500,
-            vAxis: { viewWindow: { min: 0 } },
-            isStacked: true,
-            bar: {
-                groupWidth: 15,
-            },
-        }
+    const captionSquares = lineChart
+        .append("g")
+        .attr("id", "captionsquares")
+        .attr("transform", `translate(${margins.left + width}, ${margins.top})`)
+        .selectAll("rect")
+        .data(data)
+        .join(
+            (enter) => {
+                enter.append("rect")
+                    .attr("width", 12)
+                    .attr("height", 12)
+                    .attr("fill", d => colorScale(d[0].category))
+                    .attr("x", 30)
+                    .attr("y", (_, i) => 50 + i * 50)
+                    .attr("ry", 2)
+            }
+        );
 
-        // Generate
-        var chart = new google.charts.Line(document.getElementById("quotaChart"))
-        google.visualization.events.addListener(chart, "error", error => {
-            console.log(error)
-            modal.html("No hay datos disponibles.")
-        })
-        chart.draw(data, google.charts.Line.convertOptions(options))
-    }
-    google.charts.load("current", { packages: ["line"] })
-    google.charts.setOnLoadCallback(drawChart)
-
-    ga_event("detail", { event_category: "follow", event_label: response.initials })
+    const captionText = lineChart
+        .append("g")
+        .attr("id", "textsquares")
+        .attr("transform", `translate(${margins.left + width}, ${margins.top})`)
+        .selectAll("rect")
+        .data(data)
+        .join(
+            (enter) => {
+                enter.append("text")
+                    .attr("x", 30 + 20)
+                    .attr("y", (_, i) => 50 + 12 + i * 50)
+                    .text(d => d[0].category)
+                    .attr("fill", "#757575")
+            }
+        )
 }
