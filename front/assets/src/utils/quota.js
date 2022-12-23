@@ -45,9 +45,6 @@ const loadQuotaHandleResponse = (response, modal) => {
         data.push(categories[category])
     });
 
-    console.log(categories_keys);
-    console.log(data);
-
     // Create the visualization using D3.js
     //npm install d3
     const d3 = require('d3');
@@ -72,7 +69,7 @@ const loadQuotaHandleResponse = (response, modal) => {
         .attr("width", WIDTH)
         .attr("height", HEIGHT);
 
-    const quotaTitle = lineChart
+    lineChart
         .append("text")
         .attr("font-size", 16)
         .attr("fill", "#757575")
@@ -80,7 +77,7 @@ const loadQuotaHandleResponse = (response, modal) => {
         .attr("y", margins.top*3/4)
         .text("Disponibilidad de cupos");
 
-    const dateTitle = lineChart
+    lineChart
         .append("text")
         .attr("font-size", 16)
         .attr("fill", "#757575")
@@ -90,13 +87,10 @@ const loadQuotaHandleResponse = (response, modal) => {
         .attr("text-anchor", "middle");
 
     const maxQuota = categories_keys.map(category => categories[category].map(d => d.quota).reduce((a, b) => Math.max(a, b), 0)).reduce((a, b) => Math.max(a, b), 0);
-    console.log(maxQuota);
 
     const sortedDates = categories[categories_keys[0]].map(d => d.date).sort((a, b) => a - b);
     const firstDate = sortedDates[0],
         lastDate = sortedDates[sortedDates.length - 1];
-
-    console.log(firstDate, lastDate);
 
     const quotaScale = d3
         .scaleLinear()
@@ -109,7 +103,6 @@ const loadQuotaHandleResponse = (response, modal) => {
         .domain([firstDate, lastDate])
         .range([0, width])
         .nice();
-        //.ticks(d3.timeMinute.every(90))
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -144,10 +137,103 @@ const loadQuotaHandleResponse = (response, modal) => {
         .x((d) => timeScale(d.date))
         .y((d) => quotaScale(d.quota));
 
-    const lines = lineChart
+    const linesContainer = lineChart
         .append("g")
-        .attr("id", "lines")
-        .attr("transform", `translate(${margins.left}, ${margins.top})`)
+        .attr("transform", `translate(${margins.left}, ${margins.top})`);
+
+    const circlesContainer = lineChart
+        .append("g")
+        .attr("transform", `translate(${margins.left}, ${margins.top})`);
+
+    const captionSquaresContainer = lineChart
+        .append("g")
+        .attr("transform", `translate(${margins.left + width}, ${margins.top})`);
+
+    const captionTextContainer = lineChart
+        .append("g")
+        .attr("transform", `translate(${margins.left + width}, ${margins.top})`);
+
+    const highlight = (dato) => {
+        linesContainer
+            .selectAll("path")
+            .attr("stroke-opacity", d => d == dato ? 1 : 0.3)
+            .transition()
+            .duration(500)
+            .attr("stroke-width", d => d == dato ? 5 : 2.4);
+
+        captionSquaresContainer
+            .selectAll("rect")
+            .attr("fill-opacity", d => d == dato ? 1 : 0.3);
+
+        captionTextContainer
+            .selectAll("text")
+            .attr("fill-opacity", d => d == dato ? 1 : 0.3);
+
+        circlesContainer
+            .selectAll("circle")
+            .data(dato)
+            .join(
+                enter => {
+                    enter
+                        .append("circle")
+                        .attr("cx", d => timeScale(d.date))
+                        .attr("cy", d => quotaScale(d.quota))
+                        .attr("fill", d => colorScale(d.category))
+                        .attr("r", 0)
+                        .transition()
+                        .duration(500)
+                        .attr("r", 5);
+                },
+                update => {
+                    update
+                        .attr("cx", d => timeScale(d.date))
+                        .attr("cy", d => quotaScale(d.quota))
+                        .attr("fill", d => colorScale(d.category))
+                        .attr("r", 0)
+                        .transition()
+                        .duration(500)
+                        .attr("r", 5);
+
+                },
+                exit => {
+                    exit
+                        .transition()
+                        .duration(500)
+                        .attr("r", 0)
+                        .remove();
+                }
+            );
+
+        circlesContainer
+            .selectAll("circle")
+            .on("mouseenter", (event, dato) => {
+                console.log(dato)
+                circlesContainer
+                    .selectAll("circle")
+                    .transition()
+                    .duration(500)
+                    .attr("r", d => d == dato ? 5 : 0)
+            });
+    };
+
+    const unhighlight = () => {
+        linesContainer
+            .selectAll("path")
+            .attr("stroke-opacity", 1)
+            .transition()
+            .duration(500)
+            .attr("stroke-width", 2.4);
+
+        captionSquaresContainer
+            .selectAll("rect")
+            .attr("fill-opacity", 1);
+
+        captionTextContainer
+            .selectAll("text")
+            .attr("fill-opacity", 1);
+    };
+
+    linesContainer
         .selectAll("path")
         .data(data)
         .join(
@@ -157,74 +243,45 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .attr("fill", "transparent")
                     .attr("stroke-width", 2.4)
                     .attr("d", d => drawLines(d))
-                    .on("mouseenter", (event, dato) => {
-                        enter
-                            .selectAll("path")
-                            .attr("stroke-opacity", (d) => {
-                            if (d == dato) {
-                                return 1
-                            } else {
-                                return 0.3
-                            }
-                        });
-
-                        d3.select("#captionsquares")
-                            .selectAll("rect")
-                            .attr("fill-opacity", (d) => {
-                            if (d == dato) {
-                                return 1
-                            } else {
-                                return 0.3
-                            }
-                        });
-
-                        d3.select("#textsquares")
-                            .selectAll("text")
-                            .attr("fill-opacity", (d) => {
-                        if (d == dato) {
-                            return 1
-                        } else {
-                            return 0.3
-                        }
-                        });
-                    })
-                    .on("mouseleave", (event, dato) => {
-                        enter.selectAll("path")
-                            .attr("stroke-opacity", 1);
-
-                        d3.select("#captionsquares")
-                            .selectAll("rect")
-                            .attr("fill-opacity", 1);
-
-                        d3.select("#textsquares")
-                            .selectAll("text")
-                            .attr("fill-opacity", 1);
-                    })
+                    .on("mouseenter", (event, dato) => highlight(dato))
+                    .on("mouseleave", unhighlight);
             }
-        )
+        );
 
-    const captionSquares = lineChart
-        .append("g")
-        .attr("id", "captionsquares")
-        .attr("transform", `translate(${margins.left + width}, ${margins.top})`)
+    lineChart
+        .append("rect")
+        .attr("width", WIDTH)
+        .attr("height", HEIGHT)
+        .attr("fill", "transparent")
+        .lower()
+        .on("mouseenter", () => {
+            circlesContainer
+                .selectAll("circle")
+                .transition()
+                .duration(500)
+                .attr("r", 0);
+        });
+
+
+    captionSquaresContainer
         .selectAll("rect")
         .data(data)
         .join(
             (enter) => {
-                enter.append("rect")
+                enter
+                    .append("rect")
                     .attr("width", 12)
                     .attr("height", 12)
                     .attr("fill", d => colorScale(d[0].category))
                     .attr("x", 30)
                     .attr("y", (_, i) => 50 + i * 50)
                     .attr("ry", 2)
+                    .on("mouseenter", (event, dato) => highlight(dato))
+                    .on("mouseleave", unhighlight)
             }
         );
 
-    const captionText = lineChart
-        .append("g")
-        .attr("id", "textsquares")
-        .attr("transform", `translate(${margins.left + width}, ${margins.top})`)
+    captionTextContainer
         .selectAll("rect")
         .data(data)
         .join(
@@ -234,6 +291,8 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .attr("y", (_, i) => 50 + 12 + i * 50)
                     .text(d => d[0].category)
                     .attr("fill", "#757575")
+                    .on("mouseenter", (event, dato) => highlight(dato))
+                    .on("mouseleave", unhighlight)
             }
         )
 }
