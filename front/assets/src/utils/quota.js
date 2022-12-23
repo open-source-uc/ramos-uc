@@ -104,7 +104,9 @@ const loadQuotaHandleResponse = (response, modal) => {
         .range([0, width])
         .nice();
 
-    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+    const colorScale = d3
+        .scaleOrdinal(d3.schemeCategory10)
+        .domain(categories_keys);
 
     const axisQuota = d3.axisLeft(quotaScale);
     const containerAxisQuota = lineChart
@@ -152,6 +154,11 @@ const loadQuotaHandleResponse = (response, modal) => {
     const captionTextContainer = lineChart
         .append("g")
         .attr("transform", `translate(${margins.left + width}, ${margins.top})`);
+
+    const tooltipContainer = lineChart
+        .append("g")
+        .attr("transform", `translate(${margins.left}, ${margins.top})`);
+
 
     const highlight = (dato) => {
         linesContainer
@@ -207,12 +214,105 @@ const loadQuotaHandleResponse = (response, modal) => {
         circlesContainer
             .selectAll("circle")
             .on("mouseenter", (event, dato) => {
-                console.log(dato)
+
                 circlesContainer
                     .selectAll("circle")
                     .transition()
                     .duration(500)
-                    .attr("r", d => d == dato ? 5 : 0)
+                    .attr("r", d => d == dato ? 5 : 0);
+
+                const detail = [dato.date, dato.category, dato.banner, dato.quota];
+
+                const x = parseFloat(event.target.attributes[0].nodeValue);
+                const y = parseFloat(event.target.attributes[1].nodeValue);
+
+                tooltipContainer.append("rect");
+
+                tooltipContainer    //Falta hacer que desaparezca y algunos detalles estéticos
+                    .selectAll("text")
+                    .data(detail)
+                    .join(
+                        enter => {
+                            tooltipContainer
+                                .select("rect")
+                                .attr("width", 160)
+                                .attr("height", 140)
+                                .attr("fill", "white")
+                                .attr("stroke", "#757575")
+                                .attr("stroke-width", 1)
+                                .attr("x", () => x < width/2 ? x + 20 : x - 120)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 100);
+
+                            enter
+                                .append("text")
+                                .attr("font-size", (d, i) => {
+                                    if (i == 0) {
+                                        return 14
+                                    } else if (i == 1) {
+                                        return 14
+                                    } else if (i == 2) {
+                                        return 20
+                                    } else if (i == 3) {
+                                        return 24
+                                    }
+                                })
+                                .attr("fill", (d, i, a) => {
+                                    if (i == 0) {
+                                        return "black"
+                                    } else if (i == 1) {
+                                        return "#757575"
+                                    } else if (i == 2) {
+                                        return "#757575"
+                                    } else if (i == 3) {
+                                        return colorScale(a[1].__data__)
+                                    };
+                                })
+                                .attr("x", () => x < width/2 ? x + 20 : x - 120)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 100)
+                                .attr("dy", 30)
+                                .attr("dx", 20)
+                                .text((d, i) => {
+                                    if (i == 0) {
+                                        return d.toLocaleString('es-CL')
+                                    } else if (i == 1) {
+                                        return d
+                                    } else if (i == 2) {
+                                        return `Banner: ${d}`
+                                    } else if (i == 3) {
+                                        return d
+                                    }
+                                })
+                                .raise();
+                        },
+                        update => {
+                            update
+                                .attr("fill", (d, i, a) => {
+                                    if (i == 0) {
+                                        return "black"
+                                    } else if (i == 1) {
+                                        return "#757575"
+                                    } else if (i == 2) {
+                                        return "#757575"
+                                    } else if (i == 3) {
+                                        return colorScale(a[1].__data__)
+                                    };
+                                })
+                                .attr("x", () => x < width/2 ? x + 20 : x - 120)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 100)
+                                .text((d, i) => {
+                                    if (i == 0) {
+                                        return d.toLocaleString('es-CL')
+                                    } else if (i == 1) {
+                                        return d
+                                    } else if (i == 2) {
+                                        return `Banner: ${d}`
+                                    } else if (i == 3) {
+                                        return d
+                                    }
+                                })
+                                .raise();
+                        }
+                    );
             });
     };
 
