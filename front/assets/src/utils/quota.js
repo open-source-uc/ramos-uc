@@ -46,7 +46,6 @@ const loadQuotaHandleResponse = (response, modal) => {
     });
 
     // Create the visualization using D3.js
-    //npm install d3
     const d3 = require('d3');
 
     const WIDTH = 1000,
@@ -227,8 +226,9 @@ const loadQuotaHandleResponse = (response, modal) => {
                 const y = parseFloat(event.target.attributes[1].nodeValue);
 
                 tooltipContainer.append("rect");
+                tooltipContainer.style("visibility", "visible");
 
-                tooltipContainer    //Falta hacer que desaparezca y algunos detalles estéticos
+                tooltipContainer
                     .selectAll("text")
                     .data(detail)
                     .join(
@@ -240,12 +240,12 @@ const loadQuotaHandleResponse = (response, modal) => {
                                 .attr("fill", "white")
                                 .attr("stroke", "#757575")
                                 .attr("stroke-width", 1)
-                                .attr("x", () => x < width/2 ? x + 20 : x - 120)
-                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 100);
+                                .attr("x", () => x < width/2 ? x + 20 : x - 180)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 150);
 
                             enter
                                 .append("text")
-                                .attr("font-size", (d, i) => {
+                                .attr("font-size", (_, i) => {
                                     if (i == 0) {
                                         return 14
                                     } else if (i == 1) {
@@ -256,7 +256,7 @@ const loadQuotaHandleResponse = (response, modal) => {
                                         return 24
                                     }
                                 })
-                                .attr("fill", (d, i, a) => {
+                                .attr("fill", (_, i, a) => {
                                     if (i == 0) {
                                         return "black"
                                     } else if (i == 1) {
@@ -267,14 +267,25 @@ const loadQuotaHandleResponse = (response, modal) => {
                                         return colorScale(a[1].__data__)
                                     };
                                 })
-                                .attr("x", () => x < width/2 ? x + 20 : x - 120)
-                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 100)
-                                .attr("dy", 30)
-                                .attr("dx", 20)
+                                .attr("x", () => x < width/2 ? x + 20 : x - 180)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 150)
+                                .attr("dy", (_, i) => {
+                                    if (i == 2) {
+                                        return 35
+                                    } else if (i == 3) {
+                                        return 45
+                                    } else {
+                                        return 30
+                                    }
+                                })
+                                .attr("dx", 15)
                                 .text((d, i) => {
                                     if (i == 0) {
                                         return d.toLocaleString('es-CL')
                                     } else if (i == 1) {
+                                        if (d.length > 18) {
+                                            return d.substring(0, 18) + "..."
+                                        }
                                         return d
                                     } else if (i == 2) {
                                         return `Banner: ${d}`
@@ -286,7 +297,7 @@ const loadQuotaHandleResponse = (response, modal) => {
                         },
                         update => {
                             update
-                                .attr("fill", (d, i, a) => {
+                                .attr("fill", (_, i, a) => {
                                     if (i == 0) {
                                         return "black"
                                     } else if (i == 1) {
@@ -297,12 +308,15 @@ const loadQuotaHandleResponse = (response, modal) => {
                                         return colorScale(a[1].__data__)
                                     };
                                 })
-                                .attr("x", () => x < width/2 ? x + 20 : x - 120)
-                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 100)
+                                .attr("x", () => x < width/2 ? x + 20 : x - 180)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 150)
                                 .text((d, i) => {
                                     if (i == 0) {
                                         return d.toLocaleString('es-CL')
                                     } else if (i == 1) {
+                                        if (d.length > 18) {
+                                            return d.substring(0, 18) + "..."
+                                        }
                                         return d
                                     } else if (i == 2) {
                                         return `Banner: ${d}`
@@ -313,6 +327,10 @@ const loadQuotaHandleResponse = (response, modal) => {
                                 .raise();
                         }
                     );
+            })
+            .on("mouseleave", () => {
+                tooltipContainer
+                    .style("visibility", "hidden");
             });
     };
 
@@ -343,7 +361,7 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .attr("fill", "transparent")
                     .attr("stroke-width", 2.4)
                     .attr("d", d => drawLines(d))
-                    .on("mouseenter", (event, dato) => highlight(dato))
+                    .on("mouseenter", (_, dato) => highlight(dato))
                     .on("mouseleave", unhighlight);
             }
         );
@@ -376,7 +394,7 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .attr("x", 30)
                     .attr("y", (_, i) => 50 + i * 50)
                     .attr("ry", 2)
-                    .on("mouseenter", (event, dato) => highlight(dato))
+                    .on("mouseenter", (_, dato) => highlight(dato))
                     .on("mouseleave", unhighlight)
             }
         );
@@ -391,7 +409,7 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .attr("y", (_, i) => 50 + 12 + i * 50)
                     .text(d => d[0].category)
                     .attr("fill", "#757575")
-                    .on("mouseenter", (event, dato) => highlight(dato))
+                    .on("mouseenter", (_, dato) => highlight(dato))
                     .on("mouseleave", unhighlight)
             }
         )
