@@ -128,10 +128,12 @@ const loadQuotaHandleResponse = (response, modal) => {
         .attr("fill", "#757575");
 
     const axisDates = d3.axisBottom(timeScale);
-    lineChart
+
+    const axisDatesContainer = lineChart
         .append("g")
-        .attr("transform", `translate(${margins.left}, ${height + margins.top})`)
-        .call(axisDates);
+        .attr("transform", `translate(${margins.left}, ${height + margins.top})`);
+
+    axisDatesContainer.call(axisDates);
 
     const drawLines = d3
         .line(d3.curveStepAfter)
@@ -157,7 +159,6 @@ const loadQuotaHandleResponse = (response, modal) => {
     const tooltipContainer = lineChart
         .append("g")
         .attr("transform", `translate(${margins.left}, ${margins.top})`);
-
 
     const highlight = (dato) => {
         linesContainer
@@ -413,4 +414,55 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .on("mouseleave", unhighlight)
             }
         )
+
+    //implement zooming for time axis
+    lineChart
+        .append("clipPath")
+        .attr("id", "clip-visualization")
+        .append("rect")
+        .attr("width", width)
+        .attr("height", height);
+
+    lineChart
+        .append("clipPath")
+        .attr("id", "clip-axisDates")
+        .append("rect")
+        .attr("width", width + 6)
+        .attr("height", HEIGHT)
+        .attr("x", -6)
+        .attr("y", -margins.top);
+
+    linesContainer
+        .attr("clip-path", "url(#clip-visualization)");
+
+    circlesContainer
+        .attr("clip-path", "url(#clip-visualization)");
+
+    axisDatesContainer
+        .attr("clip-path", "url(#clip-axisDates)");
+
+    const zoomHandler = (event) => {
+        const transformation = event.transform;
+
+        timeScale.rangeRound([transformation.applyX(0), transformation.applyX(width)])
+
+        linesContainer
+            .selectAll("path")
+            .attr("d", d => drawLines(d));
+
+        circlesContainer
+            .selectAll("circle")
+            .attr("cx", d => timeScale(d.date));
+
+        axisDatesContainer.call(axisDates);
+    };
+
+    const zoom = d3
+        .zoom()
+        .extent([[0, 0], [WIDTH, HEIGHT]])
+        .translateExtent([[0, 0], [WIDTH, HEIGHT]])
+        .scaleExtent([1, 8])
+        .on("zoom", zoomHandler);
+
+    lineChart.call(zoom);
 }
