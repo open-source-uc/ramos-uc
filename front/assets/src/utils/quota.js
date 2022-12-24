@@ -465,4 +465,6 @@ const loadQuotaHandleResponse = (response, modal) => {
         .on("zoom", zoomHandler);
 
     lineChart.call(zoom);
+    
+    ga_event("detail", { event_category: "follow", event_label: response.initials });
 }
