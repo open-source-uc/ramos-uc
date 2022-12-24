@@ -164,8 +164,6 @@ logs/*
 
 # Other
 desktop.ini
-node_modules/
-package-lock.json
 
 # Enviroment config
 .env
