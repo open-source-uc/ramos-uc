@@ -221,7 +221,7 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .duration(500)
                     .attr("r", d => d == dato ? 5 : 0);
 
-                const detail = [dato.date, dato.category, dato.banner, dato.quota];
+                const detail = [dato.date, dato.category, dato.quota];
 
                 const x = parseFloat(event.target.attributes[0].nodeValue);
                 const y = parseFloat(event.target.attributes[1].nodeValue);
@@ -237,12 +237,12 @@ const loadQuotaHandleResponse = (response, modal) => {
                             tooltipContainer
                                 .select("rect")
                                 .attr("width", 160)
-                                .attr("height", 140)
+                                .attr("height", 110)
                                 .attr("fill", "white")
                                 .attr("stroke", "#757575")
                                 .attr("stroke-width", 1)
                                 .attr("x", () => x < width/2 ? x + 20 : x - 180)
-                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 150);
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 + 10 : y + i*25 - 120);
 
                             enter
                                 .append("text")
@@ -252,8 +252,6 @@ const loadQuotaHandleResponse = (response, modal) => {
                                     } else if (i == 1) {
                                         return 14
                                     } else if (i == 2) {
-                                        return 20
-                                    } else if (i == 3) {
                                         return 24
                                     }
                                 })
@@ -263,18 +261,14 @@ const loadQuotaHandleResponse = (response, modal) => {
                                     } else if (i == 1) {
                                         return "#757575"
                                     } else if (i == 2) {
-                                        return "#757575"
-                                    } else if (i == 3) {
                                         return colorScale(a[1].__data__)
-                                    };
+                                    }
                                 })
                                 .attr("x", () => x < width/2 ? x + 20 : x - 180)
-                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 150)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 + 10 : y + i*25 - 120)
                                 .attr("dy", (_, i) => {
                                     if (i == 2) {
-                                        return 35
-                                    } else if (i == 3) {
-                                        return 45
+                                        return 40
                                     } else {
                                         return 30
                                     }
@@ -289,8 +283,6 @@ const loadQuotaHandleResponse = (response, modal) => {
                                         }
                                         return d
                                     } else if (i == 2) {
-                                        return `Banner: ${d}`
-                                    } else if (i == 3) {
                                         return d
                                     }
                                 })
@@ -304,13 +296,11 @@ const loadQuotaHandleResponse = (response, modal) => {
                                     } else if (i == 1) {
                                         return "#757575"
                                     } else if (i == 2) {
-                                        return "#757575"
-                                    } else if (i == 3) {
-                                        return colorScale(a[1].__data__)
-                                    };
+                                        return  colorScale(a[1].__data__)
+                                    }
                                 })
                                 .attr("x", () => x < width/2 ? x + 20 : x - 180)
-                                .attr("y", (_, i) => y < height/2 ? y + i*25 : y + i*25 - 150)
+                                .attr("y", (_, i) => y < height/2 ? y + i*25 + 10 : y + i*25 - 120)
                                 .text((d, i) => {
                                     if (i == 0) {
                                         return d.toLocaleString('es-CL')
@@ -320,8 +310,6 @@ const loadQuotaHandleResponse = (response, modal) => {
                                         }
                                         return d
                                     } else if (i == 2) {
-                                        return `Banner: ${d}`
-                                    } else if (i == 3) {
                                         return d
                                     }
                                 })
@@ -366,6 +354,23 @@ const loadQuotaHandleResponse = (response, modal) => {
                     .on("mouseleave", unhighlight);
             }
         );
+
+    lineChart
+        .append("rect")
+        .attr("id", "trigger")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", "transparent")
+        .attr("x", margins.left)
+        .attr("y", margins.top)
+        .lower()
+        .on("mouseenter", () => {
+            circlesContainer
+                .selectAll("circle")
+                .transition()
+                .duration(500)
+                .attr("r", 0);
+        });
 
     lineChart
         .append("rect")
@@ -461,10 +466,11 @@ const loadQuotaHandleResponse = (response, modal) => {
         .zoom()
         .extent([[0, 0], [WIDTH, HEIGHT]])
         .translateExtent([[0, 0], [WIDTH, HEIGHT]])
-        .scaleExtent([1, 8])
+        .scaleExtent([1, 10])
         .on("zoom", zoomHandler);
 
-    lineChart.call(zoom);
-    
+    d3.select("#trigger").call(zoom);
+
+    d3.select(".spinner-border").remove();
     ga_event("detail", { event_category: "follow", event_label: response.initials });
 }
