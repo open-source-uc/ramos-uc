@@ -184,7 +184,6 @@ const loadQuotaHandleResponse = (response, modal) => {
                 enter => {
                     enter
                         .append("circle")
-                        .attr("class", "interactive")
                         .attr("cx", d => timeScale(d.date))
                         .attr("cy", d => quotaScale(d.quota))
                         .attr("fill", d => colorScale(d.category))
@@ -349,7 +348,6 @@ const loadQuotaHandleResponse = (response, modal) => {
             (enter) => {
                 enter
                     .append("path")
-                    .attr("class", "interactive")
                     .attr("stroke", d => colorScale(d[0].category))
                     .attr("fill", "transparent")
                     .attr("stroke-width", 2.4)
@@ -362,7 +360,7 @@ const loadQuotaHandleResponse = (response, modal) => {
 
     lineChart
         .append("rect")
-        .attr("class", "interactive")
+        .attr("id", "trigger")
         .attr("width", width)
         .attr("height", height)
         .attr("fill", "transparent")
@@ -480,7 +478,7 @@ const loadQuotaHandleResponse = (response, modal) => {
         .scaleExtent([1, 100])
         .on("zoom", zoomHandler);
 
-    d3.selectAll(".interactive").call(zoom);
+    d3.select("#trigger").call(zoom);
 
     d3.select(".spinner-border").remove();
     ga_event("detail", { event_category: "follow", event_label: response.initials });
