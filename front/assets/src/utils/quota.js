@@ -227,9 +227,6 @@ const loadQuotaHandleResponse = (response, modal) => {
                 const x = parseFloat(event.target.attributes[0].nodeValue);
                 const y = parseFloat(event.target.attributes[1].nodeValue);
 
-                console.log(event)
-                console.log(x, y)
-
                 tooltipContainer.append("rect");
                 tooltipContainer.style("visibility", "visible");
 
