@@ -100,8 +100,7 @@ const loadQuotaHandleResponse = (response, modal) => {
     const timeScale = d3
         .scaleTime()
         .domain([firstDate, lastDate])
-        .range([0, width])
-        .nice();
+        .range([0, width]);
 
     const colorScale = d3
         .scaleOrdinal(d3.schemeCategory10)
@@ -127,7 +126,9 @@ const loadQuotaHandleResponse = (response, modal) => {
         .attr("font-size", 12)
         .attr("fill", "#757575");
 
-    const axisDates = d3.axisBottom(timeScale);
+    const axisDates = d3
+        .axisBottom(timeScale)
+        .ticks(10);
 
     const axisDatesContainer = lineChart
         .append("g")
@@ -183,6 +184,7 @@ const loadQuotaHandleResponse = (response, modal) => {
                 enter => {
                     enter
                         .append("circle")
+                        .attr("class", "interactive")
                         .attr("cx", d => timeScale(d.date))
                         .attr("cy", d => quotaScale(d.quota))
                         .attr("fill", d => colorScale(d.category))
@@ -345,11 +347,14 @@ const loadQuotaHandleResponse = (response, modal) => {
         .data(data)
         .join(
             (enter) => {
-                enter.append("path")
+                enter
+                    .append("path")
+                    .attr("class", "interactive")
                     .attr("stroke", d => colorScale(d[0].category))
                     .attr("fill", "transparent")
                     .attr("stroke-width", 2.4)
                     .attr("d", d => drawLines(d))
+                    .style("pointer-events", "visibleStroke")
                     .on("mouseenter", (_, dato) => highlight(dato))
                     .on("mouseleave", unhighlight);
             }
@@ -357,7 +362,7 @@ const loadQuotaHandleResponse = (response, modal) => {
 
     lineChart
         .append("rect")
-        .attr("id", "trigger")
+        .attr("class", "interactive")
         .attr("width", width)
         .attr("height", height)
         .attr("fill", "transparent")
@@ -449,7 +454,9 @@ const loadQuotaHandleResponse = (response, modal) => {
     const zoomHandler = (event) => {
         const transformation = event.transform;
 
-        timeScale.rangeRound([transformation.applyX(0), transformation.applyX(width)])
+        timeScale.rangeRound([transformation.applyX(0), transformation.applyX(width)]);
+        axisDates.ticks(Math.max(10, Math.floor(10 * transformation.k * 0.6)));
+        axisDatesContainer.call(axisDates);
 
         linesContainer
             .selectAll("path")
@@ -458,18 +465,22 @@ const loadQuotaHandleResponse = (response, modal) => {
         circlesContainer
             .selectAll("circle")
             .attr("cx", d => timeScale(d.date));
-
-        axisDatesContainer.call(axisDates);
     };
 
     const zoom = d3
         .zoom()
-        .extent([[0, 0], [WIDTH, HEIGHT]])
-        .translateExtent([[0, 0], [WIDTH, HEIGHT]])
-        .scaleExtent([1, 10])
+        .extent([
+            [0, 0],
+            [width, height]
+        ])
+        .translateExtent([
+            [0, 0],
+            [width, height]
+        ])
+        .scaleExtent([1, 100])
         .on("zoom", zoomHandler);
 
-    d3.select("#trigger").call(zoom);
+    d3.selectAll(".interactive").call(zoom);
 
     d3.select(".spinner-border").remove();
     ga_event("detail", { event_category: "follow", event_label: response.initials });
