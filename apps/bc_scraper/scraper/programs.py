@@ -1,5 +1,8 @@
 from html.parser import HTMLParser
 from .request import get_text
+from django.conf import settings
+
+CATALOGO_URL = getattr(settings, "CATALOGO_URL")
 
 
 class _ProgramParser(HTMLParser):
@@ -34,8 +37,6 @@ class _ProgramParser(HTMLParser):
 
 def get_program(initials):
     parser = _ProgramParser()
-    query = (
-        f"http://catalogo.uc.cl/index.php?tmpl=component&view=programa&sigla={initials}"
-    )
+    query = f"{CATALOGO_URL}/index.php?tmpl=component&view=programa&sigla={initials}"
     text = get_text(query)
     return parser.process(text)

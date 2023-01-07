@@ -1,9 +1,12 @@
 from html.parser import HTMLParser
 from time import sleep
 from .request import get_text
+from django.conf import settings
 import logging
 
 log = logging.getLogger("scraper")
+
+BUSCACURSOS_URL = getattr(settings, "BUSCACURSOS_URL")
 
 
 class _BCParser(HTMLParser):
@@ -107,9 +110,9 @@ def bc_search(query, period, nrc=False):
     parser = _BCParser()
     url = None
     if nrc:
-        url = f"https://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={query}"
+        url = f"{BUSCACURSOS_URL}/?cxml_semestre={period}&cxml_nrc={query}"
     else:
-        url = f"https://buscacursos.uc.cl/?cxml_semestre={period}&cxml_sigla={query}"
+        url = f"{BUSCACURSOS_URL}/?cxml_semestre={period}&cxml_sigla={query}"
     resp = get_text(url)
 
     # Check valid response

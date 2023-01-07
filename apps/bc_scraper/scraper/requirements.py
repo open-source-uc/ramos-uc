@@ -1,5 +1,8 @@
 from .request import get_text
 from html.parser import HTMLParser
+from django.conf import settings
+
+CATALOGO_URL = getattr(settings, "CATALOGO_URL")
 
 
 class _RequirementsParser(HTMLParser):
@@ -29,6 +32,6 @@ class _RequirementsParser(HTMLParser):
 
 def get_requirements(initials):
     parser = _RequirementsParser()
-    query = f"http://catalogo.uc.cl/index.php?tmpl=component&view=requisitos&sigla={initials}"
+    query = f"{CATALOGO_URL}/index.php?tmpl=component&view=requisitos&sigla={initials}"
     text = get_text(query)
     return parser.process(text)

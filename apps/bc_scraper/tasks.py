@@ -14,6 +14,8 @@ def get_scraper_settings():
         "db_passwd": db_settings["PASSWORD"],
         "db_name": db_settings["NAME"],
         "batch_size": getattr(settings, "SCRAPE_BATCH_SIZE"),
+        "buscacursos_url": getattr(settings, "BUSCACURSOS_URL"),
+        "catalogo_url": getattr(settings, "CATALOGO_URL"),
     }
     return settings_dict
 

@@ -29,6 +29,7 @@ def banner(period, settings, banner="0"):
     open_db_conn(settings)
 
     BATCH_SIZE = settings["batch_size"]
+    BUSCACURSOS_URL = settings["buscacursos_url"]
     INSERT = f"INSERT INTO courses_quota (section_id, date, category, quota, banner) VALUES (%s, %s, %s, %s, '{banner}');"
     UPDATE = "UPDATE courses_section SET available_quota=%s WHERE id=%s;"
 
@@ -52,14 +53,14 @@ def banner(period, settings, banner="0"):
             for curso in cursos:
                 id = int(curso[0])
                 nrc = curso[1]
-                query = f"https://buscacursos.uc.cl/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
+                query = f"{BUSCACURSOS_URL}/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
                 text = get_text(query)
 
                 date = str(datetime.now())
                 cupos_dict = parser.process(text)
                 if not len(cupos_dict):
                     # Solo vacantes libres, buscar en página principal
-                    query = f"http://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
+                    query = f"{BUSCACURSOS_URL}/?cxml_semestre={period}&cxml_nrc={nrc}"
                     text = get_text(query)
                     cupos_dict = {"Total": parser_bc.process(text)}
 

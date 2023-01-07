@@ -25,6 +25,7 @@ def delete(settings):
     the course, removes it from DB.
     """
     open_db_conn(settings)
+    BUSCACURSOS_URL = settings["buscacursos_url"]
 
     with open("logs/delete.log") as del_log:
         for line in del_log:
@@ -38,7 +39,7 @@ def delete(settings):
 
             log.info("Searching %s %s", nrc, period)
             resp = requests.get(
-                f"https://buscacursos.uc.cl/?cxml_semestre={period}&cxml_nrc={nrc}"
+                f"{BUSCACURSOS_URL}/?cxml_semestre={period}&cxml_nrc={nrc}"
             )
 
             not_result = "La búsqueda no produjo resultados" in resp.text

@@ -170,6 +170,8 @@ GA_CODE = os.getenv("GA_CODE", None)
 
 # BC-Scraper
 SCRAPE_BATCH_SIZE = 100
+BUSCACURSOS_URL = os.getenv("BUSCAURSOS_URL", "https://buscacursos.uc.cl")
+CATALOGO_URL = os.getenv("CATALOGO_URL", "https://catalogo.uc.cl")
 
 # Scheduler
 MAX_ATTEMPTS = 1
