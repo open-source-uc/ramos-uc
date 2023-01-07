@@ -1,6 +1,6 @@
 import { getCookie, setCookie } from "./cookies"
 import ga_event from "./ga_event.js"
-import { ucalendar } from "./ucalendar"
+import * as ucalendar from "./ucalendar"
 
 
 // Add ramo to cookie and load it to schedule

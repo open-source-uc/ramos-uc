@@ -12,7 +12,7 @@ import { add, remove, loadRamo, loadFromCookie } from "./utils/schedule"
 import { loadInfo } from "./utils/info"
 import { search } from "./utils/search"
 import { loadQuota } from "./utils/quota"
-import { ucalendar } from "./utils/ucalendar"
+import * as ucalendar from "./utils/ucalendar"
 
 export {
     toggle, toggleRow, toggleDay, clearSelects,
@@ -31,7 +31,6 @@ $(() => {
     // Load ramos from cookie
     wp.loadFromCookie()
 
-    // Ucalendar
     $("#ucalendar").on("click", () => ucalendar.dowload_schedule())
 
     // Load filters dropdowns
