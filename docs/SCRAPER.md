@@ -22,7 +22,7 @@ Uses the same schema defined on courses models.
 + courses_course (id, initials, name, credits, req, con, restr, program, school, area, category)
 + courses_section (id, course_id, period, section, nrc, teachers, schedule, format, campus, is_english, is_removable, is_special, available_quota, total_quota)
 + courses_quota (section_id, date, category, quota, banner)
-+ courses_fullschedule (section_id, LMWJVS x 12345678)
++ courses_fullschedule (section_id, LMWJVS x 123456789)
 + courses_scheduleinfo (section_id, total, ayu, clas, lab, pra, sup, tal, ter, tes)
 + courses_category (id, name)
 

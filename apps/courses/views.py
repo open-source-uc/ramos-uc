@@ -27,7 +27,6 @@ def get_fields_values():
             "6:50",
             "8:10",
         ],
-        # "mods": ["8:30", "10:00", "11:30", "2:00", "3:30", "5:00", "6:30", "8:00"],
         "schools": Course.objects.available("school"),
         "campuses": Section.objects.available("campus"),
         "formats": Section.objects.available("format"),
@@ -61,7 +60,6 @@ def share(request):
                 "6:50",
                 "8:10",
             ],
-            # "mods": ["8:30", "10:00", "11:30", "2:00", "3:30", "5:00", "6:30", "8:00"],
             "ids": request.GET.get("h", []),
         },
     )
