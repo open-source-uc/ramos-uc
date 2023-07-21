@@ -45,7 +45,7 @@ const loadFromCookie = () => {
 
         let promises = initialsToLoad.map(initials => {
             let body = {
-                period: "2021-2",
+                period: "2023-2",
                 q: initials,
                 overlap: false,
                 overlap_except: false,
@@ -121,7 +121,7 @@ const generateCombinations = () => {
 
 const resetHorario = () => {
     let days = ["L", "M", "W", "J", "V", "S"]
-    let modules = 8
+    let modules = 9
 
     for (let i = 0; i < modules; i++) {
         days.forEach(day => {
