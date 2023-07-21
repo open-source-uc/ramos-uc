@@ -19,7 +19,7 @@
                 <td {% if is_interactive %}onclick="wp.toggle(this)"{% endif %} id="{{ day }}{{ forloop.parentloop.counter }}"></td>
                 {% endfor %}
             </tr>
-            {% if forloop.counter == 3 or forloop.counter == 6 %}
+            {% if forloop.counter == 4 or forloop.counter == 7 %}
             <tr class="table-success"><td colspan="8"></td></tr>
             {% endif %}
         {% endfor %}
