@@ -9,7 +9,7 @@ export const search = (page = 1) => {
     const events = []
     if (overlap) {
         "LMWJVS".split("").forEach(day => {
-            "12345678".split("").forEach(module => {
+            "123456789".split("").forEach(module => {
                 if ($(`#${day}${module}`).hasClass("table-secondary")) {
                     events.push(day + module)
                 }
