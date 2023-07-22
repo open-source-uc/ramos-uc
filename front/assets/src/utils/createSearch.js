@@ -23,7 +23,7 @@ export const createSearch = (page = 1) => {
     var horario = []
     if (tope) {
         "LMWJVS".split("").forEach(day => {
-            "12345678".split("").forEach(module => {
+            "123456789".split("").forEach(module => {
                 if ($(`#${day}${module}`).hasClass("table-secondary")) {
                     horario.push(day + module)
                 }

@@ -12,6 +12,7 @@ class FullSchedule(models.Model):
     l6 = models.CharField(max_length=4, default="FREE")
     l7 = models.CharField(max_length=4, default="FREE")
     l8 = models.CharField(max_length=4, default="FREE")
+    l9 = models.CharField(max_length=4, default="FREE")
     m1 = models.CharField(max_length=4, default="FREE")
     m2 = models.CharField(max_length=4, default="FREE")
     m3 = models.CharField(max_length=4, default="FREE")
@@ -20,6 +21,7 @@ class FullSchedule(models.Model):
     m6 = models.CharField(max_length=4, default="FREE")
     m7 = models.CharField(max_length=4, default="FREE")
     m8 = models.CharField(max_length=4, default="FREE")
+    m9 = models.CharField(max_length=4, default="FREE")
     w1 = models.CharField(max_length=4, default="FREE")
     w2 = models.CharField(max_length=4, default="FREE")
     w3 = models.CharField(max_length=4, default="FREE")
@@ -28,6 +30,7 @@ class FullSchedule(models.Model):
     w6 = models.CharField(max_length=4, default="FREE")
     w7 = models.CharField(max_length=4, default="FREE")
     w8 = models.CharField(max_length=4, default="FREE")
+    w9 = models.CharField(max_length=4, default="FREE")
     j1 = models.CharField(max_length=4, default="FREE")
     j2 = models.CharField(max_length=4, default="FREE")
     j3 = models.CharField(max_length=4, default="FREE")
@@ -36,6 +39,7 @@ class FullSchedule(models.Model):
     j6 = models.CharField(max_length=4, default="FREE")
     j7 = models.CharField(max_length=4, default="FREE")
     j8 = models.CharField(max_length=4, default="FREE")
+    j9 = models.CharField(max_length=4, default="FREE")
     v1 = models.CharField(max_length=4, default="FREE")
     v2 = models.CharField(max_length=4, default="FREE")
     v3 = models.CharField(max_length=4, default="FREE")
@@ -44,6 +48,7 @@ class FullSchedule(models.Model):
     v6 = models.CharField(max_length=4, default="FREE")
     v7 = models.CharField(max_length=4, default="FREE")
     v8 = models.CharField(max_length=4, default="FREE")
+    v9 = models.CharField(max_length=4, default="FREE")
     s1 = models.CharField(max_length=4, default="FREE")
     s2 = models.CharField(max_length=4, default="FREE")
     s3 = models.CharField(max_length=4, default="FREE")
@@ -52,6 +57,7 @@ class FullSchedule(models.Model):
     s6 = models.CharField(max_length=4, default="FREE")
     s7 = models.CharField(max_length=4, default="FREE")
     s8 = models.CharField(max_length=4, default="FREE")
+    s9 = models.CharField(max_length=4, default="FREE")
 
 
 class ScheduleInfo(models.Model):

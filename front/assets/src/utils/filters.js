@@ -23,7 +23,7 @@ const toggleDay = (day) => {
     if (document.getElementById(`${day}1`).className == "") {
         toogle = "table-secondary"
     }
-    "12345678".split("").forEach(module => {
+    "123456789".split("").forEach(module => {
         document.getElementById(day + module).className = toogle
     })
 }
