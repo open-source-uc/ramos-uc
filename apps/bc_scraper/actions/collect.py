@@ -163,44 +163,46 @@ def collect(period, settings):
     open_db_conn(settings)
 
     LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    for l1 in LETTERS:
-        comb = l1
-        log.info("Searching %s", comb)
-        courses = bc_search(comb, period)
-        _process_courses(courses, period)
-        if len(courses) < 50:
-            continue
-
-        for l2 in LETTERS:
-            comb = l1 + l2
+    try:
+        for l1 in LETTERS:
+            comb = l1
             log.info("Searching %s", comb)
             courses = bc_search(comb, period)
             _process_courses(courses, period)
             if len(courses) < 50:
                 continue
 
-            for l3 in LETTERS:
-                comb = l1 + l2 + l3
+            for l2 in LETTERS:
+                comb = l1 + l2
                 log.info("Searching %s", comb)
                 courses = bc_search(comb, period)
                 _process_courses(courses, period)
                 if len(courses) < 50:
                     continue
 
-                for n1 in "0123456789":
-                    comb = l1 + l2 + l3 + n1
+                for l3 in LETTERS:
+                    comb = l1 + l2 + l3
                     log.info("Searching %s", comb)
                     courses = bc_search(comb, period)
                     _process_courses(courses, period)
                     if len(courses) < 50:
                         continue
 
-                    for n2 in "0123456789":
-                        comb = l1 + l2 + l3 + n1 + n2
+                    for n1 in "0123456789":
+                        comb = l1 + l2 + l3 + n1
                         log.info("Searching %s", comb)
                         courses = bc_search(comb, period)
                         _process_courses(courses, period)
+                        if len(courses) < 50:
+                            continue
 
+                        for n2 in "0123456789":
+                            comb = l1 + l2 + l3 + n1 + n2
+                            log.info("Searching %s", comb)
+                            courses = bc_search(comb, period)
+                            _process_courses(courses, period)
+    except Exception as err:
+        handle({"comb": comb, "period": period}, err)
     db_cursor.close()
     db_conn.close()
 
