@@ -6,6 +6,11 @@ from .errors import handle
 from ..scraper.banner import BannerParser, BannerBCParser
 import logging
 
+import requests
+from ..exceptions.exceptions import EmptyResponseError
+
+from django.conf import settings as st
+
 log = logging.getLogger("scraper")
 
 # DB
@@ -55,13 +60,16 @@ def banner(period, settings, banner="0"):
                 nrc = curso[1]
                 query = f"{BUSCACURSOS_URL}/informacionVacReserva.ajax.php?nrc={nrc}&termcode={period}"
                 text = get_text(query)
-
+                if len(text) < 1000:
+                    raise EmptyResponseError(url=query)
                 date = str(datetime.now())
                 cupos_dict = parser.process(text)
                 if not len(cupos_dict):
                     # Solo vacantes libres, buscar en página principal
                     query = f"{BUSCACURSOS_URL}/?cxml_semestre={period}&cxml_nrc={nrc}"
                     text = get_text(query)
+                    if len(text) < 1000:
+                        raise EmptyResponseError(url=query)
                     cupos_dict = {"Total": parser_bc.process(text)}
 
                 values = []
@@ -81,7 +89,15 @@ def banner(period, settings, banner="0"):
             open_db_conn(settings)
             sleep(5)
             continue
-
+        except (
+            requests.Timeout,
+            requests.exceptions.HTTPError,
+            requests.exceptions.ConnectionError,
+        ) as rq_err:
+            handle({"id": id, "query": query}, rq_err)
+        # This is thrown by get_text(query) when an empty response has been provided.
+        except EmptyResponseError as e_err:
+            handle({"id": id, "query": query}, e_err)
         except Exception as err:
             handle({"id": id}, err)
 

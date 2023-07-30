@@ -1,8 +1,10 @@
 from html.parser import HTMLParser
 from time import sleep
+import requests
 from .request import get_text
 from django.conf import settings
 import logging
+from ..exceptions.exceptions import EmptyResponseError
 
 log = logging.getLogger("scraper")
 
@@ -113,13 +115,22 @@ def bc_search(query, period, nrc=False):
         url = f"{BUSCACURSOS_URL}/?cxml_semestre={period}&cxml_nrc={query}"
     else:
         url = f"{BUSCACURSOS_URL}/?cxml_semestre={period}&cxml_sigla={query}"
-    resp = get_text(url)
-
+    try:
+        resp = get_text(url)
+    except (
+        requests.Timeout,
+        requests.exceptions.HTTPError,
+        requests.exceptions.ConnectionError,
+    ) as rq_err:
+        log.error("GET %s failed, error: %s", rq_err.request.url, rq_err)
+        raise
     # Check valid response
     if len(resp) < 1000:
         log.warn("Too many request prevention")
         sleep(5)
         resp = get_text(url)
+        if len(resp) < 1000:
+            raise EmptyResponseError(url=url)
 
     parser.feed(resp)
     return parser.courses
