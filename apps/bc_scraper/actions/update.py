@@ -5,6 +5,8 @@ from .errors import handle
 import psycopg2
 from . import queries as sql
 import logging
+import requests
+from ..exceptions.exceptions import EmptyResponseError
 
 log = logging.getLogger("scraper")
 
@@ -78,36 +80,46 @@ def update(period, settings):
     open_db_conn(settings)
     BATCH_SIZE = settings["batch_size"]
 
-    db_cursor.execute(sql.COUNT_SECTIONS, (period,))
-    total = int(db_cursor.fetchone()[0])
-    deleted = 0
+    try:
+        db_cursor.execute(sql.COUNT_SECTIONS, (period,))
+        total = int(db_cursor.fetchone()[0])
+        deleted = 0
 
-    offset = 0
-    while offset < total:
-        # Process by batches
-        log.info("Updating from %s to % of %s", offset, offset + BATCH_SIZE, total)
-        db_cursor.execute(sql.GET_NRC_BATCH, (period, BATCH_SIZE, offset))
-        rows = db_cursor.fetchall()
-        for row in rows:
-            nrc = row[0]
-            section_id = row[1]
-            courses = bc_search(nrc, period, nrc=True)
+        offset = 0
+        while offset < total:
+            # Process by batches
+            log.info("Updating from %s to %s of %s", offset, offset + BATCH_SIZE, total)
+            db_cursor.execute(sql.GET_NRC_BATCH, (period, BATCH_SIZE, offset))
+            rows = db_cursor.fetchall()
+            for row in rows:
+                nrc = row[0]
+                section_id = row[1]
+                courses = bc_search(nrc, period, nrc=True)
+                # Check section existance in BC
+                if not len(courses):
+                    deleted += 1
+                    log.info("%s give no results. Added to delete list.", nrc)
+                    with open("logs/delete.log", "a+") as del_log:
+                        del_log.write(
+                            str(datetime.now()) + " NRC " + nrc + " " + period + "\n"
+                        )
 
-            # Check section existance in BC
-            if not len(courses):
-                deleted += 1
-                log.info("%s give no results. Added to delete list.", nrc)
-                with open("logs/delete.log", "a+") as del_log:
-                    del_log.write(
-                        str(datetime.now()) + " NRC " + nrc + " " + period + "\n"
-                    )
+                else:
+                    _process_course(courses[0], section_id)
 
-            else:
-                _process_course(courses[0], section_id)
+            offset += BATCH_SIZE
 
-        offset += BATCH_SIZE
-
-    db_cursor.close()
-    db_conn.close()
+        db_cursor.close()
+        db_conn.close()
+    except (
+        requests.Timeout,
+        requests.exceptions.HTTPError,
+        requests.exceptions.ConnectionError,
+    ) as rq_err:
+        handle({"period": period, "nrc": nrc, "url": rq_err.request.url}, rq_err)
+    except EmptyResponseError as e_err:
+        handle({"period": period, "nrc": nrc, "url": e_err.url}, e_err)
+    except Exception as err:
+        handle({"period": period, "nrc": nrc}, err)
 
     log.info("Courses deleted: %s", str(deleted))
