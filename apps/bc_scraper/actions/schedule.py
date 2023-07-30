@@ -3,7 +3,7 @@ from copy import copy
 
 DEFAULT_SCHEDULE = {}
 for day in "lmwjvs":
-    for mod in "12345678":
+    for mod in "123456789":
         DEFAULT_SCHEDULE[day + mod] = "'FREE'"
 
 
