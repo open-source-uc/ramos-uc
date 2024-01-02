@@ -16,7 +16,7 @@
     "jquery": "^3.6.0",
     "mini-css-extract-plugin": "^1.6.0",
     "multiple-select": "^1.5.2",
-    "postcss": "^8.3.0",
+    "postcss": "^8.4.31",
     "style-loader": "^2.0.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0",
