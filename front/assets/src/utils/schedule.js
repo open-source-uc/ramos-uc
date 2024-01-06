@@ -1,5 +1,6 @@
 import { getCookie, setCookie } from "./cookies"
 import ga_event from "./ga_event.js"
+import * as ucalendar from "./ucalendar"
 
 
 // Add ramo to cookie and load it to schedule
@@ -25,6 +26,9 @@ const remove = (id) => {
     if (index != -1) {
         saved.splice(index, 1)
     }
+
+    ucalendar.remove_from_schedule_page(id)
+
     setCookie("ramos", saved.join(","), 120)
 
     var parents = $(`td > [name='ramo_${id}']`).parent().get()
@@ -64,6 +68,9 @@ const toCourseClassName = (type_of_course) => {
 
 const loadRamoHandleResponse = (response, id, showDelete, ramos) => {
     var ramo = response
+
+    ucalendar.add_from_schedule_page(id, ramo)
+
     // Print in horario
     for (let [key, value] of Object.entries(ramo.schedule)) {
         var slot = $(`#${key.toUpperCase()}`)
