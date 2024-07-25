@@ -23,6 +23,8 @@ For dev and production.
   	ALTER ROLE django SET client_encoding TO 'utf-8';
   	ALTER ROLE django SET timezone TO '<timezone>';  # example timezone: America/Santiago
   	GRANT ALL PRIVILEGES ON DATABASE db_name TO django;
+	\c ramosuc postgres
+	GRANT ALL ON SCHEMA public TO django;
 	```
 + Allow password authentication to postgres (in `/etc/postgresql/13/main/pg_hba.conf`)
   + CHANGE local all all peer ----> local all all md5
@@ -109,7 +111,7 @@ Only for production.
 ```
 [uwsgi]
 chdir=/srv/NAME/current
-module=web.wsgi:application
+module=ramosuc.wsgi:application
 home=/srv/NAME/current
 chmod-socket=666
 
