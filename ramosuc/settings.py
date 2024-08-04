@@ -71,6 +71,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.google_analytics.context_processors.ga_code",
+                "apps.courses.context_processors.defaults",
             ],
         },
     },
